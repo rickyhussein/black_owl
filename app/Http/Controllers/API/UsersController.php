@@ -67,6 +67,7 @@ class UsersController extends Controller
     public function edit($id)
     {
         $data = User::find($id);
+        $data['userRoles'] = $data->Roles->pluck('name');
         if($data){
             return ApiFormatter::createApi(200, 'Success', $data);
         }else{
@@ -77,35 +78,41 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
            try {
-            $request['kode_acak'] = Str::random(10);
             $rules = [
                 'name' => 'required',
-                'email' => 'required|email:dns|unique:users',
                 'telepon' => 'required',
                 'roles' => 'required',
                 'kode_acak' => 'required',
-                'password' => 'required|min:6'
             ];
+
+            $userId = User::find($id);
+            
+            if ($request->email != $userId->email) {
+                $rules['email'] = 'required|email:dns|unique:users';
+            }
 
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return ApiFormatter::createApi(412, 'Failed', $validator->errors());
             }
 
-            $users = User::create([
+            foreach($userId->roles as $r){
+                $userId->removeRole($r->name);
+            }
+
+            User::where('id', $id)->update([
                 'name' => $request['name'],
                 'email' => $request['email'],
                 'telepon' => $request['telepon'],
                 'kode_acak' => $request['kode_acak'],
-                'password' => Hash::make($request['password'])
             ]);
             
             foreach($request->roles as $role){
-                $users->assignRole($role);
+                $userId->assignRole($role);
             }
             
-            if($users){
-                return ApiFormatter::createApi(200, 'Success', $users);
+            if($userId){
+                return ApiFormatter::createApi(200, 'Success', $userId);
             }else{
                 return ApiFormatter::createApi(410, 'Failed');
             }

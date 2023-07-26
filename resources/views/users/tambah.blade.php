@@ -29,7 +29,7 @@
                         </div>
                         <div class="col">
                             <label for="telepon">Nomor Telfon</label>
-                            <input type="text" class="form-control {{ isset($fails['telepon']) ? 'is-invalid' : '' }}" id="telepon" name="telepon">
+                            <input type="number" class="form-control {{ isset($fails['telepon']) ? 'is-invalid' : '' }}" id="telepon" name="telepon">
                             @if (isset($fails['telepon']))
                             <div class="invalid-feedback">
                                 {{ implode(' ', $fails['telepon']) }}

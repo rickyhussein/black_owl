@@ -30,7 +30,7 @@
                         </div>
                         <div class="col">
                             <label for="telepon">Nomor Telfon</label>
-                            <input type="text" class="form-control {{ isset($fails['telepon']) ? 'is-invalid' : '' }}" id="telepon" name="telepon" value="{{ $user['telepon'] }}">
+                            <input type="number" class="form-control {{ isset($fails['telepon']) ? 'is-invalid' : '' }}" id="telepon" name="telepon" value="{{ $user['telepon'] }}">
                             @if (isset($fails['telepon']))
                             <div class="invalid-feedback">
                                 {{ implode(' ', $fails['telepon']) }}
@@ -69,8 +69,6 @@
                         <span style="color: red">Roles Required</span>
                     @endif
                     <br>
-
-                    <input type="hidden" name="kode_acak">
                     <br>
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </form>

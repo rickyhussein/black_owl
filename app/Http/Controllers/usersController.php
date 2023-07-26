@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -72,7 +73,7 @@ class usersController extends Controller
                 'title' => 'Edit user',
                 'user' => $data['data'],
                 "roles" => Role::orderBy('name')->get(),
-                'userRoles' => User::find($id)->Roles->pluck('name')->toArray()
+                'userRoles' => $data['data']['userRoles']
             ]);
         } else {
             return view('users.editUser', [
@@ -86,7 +87,29 @@ class usersController extends Controller
 
     public function update(Request $request, $id)
     {
-        return $request;
+        $response = Http::put(url('/api/users/update/'.$id), [
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'telepon' => $request['telepon'],
+            'kode_acak' => $request['kode_acak'],
+            'roles' => $request['roles'],
+        ]);
+
+        if ($response['code'] == 200){
+            return redirect('/users')->with('success', 'Data Berhasil di Update');
+        } else if($response['code'] == 412) {
+            $data = Http::get(url('/api/users/edit/'.$id));
+            return view('users.editUser', [
+                'title' => 'Edit user',
+                'user' => $data['data'],
+                "roles" => Role::orderBy('name')->get(),
+                'userRoles' => $data['data']['userRoles'],
+                'fails' => $response['data']
+            ]);
+        } else {
+            Alert::error('Failed', 'Error');
+            return back();
+        }
     }
 
     public function deleteUser($id)
