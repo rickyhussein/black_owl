@@ -35,7 +35,7 @@
             <div class="col-md-9">
                 <div class="card">
                       <div class="card-body">
-                            <form method="post" action="{{ url('/my-profile/update/'.auth()->user()->id) }}" enctype="multipart/form-data">
+                            <form method="post" action="{{ url('/my-profile/update/'.auth()->user()->id) }}">
                               @method('put')
                               @csrf
                               <div class="form-row">
@@ -48,16 +48,6 @@
                                       </div>
                                       @enderror
                                   </div>
-                                  <div class="col">
-                                      <label for="foto" class="form-label">Foto user</label>
-                                      <input class="form-control @error('foto') is-invalid @enderror" type="file" id="foto" name="foto">
-                                      @error('foto')
-                                      <div class="invalid-feedback">
-                                          {{ $message }}
-                                      </div>
-                                      @enderror
-                                  </div>
-                                  <input type="hidden" name="foto_lama" value="{{ auth()->user()->foto }}">
                               </div>
                               <br>
                               <div class="form-row">

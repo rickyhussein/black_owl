@@ -144,7 +144,6 @@ class usersController extends Controller
     {
         $rules = [
             'name' => 'required|max:255',
-            'foto' => 'image|file|max:10240',
             'telepon' => 'required',
         ];
 
