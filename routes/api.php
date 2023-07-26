@@ -19,4 +19,5 @@ Route::get('users', [UsersController::class, 'index']);
 Route::post('tambah-users', [UsersController::class, 'store']);
 Route::get('users/edit/{id}', [UsersController::class, 'edit']);
 Route::put('users/update/{id}', [UsersController::class, 'update']);
+Route::delete('users/delete/{id}', [UsersController::class, 'delete']);
 

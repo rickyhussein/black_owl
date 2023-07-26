@@ -15,6 +15,7 @@ class usersController extends Controller
 {
     public function index(Request $request)
     {
+        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
         $data = Http::get(url('/api/users'));
 
         if($data["code"] == 200){
@@ -32,6 +33,7 @@ class usersController extends Controller
 
     public function tambahUsers()
     {
+        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
         return view('users.tambah',[
             "title" => 'Tambah User',
             "roles" => Role::orderBy('name')->get(),
@@ -41,6 +43,7 @@ class usersController extends Controller
 
     public function tambahUserProses(Request $request)
     {
+        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
         $response = Http::post(url('/api/tambah-users'), [
             'name' => $request['name'],
             'email' => $request['email'],
@@ -66,6 +69,7 @@ class usersController extends Controller
 
     public function detail($id)
     {
+        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
         $data = Http::get(url('/api/users/edit/'.$id));
 
         if($data["code"] == 200){
@@ -87,6 +91,7 @@ class usersController extends Controller
 
     public function update(Request $request, $id)
     {
+        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
         $response = Http::put(url('/api/users/update/'.$id), [
             'name' => $request['name'],
             'email' => $request['email'],
@@ -114,10 +119,17 @@ class usersController extends Controller
 
     public function deleteUser($id)
     {
-        $delete = User::find($id);
-        Storage::delete($delete->foto);
-        $delete->delete();
-        return redirect('/users')->with('success', 'Data Berhasil di Delete');
+        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
+        $response = Http::delete(url('/api/users/delete/'.$id));
+        if ($response['code'] == 200){
+            return redirect('/users')->with('success', 'Data Berhasil di Delete');
+        } else if($response['code'] == 410) {
+            Alert::error('Failed', 'User Sedang Online');
+            return back();
+        } else {
+            Alert::error('Error', 'Error');
+            return back();
+        }
     }
 
 

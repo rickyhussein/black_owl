@@ -120,4 +120,14 @@ class UsersController extends Controller
             return ApiFormatter::createApi(400, '');
            }
     }
+    public function delete($id)
+    {
+        $delete = User::find($id);
+        if ($delete->isOnline() == 1) {
+            return ApiFormatter::createApi(410, 'Online');
+        } else {
+            $delete->delete();
+            return ApiFormatter::createApi(200, 'Success', 'Deleted');
+        }
+    }
 }

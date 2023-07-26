@@ -53,6 +53,7 @@ class authController extends Controller
 
         if (Auth::attempt($credentials, $remember_me)) {
             $request->session()->regenerate();
+            User::where('email', $request['email'])->update(['last_seen_at' => now()]);
 
             return redirect()->intended('/dashboard');
         }

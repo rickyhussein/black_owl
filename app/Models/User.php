@@ -30,6 +30,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function isOnline()
+    {
+        $onlineThreshold = now()->subMinutes(5);
+        return $this->last_seen_at >= $onlineThreshold;
+    }
+
     /**
      * The attributes that should be cast.
      *
