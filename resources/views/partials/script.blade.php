@@ -47,7 +47,6 @@
 <script src="{{ url('https://cdn.jsdelivr.net/npm/flatpickr') }}"></script>
 
 
-{{-- selectpicker --}}
 <script src="{{ url('https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js') }}"></script>
 
 <script>
@@ -60,23 +59,33 @@
 
     flatpickr("input[type=datetime-local]", config)
     flatpickr("input[type=datetime]", {})
-</script>
 
-<script>
-  $(function () {
-    $('#tablePayroll').DataTable( {
-        "responsive": true,
-        "paging": false, 
-        "info": false,
-        "scrollCollapse": true, 
-        "autoWidth": false,
-        'searching': false
+    $(function () {
+        $('form').on('submit', function() {
+            if ($(this).attr('method').toUpperCase() !== 'GET') {
+                $(':input[type="submit"]').prop('disabled', true);
+            }
+        });
+
+        $('form').on('keypress', function(event) {
+            if (event.which === 13 && $(this).attr('method').toUpperCase() !== 'GET' && !$(event.target).is('textarea')) {
+                event.preventDefault();
+            }
+        });
+
+        $('#tablePayroll').DataTable({
+            "responsive": true,
+            "paging": false,
+            "info": false,
+            "scrollCollapse": true,
+            "autoWidth": false,
+            'searching': false
+        });
     });
-  });
 
-  $.ajaxSetup({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }
-  });
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 </script>

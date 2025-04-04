@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use GuzzleHttp\Client;
+use App\Models\Keluarga;
+use App\Imports\UsersImport;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -15,171 +18,291 @@ class usersController extends Controller
 {
     public function index(Request $request)
     {
-        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
-        $data = Http::get(url('/api/users'));
+        $title = 'Users';
+        $search = request()->input('search');
 
-        if($data["code"] == 200){
-            return view('users.index', [
-                'title' => 'Users',
-                'data_user' => $data['data']
-            ]);
-        } else {
-            return view('users.index', [
-                'title' => 'Users',
-                'data_user' => $data = []
-            ]);
-        }
+        $users = User::when($search, function ($query) use ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('email', 'LIKE', '%'.$search.'%');
+            });
+        })
+        ->orderBy('rt', 'asc')
+        ->orderBy('alamat', 'asc')
+        ->paginate(10)
+        ->withQueryString();
+
+        return view('users.index', compact(
+            'title',
+            'users'
+        ));
     }
 
-    public function tambahUsers()
+    public function import(Request $request)
     {
-        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
-        return view('users.tambah',[
-            "title" => 'Tambah User',
-            "roles" => Role::orderBy('name')->get(),
-            'fails' => []
-        ]);
-    }
-
-    public function tambahUserProses(Request $request)
-    {
-        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
-        $response = Http::post(url('/api/tambah-users'), [
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'telepon' => $request['telepon'],
-            'kode_acak' => $request['kode_acak'],
-            'password' => $request['password'],
-            'roles' => $request['roles']
+        $request->validate([
+            'file_excel' => 'required|mimes:xls,xlsx,csv|max:5000'
         ]);
 
-        if ($response['code'] == 200){
-            return redirect('/users')->with('success', 'Data Berhasil di Tambahkan');
-        } else if($response['code'] == 412) {
-            return view('users.tambah', [
-                "title" => 'Tambah User',
-                "roles" => Role::orderBy('name')->get(),
-                'fails' => $response['data']
-            ]);
-        } else {
-            Alert::error('Failed', 'Error');
-            return back();
-        }
+        $file_excel = $request->file('file_excel')->store('file_excel');
+
+        Excel::import(new UsersImport, public_path('/storage/'.$file_excel));
+        return back()->with('success', 'Data Berhasil Di Import');
     }
 
-    public function detail($id)
+    public function tambah()
     {
-        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
-        $data = Http::get(url('/api/users/edit/'.$id));
+        $title = 'Users';
+        $roles = Role::orderBy('name')->get();
+        $status = User::select('status')->whereNotNull('status')->groupBy('status')->get();
 
-        if($data["code"] == 200){
-            return view('users.editUser', [
-                'title' => 'Edit user',
-                'user' => $data['data'],
-                "roles" => Role::orderBy('name')->get(),
-                'userRoles' => $data['data']['userRoles']
-            ]);
-        } else {
-            return view('users.editUser', [
-                'title' => 'Edit user',
-                'user' => $data = [],
-                "roles" => Role::orderBy('name')->get(),
-                'userRoles' => null
-            ]);
+        return view('users.tambah', compact(
+            'title',
+            'roles',
+            'status',
+        ));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'foto' => 'image|file|max:10240',
+            'email' => 'required|unique:users',
+            'password' => 'required|min:6|max:255',
+            'alamat' => 'required|unique:users',
+            'rt' => 'required',
+            'no_hp' => 'required',
+            'keterangan' => 'nullable',
+            'status' => 'required',
+        ]);
+
+        if ($request->file('foto')) {
+            $validated['foto'] = $request->file('foto')->store('foto');
         }
+
+        $validated['password'] = Hash::make($validated['password']);
+        $user = User::create($validated);
+
+        $nama_keluarga = $request->input('nama_keluarga', []);
+        $status_keluarga = $request->input('status_keluarga', []);
+
+        for ($i = 0; $i < count($nama_keluarga); $i++) {
+            if ($nama_keluarga[$i] !== null && $status_keluarga[$i] !== null) {
+                Keluarga::create([
+                    'user_id' => $user->id,
+                    'nama_keluarga' => $nama_keluarga[$i],
+                    'status_keluarga' => $status_keluarga[$i],
+                ]);
+            }
+        }
+
+        if ($request->role) {
+            foreach($request->role as $role){
+                $user->assignRole($role);
+            }
+        }
+
+        return redirect('/users')->with('success', 'Data Berhasil di Tambahkan');
+    }
+
+    public function edit($id)
+    {
+        $title = 'Users';
+        $roles = Role::orderBy('name')->get();
+        $status = User::select('status')->whereNotNull('status')->groupBy('status')->get();
+        $user = User::find($id);
+        $user_roles = $user->roles->pluck('name')->toArray();
+
+        return view('users.edit', compact(
+            'title',
+            'roles',
+            'status',
+            'user',
+            'user_roles',
+        ));
     }
 
     public function update(Request $request, $id)
     {
-        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
-        $response = Http::put(url('/api/users/update/'.$id), [
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'telepon' => $request['telepon'],
-            'kode_acak' => $request['kode_acak'],
-            'roles' => $request['roles'],
+        $user = User::find($id);
+
+        $rules = [
+            'name' => 'required',
+            'foto' => 'image|file|max:10240',
+            'rt' => 'required',
+            'no_hp' => 'required',
+            'keterangan' => 'nullable',
+            'status' => 'required',
+        ];
+
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|unique:users';
+        }
+
+        if ($request->alamat != $user->alamat) {
+            $rules['alamat'] = 'required|unique:users';
+        }
+
+        $validated = $request->validate($rules);
+
+
+        if ($request->file('foto')) {
+            $validated['foto'] = $request->file('foto')->store('foto');
+        }
+
+        foreach($user->roles as $r){
+            $user->removeRole($r->name);
+        }
+
+        $user->update($validated);
+
+        $nama_keluarga = $request->input('nama_keluarga', []);
+        $status_keluarga = $request->input('status_keluarga', []);
+
+        Keluarga::where('user_id', $user->id)->delete();
+        for ($i = 0; $i < count($nama_keluarga); $i++) {
+            if ($nama_keluarga[$i] !== null && $status_keluarga[$i] !== null) {
+                Keluarga::create([
+                    'user_id' => $user->id,
+                    'nama_keluarga' => $nama_keluarga[$i],
+                    'status_keluarga' => $status_keluarga[$i],
+                ]);
+            }
+        }
+
+        if ($request->role) {
+            foreach($request->role as $role){
+                $user->assignRole($role);
+            }
+        }
+
+        return redirect('/users')->with('success', 'Data Berhasil di Update');
+    }
+
+    public function editPassword($id)
+    {
+        $title = 'Ganti Password';
+        $user = User::find($id);
+
+        return view('users.editPassword', compact(
+            'title',
+            'user',
+        ));
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $validated = $request->validate([
+            'password' => 'required|min:6|max:255',
         ]);
 
-        if ($response['code'] == 200){
-            return redirect('/users')->with('success', 'Data Berhasil di Update');
-        } else if($response['code'] == 412) {
-            $data = Http::get(url('/api/users/edit/'.$id));
-            return view('users.editUser', [
-                'title' => 'Edit user',
-                'user' => $data['data'],
-                "roles" => Role::orderBy('name')->get(),
-                'userRoles' => $data['data']['userRoles'],
-                'fails' => $response['data']
-            ]);
-        } else {
-            Alert::error('Failed', 'Error');
-            return back();
-        }
+        $validated['password'] = Hash::make($request->password);
+
+        $user->update($validated);
+
+        return redirect('/users')->with('success', 'Password Berhasil Di Ganti');
     }
 
-    public function deleteUser($id)
+    public function delete($id)
     {
-        User::where('id', auth()->user()->id)->update(['last_seen_at' => now()]);
-        $response = Http::delete(url('/api/users/delete/'.$id));
-        if ($response['code'] == 200){
-            return redirect('/users')->with('success', 'Data Berhasil di Delete');
-        } else if($response['code'] == 410) {
-            Alert::error('Failed', 'User Sedang Online');
-            return back();
-        } else {
-            Alert::error('Error', 'Error');
-            return back();
-        }
-    }
+        $user = User::find($id);
+        Keluarga::where('user_id', $user->id)->delete();
+        $user->delete();
 
+        return redirect('/users')->with('success', 'Data Berhasil Dihapus');
+    }
 
     public function myProfile()
     {
-        return view('users.myProfile', [
-            'title' => 'My Profile'
-        ]);
+        $title = 'My Profile';
+        $roles = Role::orderBy('name')->get();
+        $status = User::select('status')->whereNotNull('status')->groupBy('status')->get();
+        $user = User::find(auth()->user()->id);
+        $user_roles = implode(', ', $user->roles->pluck('name')->toArray());
+
+        return view('users.myProfile', compact(
+            'title',
+            'roles',
+            'status',
+            'user',
+            'user_roles',
+        ));
     }
 
     public function myProfileUpdate(Request $request, $id)
     {
+        $user = User::find($id);
+
         $rules = [
-            'name' => 'required|max:255',
-            'telepon' => 'required',
+            'name' => 'required',
+            'foto' => 'image|file|max:10240',
+            'rt' => 'required',
+            'no_hp' => 'required',
+            'keterangan' => 'nullable',
+            'status' => 'required',
         ];
 
-
-        $userId = User::find($id);
-       
-        if ($request->email != $userId->email) {
-            $rules['email'] = 'required|email:dns|unique:users';
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|unique:users';
         }
 
-        $validatedData = $request->validate($rules);
+        if ($request->alamat != $user->alamat) {
+            $rules['alamat'] = 'required|unique:users';
+        }
+
+        $validated = $request->validate($rules);
 
 
-        User::where('id', $id)->update($validatedData);
-        
-        $request->session()->flash('success', 'Data Berhasil di Update');
-        return redirect('/my-profile');
+        if ($request->file('foto')) {
+            $validated['foto'] = $request->file('foto')->store('foto');
+        }
+
+        $user->update($validated);
+
+        $nama_keluarga = $request->input('nama_keluarga', []);
+        $status_keluarga = $request->input('status_keluarga', []);
+
+        Keluarga::where('user_id', $user->id)->delete();
+        for ($i = 0; $i < count($nama_keluarga); $i++) {
+            if ($nama_keluarga[$i] !== null && $status_keluarga[$i] !== null) {
+                Keluarga::create([
+                    'user_id' => $user->id,
+                    'nama_keluarga' => $nama_keluarga[$i],
+                    'status_keluarga' => $status_keluarga[$i],
+                ]);
+            }
+        }
+
+
+        return redirect('/my-profile')->with('success', 'Data Berhasil di Update');
     }
 
-    public function myProfileEditPassword()
+    public function gantiPassword()
     {
-        return view('users.myProfileEditPassword', [
-            'title' => 'Edit Password'
-        ]);
+        $title = 'Ganti Password';
+        $user = User::find(auth()->user()->id);
+
+        return view('users.gantiPassword', compact(
+            'title',
+            'user',
+        ));
     }
 
-    public function myProfileUpdatePassword(Request $request, $id)
+    public function gantiPasswordUpdate(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'password' => 'required|min:6|max:255',
+        $user = User::find($id);
+
+        $validated = $request->validate([
+            'password' => 'required|min:6|max:255|confirmed',
         ]);
 
-        $validatedData['password'] = Hash::make($request->password);
+        $validated['password'] = Hash::make($request->password);
 
-        User::where('id', $id)->update($validatedData);
-        $request->session()->flash('success', 'Password Berhasil Diganti');
-        return redirect('/my-profile');
+        $user->update($validated);
+        return redirect('/ganti-password')->with('success', 'Password Berhasil Diganti');
     }
+
 }

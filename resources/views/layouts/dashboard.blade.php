@@ -7,7 +7,7 @@
 
   <title>{{ $title }}</title>
   {{-- logo --}}
-  <link rel="shorcut icon" href="{{ url('assets/img/images.JPEG') }}">
+  <link rel="shorcut icon" href="{{ url('assets/img/madrid.png') }}">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="{{ url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback') }}">
   <!-- Font Awesome -->
@@ -47,56 +47,86 @@
     .card{
       border-radius: 20px
     }
+    .borderi {
+        border-color:rgb(201, 201, 201)
+    }
+
+    .bootstrap-select .dropdown-toggle {
+        background-color: #ffffff !important;
+        border: 1px solid #ced4da !important;
+        color: #000;
+        border-radius: 5px;
+    }
+
+    .flatpickr-input {
+        background-color: #ffffff !important;
+        border: 1px solid #ced4da !important;
+        color: #000;
+        border-radius: 5px;
+        padding: 8px;
+    }
+
+    .flatpickr-input:focus {
+        border-color: #adb5bd !important;
+        box-shadow: none !important;
+    }
+
+
   </style>
+
+  @stack('style')
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-  <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
     <img src="{{ url('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTELogo" height="60" width="60">
   </div>
 
-  @include('partials.topbar')
+
+
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+
+        @if (auth()->user()->hasRole('user'))
+            <li class="nav-item">
+                <a href="{{ url('/dashboard-user') }}" class="btn btn-warning nav-link"  style="color: white" onclick="return confirm('Are You Sure ?')">Dashboard User</a>
+            </li>
+        @endif
+
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+          @yield('button')
+      </ul>
+  </nav>
 
   @include('partials.sidebar')
 
 
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <center>
-          <div class="m-4">
-            <h1 class="m-0">{{ $title }}</h1>
-          </div>
-        </center>
-      </div>
-    </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
     <section class="content">
-      @yield('isi')
+        <br>
+        <h1 class="text-center">{{ $title }}</h1>
+        <br>
+        @yield('isi')
     </section>
     <br><br>
 
   </div>
-  <!-- /.content-wrapper -->
 
   @include('partials.footer')
 
-  <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
   </aside>
-  <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
 
 @include('partials.script')
+@stack('script')
 @include('sweetalert::alert')
 
 </body>

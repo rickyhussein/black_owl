@@ -30,10 +30,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function isOnline()
+    public function keluarga()
     {
-        $onlineThreshold = now()->subMinutes(5);
-        return $this->last_seen_at >= $onlineThreshold;
+        return $this->hasMany(Keluarga::class, 'user_id');
     }
 
     /**
