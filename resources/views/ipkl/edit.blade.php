@@ -17,7 +17,7 @@
                             <select name="user_id" id="user_id" class="form-control @error('user_id') is-invalid @enderror selectpicker" data-live-search="true">
                                 <option value="">-- Pilih --</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" {{ $user->id == old('user_id', $ipkl->user_id) ? 'selected="selected"' : '' }}>{{ $user->alamat }} - {{ $user->name }}</option>
+                                    <option value="{{ $user->id }}" {{ $user->id == old('user_id', $ipkl->user_id) ? 'selected="selected"' : '' }}>{{ $user->alamat }} - {{ $user->name }} - {{ $user->status }}</option>
                                 @endforeach
                             </select>
                             @error('user_id')

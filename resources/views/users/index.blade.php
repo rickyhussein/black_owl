@@ -4,22 +4,87 @@
         <a href="{{ url('/users/tambah') }}" class="btn btn-primary nav-link" style="color: white">+ Tambah</a>
     </li>
     <li class="nav-item mr-2">
-        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter">
+        <button type="button" class="btn btn-secondary text-white" data-toggle="modal" data-target="#exampleModalCenter">
             <i class="fas fa-file-import mr-1"></i> Import
         </button>
     </li>
+    <li class="nav-item mr-2">
+        <a href="{{ url('/users/export') }}{{ $_GET?'?'.$_SERVER['QUERY_STRING']: '' }}" class="btn btn-success nav-link" style="color: white"><i class="far fa-file-excel mr-1"></i>Export</a>
+    </li>
 @endsection
 @section('isi')
-    <form action="{{ url('/users') }}" class="mr-2 ml-2">
-        <div class="form-row mb-2">
-            <div class="col-10">
-                <input type="text" class="form-control" name="search" placeholder="search" id="mulai" value="{{ request('search') }}">
+    <div class="d-none d-md-block">
+        <form action="{{ url('/users') }}" class="mr-2 ml-2">
+            <div class="form-row mb-2">
+                <div class="col-4">
+                    <input type="text" class="form-control" name="search" placeholder="Nama / Alamat / Email" id="search" value="{{ request('search') }}">
+                </div>
+                <div class="col-3">
+                    <select name="rt" id="rt" class="form-control @error('rt') is-invalid @enderror selectpicker" data-live-search="true">
+                        <option value="">-- Pilih RT --</option>
+                        <option value="001" {{ '001' == request('rt') ? 'selected="selected"' : '' }}>001</option>
+                        <option value="002" {{ '002' == request('rt') ? 'selected="selected"' : '' }}>002</option>
+                        <option value="003" {{ '003' == request('rt') ? 'selected="selected"' : '' }}>003</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
+                        <option value="">-- Pilih Status --</option>
+                        <option value="Dihuni" {{ 'Dihuni' == request('status') ? 'selected="selected"' : '' }}>Dihuni</option>
+                        <option value="Belum dihuni" {{ 'Belum dihuni' == request('status') ? 'selected="selected"' : '' }}>Belum dihuni</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button type="submit" id="search" class="btn"><i class="fas fa-search"></i></button>
+                </div>
             </div>
-            <div class="col-2">
-                <button type="submit" id="search" class="btn"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    <div class="d-block d-md-none">
+        <button type="button" class="btn btn-secondary btn-sm text-white ml-3 mb-3"  data-toggle="modal" data-target="#exampleModalCenter">
+            <i class="fas fa-filter mr-1"></i> Filter
+        </button>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Filter</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ url('/users') }}">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="search" placeholder="Nama / Alamat / Email" id="search" value="{{ request('search') }}">
+                        </div>
+                        <div class="form-group">
+                            <select name="rt" id="rt" class="form-control @error('rt') is-invalid @enderror selectpicker" data-live-search="true">
+                                <option value="">-- Pilih RT --</option>
+                                <option value="001" {{ '001' == request('rt') ? 'selected="selected"' : '' }}>001</option>
+                                <option value="002" {{ '002' == request('rt') ? 'selected="selected"' : '' }}>002</option>
+                                <option value="003" {{ '003' == request('rt') ? 'selected="selected"' : '' }}>003</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
+                                <option value="">-- Pilih Status --</option>
+                                <option value="Dihuni" {{ 'Dihuni' == request('status') ? 'selected="selected"' : '' }}>Dihuni</option>
+                                <option value="Belum dihuni" {{ 'Belum dihuni' == request('status') ? 'selected="selected"' : '' }}>Belum dihuni</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-secondary">Search</button>
+                    </div>
+                </form>
+            </div>
             </div>
         </div>
-    </form>
+    </div>
+
     <div class="container-fluid">
         <div class="card p-4">
             <div class="table-responsive" style="border-radius: 10px">

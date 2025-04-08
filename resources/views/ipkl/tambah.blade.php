@@ -19,12 +19,15 @@
                                     <label for="select_all" class="form-check-label">Pilih Semua</label>
                                 </div>
 
-                                @foreach ($status as $stat)
-                                    <div class="col-3">
-                                        <input type="checkbox" name="{{ $stat->status }}" id="{{ $stat->status }}" class="form-check-input" value="{{ old($stat->status) }}">
-                                        <label for="{{ $stat->status }}" class="form-check-label">{{ $stat->status }}</label>
-                                    </div>
-                                @endforeach
+                                <div class="col-3">
+                                    <input type="checkbox" name="Dihuni" id="Dihuni" class="form-check-input" value="{{ old('Dihuni') }}">
+                                    <label for="Dihuni" class="form-check-label">Dihuni</label>
+                                </div>
+
+                                <div class="col-3">
+                                    <input type="checkbox" name="Belum dihuni" id="Belum dihuni" class="form-check-input" value="{{ old('Belum dihuni') }}">
+                                    <label for="Belum dihuni" class="form-check-label">Belum dihuni</label>
+                                </div>
                             </div>
                             <select class="form-control selectpicker @error('user_id') is-invalid @enderror" name="user_id[]" id="user_id" multiple data-live-search="true">
                                 @foreach ($users as $user)

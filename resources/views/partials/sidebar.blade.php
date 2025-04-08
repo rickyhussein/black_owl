@@ -88,9 +88,27 @@
 
                 <li class="nav-item">
                     <a href="{{ url('/ipkl') }}" class="nav-link {{ Request::is('ipkl*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-money-check-alt"></i>
+                        <i class="nav-icon fas fa-hand-holding-usd"></i>
                         <p>
                             IPKL
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/laporan-ipkl') }}" class="nav-link {{ Request::is('laporan-ipkl*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>
+                            Laporan IPKL
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/pengeluaran') }}" class="nav-link {{ Request::is('pengeluaran*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-money-check-alt"></i>
+                        <p>
+                            Pengeluaran
                         </p>
                     </a>
                 </li>

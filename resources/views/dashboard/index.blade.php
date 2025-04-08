@@ -2,16 +2,6 @@
 @section('isi')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box">
-                  <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
-                  <div class="info-box-content">
-                    <span class="info-box-text">Total Users</span>
-                    <span class="info-box-number">{{ number_format($total_users) }}</span>
-                  </div>
-                </div>
-              </div>
-
               <div class="col-md-3 col-sm-6 col-12">
                 <div class="info-box">
                   <span class="info-box-icon bg-success"><i class="fas fa-hand-holding-usd"></i></span>
@@ -33,7 +23,7 @@
               </div>
 
               <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box">
+                <div class="info-box clickable" data-url="{{ url('/pengeluaran') }}{{ $_GET?'?'.$_SERVER['QUERY_STRING']: '' }}" style="cursor: pointer;">
                   <span class="info-box-icon bg-warning" style="color: white"><i class="fas fa-money-check-alt"></i></span>
                   <div class="info-box-content">
                     <span class="info-box-text">Total Pengeluaran</span>
@@ -41,6 +31,17 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box">
+                  <span class="info-box-icon bg-primary"><i class="far fa-money-bill-alt"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Sisa Saldo</span>
+                    <span class="info-box-number">{{ number_format($sisa) }}</span>
+                  </div>
+                </div>
+              </div>
+
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -58,7 +59,7 @@
                                 <select name="year" id="year" class="form-control @error('year') is-invalid @enderror selectpicker" data-live-search="true">
                                     <option value="">Year</option>
                                     @for ($i = $now; $i >= $last; $i--)
-                                    <option value="{{ $i }}" {{ $i == Request::get('year') ? 'selected="selected"' : '' }}>{{ $i }}</option>
+                                    <option value="{{ $i }}" {{ $i == request('year') ? 'selected="selected"' : '' }}>{{ $i }}</option>
                                     @endfor
                                 </select>
                                 @error('year')
@@ -141,6 +142,10 @@
                             }
                         }
                     }
+                });
+
+                $(".clickable").on("click", function() {
+                    window.location.href = $(this).data("url");
                 });
             });
         </script>

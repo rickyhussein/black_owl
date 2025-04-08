@@ -50,7 +50,7 @@
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Jatuh Tempo</th>
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Jenis Transaksi</th>
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Nominal</th>
-                            <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Keterangan</th>
+                            <th style="min-width: 300px; background-color:rgb(243, 243, 243);" class="text-center">Keterangan</th>
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Status</th>
                             <th style="background-color:rgb(243, 243, 243);" class="text-center">Actions</th>
                         </tr>
@@ -82,7 +82,7 @@
                                         {{ $ipkl->type ?? '-' }} ({{ $month }} {{ $ipkl->year }})
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($ipkl->nominal) }}</td>
-                                    <td class="text-center" style="vertical-align: middle;">{{ $ipkl->notes ?? '-' }}</td>
+                                    <td style="vertical-align: middle;">{!! $ipkl->notes ? nl2br(e($ipkl->notes)) : '-' !!}</td>
                                     <td class="text-center" style="vertical-align: middle;">
                                         @if ($ipkl->status == 'paid')
                                             <div class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">{{ $ipkl->status ?? '-' }}</div>

@@ -11,6 +11,8 @@ use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\TataTertibController;
+use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\NotificationController;
 
 /*
@@ -43,9 +45,11 @@ Route::get('/notifications', [NotificationController::class, 'index'])->middlewa
 Route::get('/notifications/read-message/{id}', [NotificationController::class, 'readMessage'])->middleware('role:user');
 Route::get('/notification', [NotificationController::class, 'notification'])->middleware('role:user');
 
+Route::get('/users/updateStatus', [usersController::class, 'updateStatus'])->middleware('role:admin');
 
 Route::get('/users', [usersController::class, 'index'])->middleware('role:admin');
 Route::get('/users/tambah', [usersController::class, 'tambah'])->middleware('role:admin');
+Route::get('/users/export', [usersController::class, 'export'])->middleware('role:admin');
 Route::post('/users/store', [usersController::class, 'store'])->middleware('role:admin');
 Route::get('/users/edit/{id}', [usersController::class, 'edit'])->middleware('role:admin');
 Route::put('/users/update/{id}', [usersController::class, 'update'])->middleware('role:admin');
@@ -91,8 +95,25 @@ Route::put('/ipkl/update/{id}', [IPKLController::class, 'update'])->middleware('
 Route::get('/ipkl/show/{id}', [IPKLController::class, 'show'])->middleware('role:admin');
 Route::delete('/ipkl/delete/{id}', [IPKLController::class, 'delete'])->middleware('role:admin');
 
+Route::get('/laporan-ipkl', [IPKLController::class, 'laporanIpkl'])->middleware('role:admin');
+Route::get('/laporan-ipkl/export', [IPKLController::class, 'laporanIpklExport'])->middleware('role:admin');
+
+Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->middleware('role:admin');
+Route::get('/pengeluaran/export', [PengeluaranController::class, 'export'])->middleware('role:admin');
+Route::get('/pengeluaran/tambah', [PengeluaranController::class, 'tambah'])->middleware('role:admin');
+Route::post('/pengeluaran/store', [PengeluaranController::class, 'store'])->middleware('role:admin');
+Route::get('/pengeluaran/edit/{id}', [PengeluaranController::class, 'edit'])->middleware('role:admin');
+Route::put('/pengeluaran/update/{id}', [PengeluaranController::class, 'update'])->middleware('role:admin');
+Route::get('/pengeluaran/show/{id}', [PengeluaranController::class, 'show'])->middleware('role:admin');
+Route::delete('/pengeluaran/delete/{id}', [PengeluaranController::class, 'delete'])->middleware('role:admin');
+
+Route::get('/laporan-pengeluaran', [PengeluaranController::class, 'laporanPengeluaran'])->middleware('role:user');
+Route::get('/laporan-pengeluaran/show/{id}', [PengeluaranController::class, 'laporanPengeluaranShow'])->middleware('role:user');
+
 Route::get('/my-ipkl', [IPKLController::class, 'myIpkl'])->middleware('role:user');
 Route::get('/my-ipkl/show/{id}', [IPKLController::class, 'myIpklShow']);
+
+Route::get('/laporan-keuangan', [TransactionController::class, 'laporanKeuangan'])->middleware('role:user');
 
 Route::get('/my-profile', [usersController::class, 'myProfile'])->middleware('role:user');
 Route::put('/my-profile/update/{id}', [usersController::class, 'myProfileUpdate'])->middleware('role:user');

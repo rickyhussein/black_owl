@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use GuzzleHttp\Client;
 use App\Models\Keluarga;
+use App\Exports\UserExport;
 use App\Imports\UsersImport;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -20,12 +21,21 @@ class usersController extends Controller
     {
         $title = 'Users';
         $search = request()->input('search');
+        $rt = request()->input('rt');
+        $status = request()->input('status');
 
         $users = User::when($search, function ($query) use ($search) {
             $query->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('alamat', 'LIKE', '%'.$search.'%')
                 ->orWhere('email', 'LIKE', '%'.$search.'%');
             });
+        })
+        ->when($rt, function ($query) use ($rt) {
+            $query->where('rt', $rt);
+        })
+        ->when($status, function ($query) use ($status) {
+            $query->where('status', $status);
         })
         ->orderBy('rt', 'asc')
         ->orderBy('alamat', 'asc')
@@ -36,6 +46,18 @@ class usersController extends Controller
             'title',
             'users'
         ));
+    }
+
+    public function updateStatus()
+    {
+        User::where('status', 'belum huni')->update(['status' => 'Belum dihuni']);
+        User::where('status', 'Dihuni / Kunjungan')->orWhere('status', 'Dikontrakan')->orWhere('status', 'MENETAP')->update(['status' => 'Belum dihuni']);
+        return back()->with('success', 'Data Berhasil Di Update');
+    }
+
+    public function export()
+    {
+        return (new UserExport($_GET))->download('User.xlsx');
     }
 
     public function import(Request $request)
@@ -54,12 +76,10 @@ class usersController extends Controller
     {
         $title = 'Users';
         $roles = Role::orderBy('name')->get();
-        $status = User::select('status')->whereNotNull('status')->groupBy('status')->get();
 
         return view('users.tambah', compact(
             'title',
             'roles',
-            'status',
         ));
     }
 
@@ -110,14 +130,12 @@ class usersController extends Controller
     {
         $title = 'Users';
         $roles = Role::orderBy('name')->get();
-        $status = User::select('status')->whereNotNull('status')->groupBy('status')->get();
         $user = User::find($id);
         $user_roles = $user->roles->pluck('name')->toArray();
 
         return view('users.edit', compact(
             'title',
             'roles',
-            'status',
             'user',
             'user_roles',
         ));

@@ -8,9 +8,11 @@ use App\Mail\IpklMail;
 use App\Exports\IpklExport;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Exports\LaporanIpklExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IPKLController extends Controller
 {
@@ -57,12 +59,10 @@ class IPKLController extends Controller
     {
         $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
         $users = User::select('id', 'name', 'alamat', 'status')->orderBy('alamat', 'ASC')->get();
-        $status = User::select('status')->whereNotNull('status')->groupBy('status')->get();
 
         return view('ipkl.tambah', compact(
             'title',
             'users',
-            'status',
         ));
     }
 
@@ -180,7 +180,7 @@ class IPKLController extends Controller
     public function edit($id)
     {
         $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
-        $users = User::select('id', 'name', 'alamat')->orderBy('alamat', 'ASC')->get();
+        $users = User::select('id', 'name', 'alamat', 'status')->orderBy('alamat', 'ASC')->get();
         $ipkl = Transaction::find($id);
 
         return view('ipkl.edit', compact(
@@ -336,6 +336,49 @@ class IPKLController extends Controller
             'title',
             'ipkl',
         ));
+    }
+
+    public function laporanIpkl()
+    {
+        if (request()->input('year')) {
+            $year = request()->input('year');
+        } else {
+            $year = date('Y');
+        }
+
+        $title = 'Laporan IPKL ' . $year;
+        $search = request()->input('search');
+        $rt = request()->input('rt');
+        $status = request()->input('status');
+
+        $users = User::where('name', '!=', 'Admin')
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('alamat', 'LIKE', '%'.$search.'%');
+            });
+        })
+        ->when($rt, function ($query) use ($rt) {
+            $query->where('rt', $rt);
+        })
+        ->when($status, function ($query) use ($status) {
+            $query->where('status', $status);
+        })
+        ->orderBy('rt', 'asc')
+        ->orderBy('alamat', 'asc')
+        ->paginate(10)
+        ->withQueryString();
+
+        return view('ipkl.laporanIpkl', compact(
+            'title',
+            'users',
+            'year',
+        ));
+    }
+
+    public function laporanIpklExport(Request $request)
+    {
+        return Excel::download(new LaporanIpklExport($request), 'laporan-ipkl.xlsx');
     }
 
     public function myIpklCallback(Request $request)

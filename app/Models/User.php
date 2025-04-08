@@ -35,6 +35,21 @@ class User extends Authenticatable
         return $this->hasMany(Keluarga::class, 'user_id');
     }
 
+    public function getIpkl($user_id, $month, $year)
+    {
+        $total_ipkl = Transaction::where('type', 'IPKL')->where('status', 'paid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->sum('nominal');
+
+        return $total_ipkl;
+    }
+
+    public function whatsapp($phoneNumber)
+    {
+        if (substr($phoneNumber, 0, 1) == '0') {
+            return '62' . substr($phoneNumber, 1);
+        }
+        return $phoneNumber;
+    }
+
     /**
      * The attributes that should be cast.
      *

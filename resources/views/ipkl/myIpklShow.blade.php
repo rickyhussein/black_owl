@@ -110,7 +110,7 @@
                                 Keterangan
                             </p>
                             <h5>
-                                {{ $ipkl->notes ?? '-' }}
+                                {!! $ipkl->notes ? nl2br(e($ipkl->notes)) : '-' !!}
                             </h5>
                         </div>
                     </li>

@@ -3,7 +3,7 @@
     "name": "Cluster Madrid",
     "scope": "/",
     "display": "standalone",
-    "start_url": "/cluster/public",
+    "start_url": "/",
     "short_name": "Cluster Madrid",
     "description": "",
     "orientation": "portrait",

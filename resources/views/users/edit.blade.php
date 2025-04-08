@@ -107,9 +107,8 @@
                             <label for="status">Status</label>
                             <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
                                 <option value="">-- Pilih Status --</option>
-                                @foreach ($status as $stat)
-                                    <option value="{{ $stat->status }}" {{ $stat->status == old('status', $user->status) ? 'selected="selected"' : '' }}>{{ $stat->status }}</option>
-                                @endforeach
+                                <option value="Dihuni" {{ 'Dihuni' == old('status', $user->status) ? 'selected="selected"' : '' }}>Dihuni</option>
+                                <option value="Belum dihuni" {{ 'Belum dihuni' == old('status', $user->status) ? 'selected="selected"' : '' }}>Belum dihuni</option>
                             </select>
                             @error('status')
                             <div class="invalid-feedback">
