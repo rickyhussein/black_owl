@@ -236,7 +236,7 @@ class IPKLController extends Controller
             $total_expired = $diff_day + $ipkl->expired;
 
             \Midtrans\Config::$serverKey = config('midtrans.server_key');
-            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isProduction = config('midtrans.is_production');
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
 
@@ -251,7 +251,7 @@ class IPKLController extends Controller
                     'duration' => $total_expired,
                 ),
                 'customer_details' => array(
-                    'firs_name' => $ipkl->user->name ?? '',
+                    'first_name' => $ipkl->user->name ?? '',
                     'email' => $ipkl->user->email ?? '',
                     'phone' => $ipkl->user->no_hp,
                 ),
