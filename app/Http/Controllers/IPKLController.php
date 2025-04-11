@@ -192,10 +192,10 @@ class IPKLController extends Controller
 
     public function update(Request $request, $id)
     {
-        $ipkl = Transaction::find($id);
-
-        DB::transaction(function ()  use ($request, $ipkl) {
-            $validated = $request->validate([
+        $ipkl_old = Transaction::find($id);
+        $result = null;
+        DB::transaction(function ()  use ($request, $ipkl_old, $result) {
+            $request->validate([
                 'user_id' => 'required',
                 'type' => 'required',
                 'date' => 'required',
@@ -204,11 +204,30 @@ class IPKLController extends Controller
                 'notes' => 'nullable',
             ]);
 
-            $validated['nominal'] = $request->nominal ? str_replace(',', '', $request->nominal) : 0;
-            $validated['month'] = date('m', strtotime($request->date));
-            $validated['year'] = date('Y', strtotime($request->date));
-            $validated['updated_by'] = auth()->user()->id;
-            $ipkl->update($validated);
+
+            $nominal = $request->nominal ? str_replace(',', '', $request->nominal) : 0;
+            $month = date('m', strtotime($request->date));
+            $year = date('Y', strtotime($request->date));
+
+
+            $ipkl = Transaction::create([
+                'user_id' => $request->user_id,
+                'type' => $request->type,
+                'date' => $request->date,
+                'nominal' => $nominal,
+                'expired' => $request->expired,
+                'notes' => $request->notes,
+                'status' => $ipkl_old->status,
+                'created_by' => $ipkl_old->created_by,
+                'updated_by' => auth()->user()->id,
+                'month' => $month,
+                'year' => $year,
+                'in_out' => $ipkl_old->in_out,
+            ]);
+
+            $this->result = $ipkl->id;
+
+            $ipkl_old->delete();
 
             $date = Carbon::parse($ipkl->date);
             $now = Carbon::now();
@@ -243,13 +262,13 @@ class IPKLController extends Controller
                 'snaptoken' => $snapToken
             ]);
 
-            $month_name = Carbon::createFromFormat('m', $validated['month'])->translatedFormat('F');
+            $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
             $user = User::find($request->user_id);
             $user->messages = [
                 'user_id'   =>  auth()->user()->id,
                 'from'   =>  auth()->user()->name,
-                'message'   =>  'IPKL (' . $month_name . ' ' . $validated['year'] . ') Harap untuk segera melakukan pembayaran!',
-                'action'   =>  'ipkl-user/show/'.$ipkl->id
+                'message'   =>  'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
+                'action'   =>  '/my-ipkl/show/'.$ipkl->id
             ];
             $user->notify(new \App\Notifications\UserNotification);
 
@@ -271,7 +290,7 @@ class IPKLController extends Controller
                     "Salam sejahtera Bapak/Ibu, Kami informasikan data dibawah ini belum melakukan pembayaran\n" .
                     "Nama : " . $user->name . "\n" .
                     "Alamat : " . $user->alamat . "\n" .
-                    "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $validated['year'] . ") \n" .
+                    "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $year . ") \n" .
                     "Jatuh Tempo : " . $expired_date . "\n" .
                     "Status : " . $ipkl->status . "\n" .
                     "Nominal : Rp " . $request->nominal . "\n\n" .
@@ -284,7 +303,7 @@ class IPKLController extends Controller
             Mail::to($ipkl->user->email)->send(new IpklMail($ipkl));
         });
 
-        return redirect('/ipkl/show/'.$ipkl->id)->with('success', 'Data Berhasil Diupdate');
+        return redirect('/ipkl/show/'.$this->result)->with('success', 'Data Berhasil Diupdate');
     }
 
     public function show($id)
