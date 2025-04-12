@@ -60,7 +60,8 @@
                                 </div>
                                 <div class="col">
                                     {{ $ipkl->user->no_hp ?? '-' }}
-                                    <a target="_blank" href="https://wa.me/{{ $ipkl->user->whatsapp($ipkl->user->no_hp) }}" class="badge ml-2" style="color: rgb(4, 149, 50); border:1px solid rgb(4, 149, 50); background-color:white; "><i class="fab fa-whatsapp"></i> Whatsapp</a>
+                                    <a target="_blank" href="{{ url('/my-ipkl/show/'.$ipkl->id) }}" class="badge ml-2" style="color: rgb(4, 16, 149); border:1px solid rgb(4, 16, 149); background-color:white; ">Link Tagihan</a>
+                                    <a target="_blank" href="https://wa.me/{{ $ipkl->user->whatsapp($ipkl->user->no_hp) }}?text={{ url('/my-ipkl/show/'.$ipkl->id) }}" class="badge ml-2" style="color: rgb(4, 149, 50); border:1px solid rgb(4, 149, 50); background-color:white; "><i class="fab fa-whatsapp"></i> Whatsapp</a>
                                     <a target="_blank" href="tel:{{ $ipkl->user->no_hp }}" class="badge ml-2" style="color: gray; border:1px solid gray; background-color:white; "><i class="fas fa-phone-volume"></i> Call</a>
                                 </div>
                             </div>
