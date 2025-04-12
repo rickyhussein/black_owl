@@ -30,6 +30,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function keluarga()
     {
         return $this->hasMany(Keluarga::class, 'user_id');
@@ -40,6 +45,20 @@ class User extends Authenticatable
         $total_ipkl = Transaction::where('type', 'IPKL')->where('status', 'paid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->sum('nominal');
 
         return $total_ipkl;
+    }
+
+    public function countIpklPaid($user_id, $month, $year)
+    {
+        $count_ipkl_paid = Transaction::where('type', 'IPKL')->where('status', 'paid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->count();
+
+        return $count_ipkl_paid;
+    }
+
+    public function countIpklUnpaid($user_id, $month, $year)
+    {
+        $count_ipkl_unpaid = Transaction::where('type', 'IPKL')->where('status', 'unpaid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->count();
+
+        return $count_ipkl_unpaid;
     }
 
     public function whatsapp($phoneNumber)

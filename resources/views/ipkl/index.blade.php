@@ -1,7 +1,10 @@
 @extends('layouts.dashboard')
 @section('button')
     <li class="nav-item mr-2">
-        <a href="{{ url('/ipkl/tambah') }}" class="btn btn-primary nav-link" style="color: white">+ Tambah</a>
+        <a href="{{ url('/ipkl/tambah') }}" class="btn btn-primary nav-link" style="color: white">+ Tambah (Multiple User)</a>
+    </li>
+    <li class="nav-item mr-2">
+        <a href="{{ url('/ipkl/tambah/peruser') }}" class="btn btn-primary nav-link" style="color: white">+ Tambah (Per User)</a>
     </li>
     <li class="nav-item mr-2">
         <a href="{{ url('/ipkl/export') }}{{ $_GET?'?'.$_SERVER['QUERY_STRING']: '' }}" class="btn btn-success nav-link" style="color: white"><i class="far fa-file-excel mr-1"></i>Export</a>

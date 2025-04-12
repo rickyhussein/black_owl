@@ -20,24 +20,36 @@ class IPKLController extends Controller
     {
         $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
         $user = request()->input('user');
+        $user_id = request()->input('user_id');
         $start_date = request()->input('start_date');
         $end_date = request()->input('end_date');
         $status = request()->input('status');
+        $month = request()->input('month');
+        $year = request()->input('year');
 
         $transaction_ipkl = Transaction::select('transactions.*')
         ->join('users', 'transactions.user_id', '=', 'users.id')
         ->where('type', 'IPKL')
         ->when($user, function ($query) use ($user) {
-            $query->whereHas('user', function ($q) use ($user) {
-                $q->where('name', 'LIKE', '%'.$user.'%')
-                ->orWhere('alamat', 'LIKE', '%'.$user.'%');
+            $query->where(function ($q) use ($user) {
+                $q->where('users.name', 'LIKE', '%'.$user.'%')
+                ->orWhere('users.alamat', 'LIKE', '%'.$user.'%');
             });
+        })
+        ->when($user_id, function ($query) use ($user_id) {
+            $query->where('users.id', $user_id);
         })
         ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
             $query->whereBetween('date', [$start_date, $end_date]);
         })
         ->when($status, function ($query) use ($status) {
             $query->where('transactions.status', $status);
+        })
+        ->when($month, function ($query) use ($month) {
+            $query->where('transactions.month', $month);
+        })
+        ->when($year, function ($query) use ($year) {
+            $query->where('transactions.year', $year);
         })
         ->orderBy('date', 'DESC')
         ->orderBy('users.alamat', 'ASC')
@@ -58,7 +70,7 @@ class IPKLController extends Controller
     public function tambah()
     {
         $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
-        $users = User::select('id', 'name', 'alamat', 'status')->orderBy('alamat', 'ASC')->get();
+        $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
 
         return view('ipkl.tambah', compact(
             'title',
@@ -84,92 +96,100 @@ class IPKLController extends Controller
 
             for ($i = 0; $i < count($user_id); $i++) {
                 if ($user_id[$i] !== null) {
-                    $ipkl = Transaction::create([
-                        'user_id' => $user_id[$i],
-                        'type' => $request->type,
-                        'date' => $request->date,
-                        'nominal' => $nominal,
-                        'expired' => $request->expired,
-                        'notes' => $request->notes,
-                        'status' => 'unpaid',
-                        'created_by' => auth()->user()->id,
-                        'month' => $month,
-                        'year' => $year,
-                        'in_out' => 'in',
-                    ]);
+                    $exists = Transaction::where('user_id', $user_id[$i])
+                    ->where('month', $month)
+                    ->where('year', $year)
+                    ->where('type', $request->type)
+                    ->exists();
 
-                    $date = Carbon::parse($ipkl->date);
-                    $now = Carbon::now();
-                    $diff_day = $now->diffInDays($date->addDay(), false);
-                    $diff_day = max(0, $diff_day);
-                    $total_expired = $diff_day + $ipkl->expired;
+                    if (!$exists) {
+                        $ipkl = Transaction::create([
+                            'user_id' => $user_id[$i],
+                            'type' => $request->type,
+                            'date' => $request->date,
+                            'nominal' => $nominal,
+                            'expired' => $request->expired,
+                            'notes' => $request->notes,
+                            'status' => 'unpaid',
+                            'created_by' => auth()->user()->id,
+                            'month' => $month,
+                            'year' => $year,
+                            'in_out' => 'in',
+                        ]);
 
-                    \Midtrans\Config::$serverKey = config('midtrans.server_key');
-                    \Midtrans\Config::$isProduction = config('midtrans.is_production');
-                    \Midtrans\Config::$isSanitized = true;
-                    \Midtrans\Config::$is3ds = true;
+                        $date = Carbon::parse($ipkl->date);
+                        $now = Carbon::now();
+                        $diff_day = $now->diffInDays($date->addDay(), false);
+                        $diff_day = max(0, $diff_day);
+                        $total_expired = $diff_day + $ipkl->expired;
+                        $user = User::find($user_id[$i]);
 
-                    $params = array(
-                        'transaction_details' => array(
-                            'order_id' => $ipkl->id,
-                            'gross_amount' => $ipkl->nominal,
-                        ),
-                        'expiry' => array(
-                            'start_time' => date("Y-m-d H:i:s O"),
-                            'unit' => 'days',
-                            'duration' => $total_expired,
-                        ),
-                        'customer_details' => array(
-                            'first_name' => $ipkl->user->name ?? '',
-                            'email' => $ipkl->user->email ?? '',
-                            'phone' => $ipkl->user->no_hp,
-                        ),
-                    );
+                        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+                        \Midtrans\Config::$isProduction = config('midtrans.is_production');
+                        \Midtrans\Config::$isSanitized = true;
+                        \Midtrans\Config::$is3ds = true;
 
-                    $snapToken = \Midtrans\Snap::getSnapToken($params);
-                    $ipkl->update([
-                        'snaptoken' => $snapToken
-                    ]);
+                        $params = array(
+                            'transaction_details' => array(
+                                'order_id' => $ipkl->id,
+                                'gross_amount' => $ipkl->nominal,
+                            ),
+                            'expiry' => array(
+                                'start_time' => date("Y-m-d H:i:s O"),
+                                'unit' => 'days',
+                                'duration' => $total_expired,
+                            ),
+                            'customer_details' => array(
+                                'first_name' => $user->name ?? '',
+                                'email' => $user->email ?? '',
+                                'phone' => $user->no_hp,
+                            ),
+                        );
 
-                    $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
-                    $user = User::find($user_id[$i]);
-                    $user->messages = [
-                        'user_id'   =>  auth()->user()->id,
-                        'from'   =>  auth()->user()->name,
-                        'message'   =>  'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
-                        'action'   =>  '/my-ipkl/show/'.$ipkl->id
-                    ];
-                    $user->notify(new \App\Notifications\UserNotification);
+                        $snapToken = \Midtrans\Snap::getSnapToken($params);
+                        $ipkl->update([
+                            'snaptoken' => $snapToken
+                        ]);
 
-                    if ($ipkl->date) {
-                        Carbon::setLocale('id');
-                        $date = Carbon::createFromFormat('Y-m-d', $ipkl->date);
-                        $expired_date = $date->addDays($ipkl->expired)->translatedFormat('d F Y');
-                    } else {
-                        $expired_date = '-';
+                        $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
+                        $user->messages = [
+                            'user_id'   =>  auth()->user()->id,
+                            'from'   =>  auth()->user()->name,
+                            'message'   =>  'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
+                            'action'   =>  '/my-ipkl/show/'.$ipkl->id
+                        ];
+                        $user->notify(new \App\Notifications\UserNotification);
+
+                        if ($ipkl->date) {
+                            Carbon::setLocale('id');
+                            $date = Carbon::createFromFormat('Y-m-d', $ipkl->date);
+                            $expired_date = $date->addDays($ipkl->expired)->translatedFormat('d F Y');
+                        } else {
+                            $expired_date = '-';
+                        }
+
+                        Http::post(config('midtrans.whatsapp_api_url'), [
+                            'api_key' => config('midtrans.whatsapp_api_key'),
+                            'sender' => config('midtrans.whatsapp_sender'),
+                            'number' => $user->no_hp,
+                            'message' =>
+                                "Ini adalah pesan otomatis dari sistem layanan Cluster Madrid\n\n" .
+
+                                "Salam sejahtera Bapak/Ibu, Kami informasikan data dibawah ini belum melakukan pembayaran\n" .
+                                "Nama : " . $user->name . "\n" .
+                                "Alamat : " . $user->alamat . "\n" .
+                                "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $year . ") \n" .
+                                "Jatuh Tempo : " . $expired_date . "\n" .
+                                "Status : " . $ipkl->status . "\n" .
+                                "Nominal : Rp " . $request->nominal . "\n\n" .
+
+                                "Pembayaran Melalui Link Dibawah Ini \n",
+
+                            'footer' => url('/my-ipkl/show/'.$ipkl->id),
+                        ]);
+
+                        Mail::to($user->email)->send(new IpklMail($ipkl));
                     }
-
-                    Http::post(config('midtrans.whatsapp_api_url'), [
-                        'api_key' => config('midtrans.whatsapp_api_key'),
-                        'sender' => config('midtrans.whatsapp_sender'),
-                        'number' => $user->no_hp,
-                        'message' =>
-                            "Ini adalah pesan otomatis dari sistem layanan Cluster Madrid\n\n" .
-
-                            "Salam sejahtera Bapak/Ibu, Kami informasikan data dibawah ini belum melakukan pembayaran\n" .
-                            "Nama : " . $user->name . "\n" .
-                            "Alamat : " . $user->alamat . "\n" .
-                            "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $year . ") \n" .
-                            "Jatuh Tempo : " . $expired_date . "\n" .
-                            "Status : " . $ipkl->status . "\n" .
-                            "Nominal : Rp " . $request->nominal . "\n\n" .
-
-                            "Pembayaran Melalui Link Dibawah Ini \n",
-
-                        'footer' => url('/my-ipkl/show/'.$ipkl->id),
-                    ]);
-
-                    Mail::to($ipkl->user->email)->send(new IpklMail($ipkl));
                 }
             }
         });
@@ -177,10 +197,130 @@ class IPKLController extends Controller
         return redirect('/ipkl')->with('success', 'Data Berhasil Ditambahkan');
     }
 
+    public function tambahPerUser()
+    {
+        $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
+        $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
+
+        return view('ipkl.tambahPerUser', compact(
+            'title',
+            'users',
+        ));
+    }
+
+    public function storePerUser(Request $request)
+    {
+        $result = null;
+        DB::transaction(function ()  use ($request, $result) {
+            $request->validate([
+                'user_id' => 'required',
+                'type' => 'required',
+                'date' => 'required',
+                'nominal' => 'required',
+                'expired' => 'required',
+            ]);
+
+            $nominal = $request->nominal ? str_replace(',', '', $request->nominal) : 0;
+            $month = date('m', strtotime($request->date));
+            $year = date('Y', strtotime($request->date));
+
+            $ipkl = Transaction::create([
+                'user_id' => $request->user_id,
+                'type' => $request->type,
+                'date' => $request->date,
+                'nominal' => $nominal,
+                'expired' => $request->expired,
+                'notes' => $request->notes,
+                'status' => 'unpaid',
+                'created_by' => auth()->user()->id,
+                'month' => $month,
+                'year' => $year,
+                'in_out' => 'in',
+            ]);
+
+            $this->result = $ipkl->id;
+
+            $date = Carbon::parse($ipkl->date);
+            $now = Carbon::now();
+            $diff_day = $now->diffInDays($date->addDay(), false);
+            $diff_day = max(0, $diff_day);
+            $total_expired = $diff_day + $ipkl->expired;
+            $user = User::find($request->user_id);
+
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            \Midtrans\Config::$isProduction = config('midtrans.is_production');
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => $ipkl->id,
+                    'gross_amount' => $ipkl->nominal,
+                ),
+                'expiry' => array(
+                    'start_time' => date("Y-m-d H:i:s O"),
+                    'unit' => 'days',
+                    'duration' => $total_expired,
+                ),
+                'customer_details' => array(
+                    'first_name' => $user->name ?? '',
+                    'email' => $user->email ?? '',
+                    'phone' => $user->no_hp,
+                ),
+            );
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $ipkl->update([
+                'snaptoken' => $snapToken
+            ]);
+
+            $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
+            $user->messages = [
+                'user_id'   =>  auth()->user()->id,
+                'from'   =>  auth()->user()->name,
+                'message'   =>  'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
+                'action'   =>  '/my-ipkl/show/'.$ipkl->id
+            ];
+            $user->notify(new \App\Notifications\UserNotification);
+
+            if ($ipkl->date) {
+                Carbon::setLocale('id');
+                $date = Carbon::createFromFormat('Y-m-d', $ipkl->date);
+                $expired_date = $date->addDays($ipkl->expired)->translatedFormat('d F Y');
+            } else {
+                $expired_date = '-';
+            }
+
+            Http::post(config('midtrans.whatsapp_api_url'), [
+                'api_key' => config('midtrans.whatsapp_api_key'),
+                'sender' => config('midtrans.whatsapp_sender'),
+                'number' => $user->no_hp,
+                'message' =>
+                    "Ini adalah pesan otomatis dari sistem layanan Cluster Madrid\n\n" .
+
+                    "Salam sejahtera Bapak/Ibu, Kami informasikan data dibawah ini belum melakukan pembayaran\n" .
+                    "Nama : " . $user->name . "\n" .
+                    "Alamat : " . $user->alamat . "\n" .
+                    "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $year . ") \n" .
+                    "Jatuh Tempo : " . $expired_date . "\n" .
+                    "Status : " . $ipkl->status . "\n" .
+                    "Nominal : Rp " . $request->nominal . "\n\n" .
+
+                    "Pembayaran Melalui Link Dibawah Ini \n",
+
+                'footer' => url('/my-ipkl/show/'.$ipkl->id),
+            ]);
+
+            Mail::to($user->email)->send(new IpklMail($ipkl));
+        });
+
+        return redirect('/ipkl/show/'.$this->result)->with('success', 'Data Berhasil Ditambahkan');
+    }
+
     public function edit($id)
     {
         $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
-        $users = User::select('id', 'name', 'alamat', 'status')->orderBy('alamat', 'ASC')->get();
+        $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
         $ipkl = Transaction::find($id);
 
         return view('ipkl.edit', compact(
@@ -234,6 +374,7 @@ class IPKLController extends Controller
             $diff_day = $now->diffInDays($date->addDay(), false);
             $diff_day = max(0, $diff_day);
             $total_expired = $diff_day + $ipkl->expired;
+            $user = User::find($request->user_id);
 
             \Midtrans\Config::$serverKey = config('midtrans.server_key');
             \Midtrans\Config::$isProduction = config('midtrans.is_production');
@@ -251,9 +392,9 @@ class IPKLController extends Controller
                     'duration' => $total_expired,
                 ),
                 'customer_details' => array(
-                    'first_name' => $ipkl->user->name ?? '',
-                    'email' => $ipkl->user->email ?? '',
-                    'phone' => $ipkl->user->no_hp,
+                    'first_name' => $user->name ?? '',
+                    'email' => $user->email ?? '',
+                    'phone' => $user->no_hp,
                 ),
             );
 
@@ -263,7 +404,6 @@ class IPKLController extends Controller
             ]);
 
             $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
-            $user = User::find($request->user_id);
             $user->messages = [
                 'user_id'   =>  auth()->user()->id,
                 'from'   =>  auth()->user()->name,
@@ -300,7 +440,7 @@ class IPKLController extends Controller
                 'footer' => url('/my-ipkl/show/'.$ipkl->id),
             ]);
 
-            Mail::to($ipkl->user->email)->send(new IpklMail($ipkl));
+            Mail::to($user->email)->send(new IpklMail($ipkl));
         });
 
         return redirect('/ipkl/show/'.$this->result)->with('success', 'Data Berhasil Diupdate');
@@ -369,6 +509,8 @@ class IPKLController extends Controller
         $search = request()->input('search');
         $rt = request()->input('rt');
         $status = request()->input('status');
+        $month = request()->input('month');
+        $status_transaksi = request()->input('status_transaksi');
 
         $users = User::where('name', '!=', 'Admin')
         ->when($search, function ($query) use ($search) {
@@ -382,6 +524,35 @@ class IPKLController extends Controller
         })
         ->when($status, function ($query) use ($status) {
             $query->where('status', $status);
+        })
+        ->when($status_transaksi == 'tagihan belum dibuat', function ($query) use ($month, $year) {
+            $query->whereDoesntHave('transaction', function ($q) use ($month, $year) {
+                $q->where('type', 'IPKL')
+                  ->where('month', $month)
+                  ->where('year', $year);
+            });
+        })
+        ->when($status_transaksi == 'paid', function ($query) use ($month, $year) {
+            $query->whereHas('transaction', function ($q) use ($month, $year) {
+                $q->where('type', 'IPKL')
+                  ->where('status', 'paid')
+                  ->where('month', $month)
+                  ->where('year', $year);
+            });
+        })
+        ->when($status_transaksi == 'unpaid', function ($query) use ($month, $year) {
+            $query->whereHas('transaction', function ($q) use ($month, $year) {
+                $q->where('type', 'IPKL')
+                  ->where('status', 'unpaid')
+                  ->where('month', $month)
+                  ->where('year', $year);
+            })
+            ->whereDoesntHave('transaction', function ($q) use ($month, $year) {
+                $q->where('type', 'IPKL')
+                  ->where('status', 'paid')
+                  ->where('month', $month)
+                  ->where('year', $year);
+            });
         })
         ->orderBy('rt', 'asc')
         ->orderBy('alamat', 'asc')

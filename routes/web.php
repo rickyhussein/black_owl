@@ -89,6 +89,8 @@ Route::delete('/pengurus/delete/{id}', [PengurusController::class, 'delete'])->m
 Route::get('/ipkl', [IPKLController::class, 'index'])->middleware('role:admin');
 Route::get('/ipkl/export', [IPKLController::class, 'export'])->middleware('role:admin');
 Route::get('/ipkl/tambah', [IPKLController::class, 'tambah'])->middleware('role:admin');
+Route::get('/ipkl/tambah/peruser', [IPKLController::class, 'tambahPerUser'])->middleware('role:admin');
+Route::post('/ipkl/store/peruser', [IPKLController::class, 'storePerUser'])->middleware('role:admin');
 Route::post('/ipkl/store', [IPKLController::class, 'store'])->middleware('role:admin');
 Route::get('/ipkl/edit/{id}', [IPKLController::class, 'edit'])->middleware('role:admin');
 Route::put('/ipkl/update/{id}', [IPKLController::class, 'update'])->middleware('role:admin');
