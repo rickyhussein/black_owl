@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('back')
     @if (auth()->user())
-        <a href="{{ url('/my-ipkl') }}" class="back-btn"> <i class="icon-left"></i> </a>
+        <a href="{{ url('/my-kritik-saran') }}" class="back-btn"> <i class="icon-left"></i> </a>
     @endif
 @endsection
 @section('container')
@@ -15,7 +15,7 @@
                                 Nama
                             </p>
                             <h5>
-                                {{ $ipkl->user->name ?? '-' }}
+                                {{ $kritik_saran->user->name ?? '-' }}
                             </h5>
                         </div>
                     </li>
@@ -26,7 +26,7 @@
                                 Alamat
                             </p>
                             <h5>
-                                {{ $ipkl->user->alamat ?? '-' }}
+                                {{ $kritik_saran->user->alamat ?? '-' }}
                             </h5>
                         </div>
                     </li>
@@ -38,14 +38,12 @@
                             </p>
                             <h5>
                                 @php
-                                    if ($ipkl->date) {
+                                    if ($kritik_saran->date) {
                                         Carbon\Carbon::setLocale('id');
-                                        $date = Carbon\Carbon::createFromFormat('Y-m-d', $ipkl->date);
+                                        $date = Carbon\Carbon::createFromFormat('Y-m-d', $kritik_saran->date);
                                         $new_date = $date->translatedFormat('d F Y');
-                                        $expired_date = $date->addDays($ipkl->expired)->translatedFormat('d F Y');
                                     } else {
                                         $new_date = '-';
-                                        $expired_date = '-';
                                     }
                                 @endphp
                                 {{ $new_date  }}
@@ -56,10 +54,10 @@
                     <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
                         <div class="content-right">
                             <p>
-                                Jatuh Tempo
+                                Judul
                             </p>
-                            <h5 style="color: red">
-                                {{ $expired_date }}
+                            <h5>
+                                {{ $kritik_saran->judul ?? '-' }}
                             </h5>
                         </div>
                     </li>
@@ -67,13 +65,10 @@
                     <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
                         <div class="content-right">
                             <p>
-                                Jenis Transaksi
+                                Kritik & Saran
                             </p>
                             <h5>
-                                @php
-                                    $month = Carbon\Carbon::createFromFormat('m', $ipkl->month)->translatedFormat('F');
-                                @endphp
-                                {{ $ipkl->type ?? '-' }} ({{ $month }} {{ $ipkl->year }})
+                                {!! $kritik_saran->kritik_saran ? nl2br(e($kritik_saran->kritik_saran)) : '-' !!}
                             </h5>
                         </div>
                     </li>
@@ -81,10 +76,14 @@
                     <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
                         <div class="content-right">
                             <p>
-                                Nominal
+                                File
                             </p>
                             <h5>
-                                Rp {{ number_format($ipkl->nominal) }}
+                                @if ($kritik_saran->kritik_saran_file_path)
+                                    <div class="badge clickable" data-url="{{ url('/storage/'.$kritik_saran->kritik_saran_file_path) }}" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px; cursor: pointer;" target="_blank"><i class="fa fa-download me-1"></i> {{ $kritik_saran->kritik_saran_file_name }}</div>
+                                @else
+                                    -
+                                @endif
                             </h5>
                         </div>
                     </li>
@@ -95,34 +94,46 @@
                                 Status
                             </p>
                             <h5>
-                                @if ($ipkl->status == 'paid')
-                                    <div class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">{{ $ipkl->status ?? '-' }}</div>
+                                @if ($kritik_saran->status == 'approved')
+                                    <div class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">{{ $kritik_saran->status ?? '-' }}</div>
+                                @elseif ($kritik_saran->status == 'rejected')
+                                    <div class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">{{ $kritik_saran->status ?? '-' }}</div>
                                 @else
-                                    <div class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">{{ $ipkl->status ?? '-' }}</div>
+                                    <div class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">{{ $kritik_saran->status ?? '-' }}</div>
                                 @endif
                             </h5>
                         </div>
                     </li>
 
+
                     <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
                         <div class="content-right">
                             <p>
-                                Keterangan
+                                Catatan Pengurus
                             </p>
                             <h5>
-                                {!! $ipkl->notes ? nl2br(e($ipkl->notes)) : '-' !!}
+                                {!! $kritik_saran->catatan_pengurus ? nl2br(e($kritik_saran->catatan_pengurus)) : '-' !!}
                             </h5>
                         </div>
                     </li>
+
+
                 </ul>
             </div>
         </div>
     </div>
 
-    @if ($ipkl->status == 'unpaid')
+    @if ($kritik_saran->status == 'draft' && $kritik_saran->user_id == auth()->user()->id)
         <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:70px">
             <div class="tf-container">
-                <button  id="pay-button" class="tf-btn accent large">Bayar Sekarang</button>
+                <div class="row">
+                    <div class="col">
+                        <a class="tf-btn accent large" href="{{ url('/my-kritik-saran/edit/'.$kritik_saran->id) }}">Edit</a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url('/my-kritik-saran/delete/'.$kritik_saran->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn accent large" style="background-color: red">Delete</a>
+                    </div>
+                </div>
             </div>
         </div>
     @endif
@@ -137,38 +148,12 @@
     <br>
     <br>
     <br>
-
-    @push('style')
-        <script type="text/javascript" src="{{ config('midtrans.snap_url') }}" data-client-key="{{ config('midtrans.client_key') }}"></script>
-    @endpush
-
     @push('script')
-        <script type="text/javascript">
-            var payButton = document.getElementById('pay-button');
-            payButton.addEventListener('click', function () {
-            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-                window.snap.pay('{{ $ipkl->snaptoken }}', {
-                    onSuccess: function(result){
-                    /* You may add your own implementation here */
-                    alert("payment success!"); console.log(result);
-                    location.reload();
-                    },
-                    onPending: function(result){
-                    /* You may add your own implementation here */
-                    alert("wating your payment!"); console.log(result);
-                    location.reload();
-                    },
-                    onError: function(result){
-                    /* You may add your own implementation here */
-                    alert("payment failed!"); console.log(result);
-                    location.reload();
-                    },
-                    onClose: function(){
-                    /* You may add your own implementation here */
-                    alert('you closed the popup without finishing the payment');
-                    location.reload();
-                    }
-                })
+        <script>
+            $(function () {
+                $(".clickable").on("click", function() {
+                    window.location.href = $(this).data("url");
+                });
             });
         </script>
     @endpush

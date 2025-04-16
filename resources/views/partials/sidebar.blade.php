@@ -113,6 +113,15 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ url('/kritik-saran') }}" class="nav-link {{ Request::is('kritik-saran*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-handshake"></i>
+                        <p>
+                            Kritik & Saran
+                        </p>
+                    </a>
+                </li>
+
                 {{-- <li class="nav-item">
                     <a href="{{ url('/roles') }}" class="nav-link {{ Request::is('roles*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-solid fa-hat-cowboy"></i>

@@ -13,6 +13,7 @@ use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\TataTertibController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\KritiksSaranController;
 use App\Http\Controllers\NotificationController;
 
 /*
@@ -124,6 +125,18 @@ Route::put('/ganti-password/update/{id}', [usersController::class, 'gantiPasswor
 
 Route::resource('/roles', rolesController::class)->middleware('auth')->except('show');
 Route::get('/switch/{id}', [authController::class, 'switch'])->middleware('auth');
+
+Route::get('/kritik-saran', [KritiksSaranController::class, 'index'])->middleware('role:admin');
+Route::get('/kritik-saran/show/{id}', [KritiksSaranController::class, 'show'])->middleware('role:admin');
+Route::post('/kritik-saran/approval/{id}', [KritiksSaranController::class, 'approval'])->middleware('role:admin');
+
+Route::get('/my-kritik-saran', [KritiksSaranController::class, 'myKritikSaran'])->middleware('role:user');
+Route::get('/my-kritik-saran/tambah', [KritiksSaranController::class, 'tambahMyKritikSaran'])->middleware('role:user');
+Route::post('/my-kritik-saran/store', [KritiksSaranController::class, 'storeMyKritikSaran'])->middleware('role:user');
+Route::get('/my-kritik-saran/show/{id}', [KritiksSaranController::class, 'showMyKritikSaran'])->middleware('role:user');
+Route::get('/my-kritik-saran/edit/{id}', [KritiksSaranController::class, 'editMyKritikSaran'])->middleware('role:user');
+Route::put('/my-kritik-saran/update/{id}', [KritiksSaranController::class, 'updateMyKritikSaran'])->middleware('role:user');
+Route::get('/my-kritik-saran/delete/{id}', [KritiksSaranController::class, 'deleteMyKritikSaran'])->middleware('role:user');
 
 Route::get('/reset', function () {
     Artisan::call('optimize');

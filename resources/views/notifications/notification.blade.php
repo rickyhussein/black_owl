@@ -19,7 +19,7 @@
                                             <img style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" src="{{ url('/storage/'.$user->foto) }}" alt="{{ $user->name ?? '-' }}">
                                         @endif
                                     </td>
-                                    <td class="mailbox-name"><a href="read-mail.html">{{ $user->name }}</a></td>
+                                    <td class="mailbox-name" style="color:blue">{{ $user->name }}</td>
                                     <td class="mailbox-subject">{{ $inbox->data['message'] }}
                                     </td>
                                     <td class="mailbox-attachment"></td>

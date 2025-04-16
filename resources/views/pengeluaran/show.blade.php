@@ -20,9 +20,6 @@
                                     :
                                 </div>
                                 <div class="col">
-                                    @php
-                                        $month = Carbon\Carbon::createFromFormat('m', $pengeluaran->month)->translatedFormat('F');
-                                    @endphp
                                     {{ $pengeluaran->type ?? '-' }}
                                 </div>
                             </div>

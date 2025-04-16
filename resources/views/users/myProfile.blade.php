@@ -3,28 +3,28 @@
     <a href="{{ url('/dashboard-user') }}" class="back-btn"> <i class="icon-left"></i> </a>
 @endsection
 @section('container')
-    <div id="app-wrap" class="mt-4">
-        <div class="bill-content">
-            <div class="tf-container ms-4 me-4">
-                <div class="card-secton transfer-section mt-2">
-                    <div class="tf-container">
-                        <div class="tf-balance-box" style="background-color: rgb(207, 207, 207);">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="inner-left d-flex justify-content-between align-items-center">
-                                    @if($user->foto == null)
-                                        <img src="{{ url('assets/img/foto_default.jpg') }}" alt="image">
-                                    @else
-                                        <img src="{{ url('/storage/'.$user->foto) }}" alt="image">
-                                    @endif
-                                    <p class="fw_7 on_surface_color">{{ $user->name }}</p>
+    <form class="tf-form" action="{{ url('/my-profile/update/'.$user->id) }}" enctype="multipart/form-data" method="POST">
+        @method('PUT')
+        @csrf
+        <div id="app-wrap" class="mt-4">
+            <div class="bill-content">
+                <div class="tf-container ms-4 me-4">
+                    <div class="card-secton transfer-section mt-2">
+                        <div class="tf-container">
+                            <div class="tf-balance-box" style="background-color: rgb(207, 207, 207);">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="inner-left d-flex justify-content-between align-items-center">
+                                        @if($user->foto == null)
+                                            <img src="{{ url('assets/img/foto_default.jpg') }}" alt="image">
+                                        @else
+                                            <img src="{{ url('/storage/'.$user->foto) }}" alt="image">
+                                        @endif
+                                        <p class="fw_7 on_surface_color">{{ $user->name }}</p>
+                                    </div>
+                                    <p class="fw_7 on_surface_color">{{ $user->alamat }}</p>
                                 </div>
-                                <p class="fw_7 on_surface_color">{{ $user->alamat }}</p>
                             </div>
-                        </div>
-                        <div class="tf-spacing-20"></div>
-                        <form class="tf-form" action="{{ url('/my-profile/update/'.$user->id) }}" enctype="multipart/form-data" method="POST">
-                            @method('PUT')
-                            @csrf
+                            <div class="tf-spacing-20"></div>
                             <div class="group-input">
                                 <label for="name">Nama</label>
                                 <input type="text" class="@error('name') is-invalid @enderror" name="name" value="{{ old('name', $user->name) }}" />
@@ -72,7 +72,7 @@
 
                             <div class="group-input">
                                 <label for="no_hp">Nomor HP</label>
-                                <input type="text" class="@error('no_hp') is-invalid @enderror" id="no_hp" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}">
+                                <input type="number" class="@error('no_hp') is-invalid @enderror" id="no_hp" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}">
                                 @error('no_hp')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -200,14 +200,19 @@
                                 </table>
                                 <a id="add_row" class="btn btn-sm btn-success float-end">+ Tambah</a>
                             </div>
-
-                            <button type="submit" class="tf-btn accent large">Save</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:50px">
+            <div class="tf-container">
+                <button type="submit" class="tf-btn accent large">Save</button>
+            </div>
+        </div>
+    </form>
+
     <br>
     <br>
     <br>
