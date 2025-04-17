@@ -127,6 +127,7 @@ Route::resource('/roles', rolesController::class)->middleware('auth')->except('s
 Route::get('/switch/{id}', [authController::class, 'switch'])->middleware('auth');
 
 Route::get('/kritik-saran', [KritiksSaranController::class, 'index'])->middleware('role:admin');
+Route::get('/kritik-saran/export', [KritiksSaranController::class, 'export'])->middleware('role:admin');
 Route::get('/kritik-saran/show/{id}', [KritiksSaranController::class, 'show'])->middleware('role:admin');
 Route::post('/kritik-saran/approval/{id}', [KritiksSaranController::class, 'approval'])->middleware('role:admin');
 

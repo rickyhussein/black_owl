@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\KritikSaran;
 use Illuminate\Http\Request;
+use App\Exports\KritikSaranExport;
 use Illuminate\Support\Facades\DB;
 
 class KritiksSaranController extends Controller
@@ -38,6 +39,11 @@ class KritiksSaranController extends Controller
         ));
     }
 
+    public function export()
+    {
+        return (new KritikSaranExport($_GET))->download('Kritik & Saran.xlsx');
+    }
+
     public function show($id)
     {
         $title = 'Kritik & Saran';
@@ -58,6 +64,8 @@ class KritiksSaranController extends Controller
                 'status' => 'required',
                 'catatan_pengurus' => 'nullable',
             ]);
+
+            $validated['approved_by'] = auth()->user()->id;
 
             $kritik_saran->update($validated);
 
