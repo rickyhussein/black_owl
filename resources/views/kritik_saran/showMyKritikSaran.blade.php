@@ -124,7 +124,7 @@
     </div>
 
     @if ($kritik_saran->status == 'draft' && $kritik_saran->user_id == auth()->user()->id)
-        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:70px">
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:80px">
             <div class="tf-container">
                 <div class="row">
                     <div class="col">

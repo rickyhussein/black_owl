@@ -3,12 +3,12 @@
     <a href="{{ url('/my-kritik-saran/show/'.$kritik_saran->id) }}" class="back-btn"> <i class="icon-left"></i> </a>
 @endsection
 @section('container')
-    <div id="app-wrap" class="mt-4">
-        <div class="bill-content">
-            <div class="tf-container ms-4 me-4">
-                <div class="card-secton transfer-section mt-2">
-                    <div class="tf-container">
-                        <form class="tf-form" action="{{ url('/my-kritik-saran/update/'.$kritik_saran->id) }}" enctype="multipart/form-data" method="POST">
+    <form class="tf-form" action="{{ url('/my-kritik-saran/update/'.$kritik_saran->id) }}" enctype="multipart/form-data" method="POST">
+        <div id="app-wrap" class="mt-4">
+            <div class="bill-content">
+                <div class="tf-container ms-4 me-4">
+                    <div class="card-secton transfer-section mt-2">
+                        <div class="tf-container">
                             @method('PUT')
                             @csrf
 
@@ -45,15 +45,18 @@
                                     -
                                 @endif
                             </div>
-
-
-                            <button type="submit" class="tf-btn accent large">Save</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:80px">
+            <div class="tf-container">
+                <button type="submit" class="tf-btn accent large">Save</button>
+            </div>
+        </div>
+    </form>
     <br>
     <br>
     <br>

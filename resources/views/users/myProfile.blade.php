@@ -108,9 +108,8 @@
                                 <label for="status" style="z-index: 1000">Status</label>
                                 <select name="status" id="status" class="@error('status') is-invalid @enderror select2" data-live-search="true">
                                     <option value="">-- Pilih Status --</option>
-                                    @foreach ($status as $stat)
-                                        <option value="{{ $stat->status }}" {{ $stat->status == old('status', $user->status) ? 'selected="selected"' : '' }}>{{ $stat->status }}</option>
-                                    @endforeach
+                                    <option value="Dihuni" {{ 'Dihuni' == old('status', $user->status) ? 'selected="selected"' : '' }}>Dihuni</option>
+                                    <option value="Belum dihuni" {{ 'Belum dihuni' == old('status', $user->status) ? 'selected="selected"' : '' }}>Belum dihuni</option>
                                 </select>
                                 @error('status')
                                 <div class="invalid-feedback">
@@ -206,7 +205,7 @@
             </div>
         </div>
 
-        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:50px">
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:80px">
             <div class="tf-container">
                 <button type="submit" class="tf-btn accent large">Save</button>
             </div>

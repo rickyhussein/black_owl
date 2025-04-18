@@ -577,36 +577,51 @@ class IPKLController extends Controller
         $hashed = hash('sha512', $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
         if ($hashed == $request->signature_key) {
             if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
-                $ipkl = Transaction::find($request->order_id);
-                $ipkl->update([
+                $transaction = Transaction::find($request->order_id);
+                $transaction->update([
                     'status' => 'paid',
                     'payment_source' => 'midtrans',
                     'paid_date' => $request->transaction_time,
                     'midtrans_transaction_id' => $request->transaction_id,
                 ]);
 
-                $month_name = Carbon::createFromFormat('m', $ipkl->month)->translatedFormat('F');
+                $month_name = Carbon::createFromFormat('m', $transaction->month)->translatedFormat('F');
 
                 $users = User::whereHas('roles', function ($query) {
                     $query->where('name', 'admin');
                 })->get();
 
+                if ($transaction->type == 'IPKL') {
+                    $message = 'IPKL (' . $month_name . ' ' . $transaction->year . ') berhasil dibayar oleh ' . $transaction->user->name . ' sebesar Rp ' . number_format($transaction->nominal);
+                    $action = '/ipkl/show/'.$transaction->id;
+
+                    $message_user = 'Terimakasih anda telah melakukan pembayaran IPKL (' . $month_name . ' ' . $transaction->year . ') sebesar Rp ' . number_format($transaction->nominal);
+                    $action_user = '/my-ipkl/show/'.$transaction->id;
+                } else {
+                    $message = $transaction->type . ' berhasil dibayar oleh ' . $transaction->user->name . ' sebesar Rp ' . number_format($transaction->nominal);
+                    $action = '/donasi/show/'.$transaction->id;
+
+                    $message_user = 'Terimakasih anda telah melakukan pembayaran ' . $transaction->type . ' sebesar Rp ' . number_format($transaction->nominal);
+                    $action_user = '/my-donasi/show/'.$transaction->id;
+                }
+
+
                 foreach ($users as $user) {
                     $user->messages = [
-                        'user_id'   =>  $ipkl->user_id,
-                        'from'   =>  $ipkl->user->name,
-                        'message'   =>  'IPKL (' . $month_name . ' ' . $ipkl->year . ') berhasil dibayar oleh ' . $ipkl->user->name . ' sebesar Rp ' . number_format($ipkl->nominal),
-                        'action'   =>  '/ipkl/show/'.$ipkl->id
+                        'user_id'   =>  $transaction->user_id,
+                        'from'   =>  $transaction->user->name,
+                        'message'   =>  $message,
+                        'action'   =>  $action
                     ];
                     $user->notify(new \App\Notifications\UserNotification);
                 }
 
-                $user_payment = User::find($ipkl->user_id);
+                $user_payment = User::find($transaction->user_id);
                 $user_payment->messages = [
-                    'user_id'   =>  $ipkl->user_id,
-                    'from'   =>  $ipkl->user->name,
-                    'message'   =>  'Terimakasih anda telah melakukan pembayaran IPKL (' . $month_name . ' ' . $ipkl->year . ') sebesar Rp ' . number_format($ipkl->nominal),
-                    'action'   =>  '/my-ipkl/show/'.$ipkl->id
+                    'user_id'   =>  $transaction->user_id,
+                    'from'   =>  $transaction->user->name,
+                    'message'   =>  $message_user,
+                    'action'   =>  $action_user
                 ];
                 $user_payment->notify(new \App\Notifications\UserNotification);
             }

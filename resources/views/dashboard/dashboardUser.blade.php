@@ -35,13 +35,8 @@
                         </li>
 
                         <li class="wallet-card-item">
-                            <a class="fw_6" href="#">
-                                <ul class="icon icon-topup">
-                                    <li class="path1"></li>
-                                    <li class="path2"></li>
-                                    <li class="path3"></li>
-                                    <li class="path4"></li>
-                                </ul>
+                            <a class="fw_6" href="{{ url('/my-donasi') }}">
+                                <img src="{{ asset('/assets/img/donasi.jpg') }}" style="width: 50px">
                                 Donasi
                             </a>
                         </li>

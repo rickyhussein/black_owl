@@ -120,7 +120,7 @@
     </div>
 
     @if ($ipkl->status == 'unpaid')
-        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:70px">
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:80px">
             <div class="tf-container">
                 <button  id="pay-button" class="tf-btn accent large">Bayar Sekarang</button>
             </div>

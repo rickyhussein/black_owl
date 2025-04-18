@@ -139,7 +139,7 @@
 
     </div>
 
-    <div class="bottom-navigation-bar st1 bottom-btn-fixed" style="bottom:50px">
+    <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:50px">
         <div class="tf-container">
             <a href="{{ url('/my-kritik-saran/tambah') }}" class="tf-btn accent large"> + Tambah</a>
         </div>

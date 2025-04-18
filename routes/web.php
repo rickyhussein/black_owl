@@ -6,6 +6,7 @@ use App\Http\Controllers\authController;
 use App\Http\Controllers\IPKLController;
 use App\Http\Controllers\rolesController;
 use App\Http\Controllers\usersController;
+use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\dashboardController;
@@ -138,6 +139,11 @@ Route::get('/my-kritik-saran/show/{id}', [KritiksSaranController::class, 'showMy
 Route::get('/my-kritik-saran/edit/{id}', [KritiksSaranController::class, 'editMyKritikSaran'])->middleware('role:user');
 Route::put('/my-kritik-saran/update/{id}', [KritiksSaranController::class, 'updateMyKritikSaran'])->middleware('role:user');
 Route::get('/my-kritik-saran/delete/{id}', [KritiksSaranController::class, 'deleteMyKritikSaran'])->middleware('role:user');
+
+Route::get('/my-donasi', [DonasiController::class, 'myDonasi'])->middleware('role:user');
+Route::get('/my-donasi/tambah', [DonasiController::class, 'tambahMyDonasi'])->middleware('role:user');
+Route::post('/my-donasi/store', [DonasiController::class, 'storeMyDonasi'])->middleware('role:user');
+Route::get('/my-donasi/show/{id}', [DonasiController::class, 'showMyDonasi'])->middleware('role:user');
 
 Route::get('/reset', function () {
     Artisan::call('optimize');

@@ -237,14 +237,12 @@ class usersController extends Controller
     {
         $title = 'My Profile';
         $roles = Role::orderBy('name')->get();
-        $status = User::select('status')->whereNotNull('status')->groupBy('status')->get();
         $user = User::find(auth()->user()->id);
         $user_roles = implode(', ', $user->roles->pluck('name')->toArray());
 
         return view('users.myProfile', compact(
             'title',
             'roles',
-            'status',
             'user',
             'user_roles',
         ));
