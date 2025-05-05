@@ -23,14 +23,57 @@ class TransactionController extends Controller
             $month = date('m');
         }
 
-        $transaction_in_paid = Transaction::where('in_out', 'in')->where('status', 'paid')->where('month', $month)->where('year', $year)->sum('nominal');
-        $transaction_in_unpaid = Transaction::where('in_out', 'in')->where('status', 'unpaid')->where('type', 'IPKL')->where('month', $month)->where('year', $year)->sum('nominal');
-        $transaction_out = Transaction::where('in_out', 'out')->where('status', 'paid')->where('month', $month)->where('year', $year)->sum('nominal');
+        $start_date = request()->input('start_date');
+        $end_date = request()->input('end_date');
+
+        $transaction_in_paid = Transaction::where('in_out', 'in')
+        ->where('status', 'paid')
+        ->when(!$start_date && !$start_date && $month, function ($query) use ($month) {
+            $query->where('month', $month);
+        })
+        ->when(!$start_date && !$start_date && $year, function ($query) use ($year) {
+            $query->where('year', $year);
+        })
+        ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
+            $query->whereBetween('date', [$start_date, $end_date]);
+        })
+        ->sum('nominal');
+
+        $transaction_in_unpaid = Transaction::where('in_out', 'in')
+        ->where('status', 'unpaid')
+        ->where('type', 'IPKL')
+        ->when(!$start_date && !$start_date && $month, function ($query) use ($month) {
+            $query->where('month', $month);
+        })
+        ->when(!$start_date && !$start_date && $year, function ($query) use ($year) {
+            $query->where('year', $year);
+        })
+        ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
+            $query->whereBetween('date', [$start_date, $end_date]);
+        })
+        ->sum('nominal');
+
+        $transaction_out = Transaction::where('in_out', 'out')
+        ->where('status', 'paid')
+        ->when(!$start_date && !$start_date && $month, function ($query) use ($month) {
+            $query->where('month', $month);
+        })
+        ->when(!$start_date && !$start_date && $year, function ($query) use ($year) {
+            $query->where('year', $year);
+        })
+        ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
+            $query->whereBetween('date', [$start_date, $end_date]);
+        })
+        ->sum('nominal');
 
         $transaction_in_paid_all = Transaction::where('in_out', 'in')->where('status', 'paid')->sum('nominal');
         $transaction_out_all = Transaction::where('in_out', 'out')->where('status', 'paid')->sum('nominal');
 
-        $sisa = $transaction_in_paid_all - $transaction_out_all;
+        if ($start_date && $end_date) {
+            $sisa = $transaction_in_paid - $transaction_out;
+        } else {
+            $sisa = $transaction_in_paid_all - $transaction_out_all;
+        }
 
         $months = [
             '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April',

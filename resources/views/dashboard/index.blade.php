@@ -48,44 +48,56 @@
                 <div class="card">
                   <div class="card-header border-0">
                     <div class="d-flex justify-content-between">
-                      <h3 class="card-title">Keuangan</h3>
-                      <form action="{{ url('/dashboard') }}">
-                        <div class="form-row mb-2">
-                            <div class="col">
-                                <select name="month" id="month" class="form-control @error('month') is-invalid @enderror selectpicker" data-live-search="true">
-                                    <option value="">Month</option>
-                                    @foreach ($months as $moth_num => $month_name)
-                                        <option value="{{ $moth_num }}" {{ $moth_num == request('month') ? 'selected="selected"' : '' }}>{{ $month_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('month')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
+                        <h3 class="card-title">Keuangan</h3>
+                        <button type="button" class="btn btn-secondary btn-sm text-white ml-3 mb-3"  data-toggle="modal" data-target="#exampleModalCenter">
+                            <i class="fas fa-filter mr-1"></i> Filter
+                        </button>
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Filter</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                                @enderror
+                                <form action="{{ url('/dashboard') }}">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <select name="month" id="month" class="form-control selectpicker month" data-live-search="true">
+                                                <option value="">Month</option>
+                                                @foreach ($months as $moth_num => $month_name)
+                                                    <option value="{{ $moth_num }}" {{ $moth_num == request('month') ? 'selected="selected"' : '' }}>{{ $month_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            @php
+                                                $last= 2020;
+                                                $now = date('Y') + 5;
+                                            @endphp
+                                            <select name="year" id="year" class="form-control selectpicker year" data-live-search="true">
+                                                <option value="">Year</option>
+                                                @for ($i = $now; $i >= $last; $i--)
+                                                    <option value="{{ $i }}" {{ $i == request('year') ? 'selected="selected"' : '' }}>{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="datetime" class="form-control start_date" name="start_date" placeholder="Start Date" id="start_date" value="{{ request('start_date') }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="datetime" class="form-control end_date" name="end_date" placeholder="End Date" id="end_date" value="{{ request('end_date') }}">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-secondary">Search</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="col">
-                                @php
-                                    $last= 2020;
-                                    $now = date('Y');
-                                @endphp
-                                <select name="year" id="year" class="form-control @error('year') is-invalid @enderror selectpicker" data-live-search="true">
-                                    <option value="">Year</option>
-                                    @for ($i = $now; $i >= $last; $i--)
-                                    <option value="{{ $i }}" {{ $i == request('year') ? 'selected="selected"' : '' }}>{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                @error('year')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="col">
-                                <button type="submit" id="search" class="btn"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
-                    </form>
                     </div>
                   </div>
                   <div class="card-body">
@@ -109,57 +121,77 @@
 
     @push('script')
         <script>
-            $(function () {
-                var ctx = document.getElementById('transactionChart').getContext('2d');
+            var ctx = document.getElementById('transactionChart').getContext('2d');
 
-                var transactionChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: {!! json_encode(array_values($months)) !!}, // Label Bulan
-                        datasets: [
-                            {
-                                label: 'Pemasukan',
-                                backgroundColor: '#28a745',
-                                data: {!! json_encode($transaction_in_paid_array) !!}
-                            },
-                            {
-                                label: 'Outstanding',
-                                backgroundColor: '#dc3545',
-                                data: {!! json_encode($transaction_in_unpaid_array) !!}
-                            },
-                            {
-                                label: 'Pengeluaran',
-                                backgroundColor: '#ffc107',
-                                data: {!! json_encode($transaction_out_array) !!}
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    callback: function(value) {
-                                        return 'Rp ' + value.toLocaleString();
-                                    }
-                                }
-                            }]
+            var transactionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode(array_values($months)) !!},
+                    datasets: [
+                        {
+                            label: 'Pemasukan',
+                            backgroundColor: '#28a745',
+                            data: {!! json_encode($transaction_in_paid_array) !!}
                         },
-                        tooltips: {
-                            callbacks: {
-                                label: function(tooltipItem, data) {
-                                    return data.datasets[tooltipItem.datasetIndex].label + ': Rp ' + tooltipItem.yLabel.toLocaleString();
+                        {
+                            label: 'Outstanding',
+                            backgroundColor: '#dc3545',
+                            data: {!! json_encode($transaction_in_unpaid_array) !!}
+                        },
+                        {
+                            label: 'Pengeluaran',
+                            backgroundColor: '#ffc107',
+                            data: {!! json_encode($transaction_out_array) !!}
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    return 'Rp ' + value.toLocaleString();
                                 }
+                            }
+                        }]
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                return data.datasets[tooltipItem.datasetIndex].label + ': Rp ' + tooltipItem.yLabel.toLocaleString();
                             }
                         }
                     }
-                });
+                }
+            });
 
-                $(".clickable").on("click", function() {
-                    window.location.href = $(this).data("url");
-                });
+            $(".clickable").on("click", function() {
+                window.location.href = $(this).data("url");
+            });
+
+            $('.start_date').change(function(){
+                var start_date = $(this).val();
+                $('.end_date').val(start_date);
+                $('.month').val('').selectpicker('refresh');
+                $('.year').val('').selectpicker('refresh');
+            });
+
+            $('.end_date').change(function(){
+                $('.month').val('').selectpicker('refresh');
+                $('.year').val('').selectpicker('refresh');
+            });
+
+            $('.month').change(function(){
+                $('.start_date').val(null);
+                $('.end_date').val(null);
+            });
+
+            $('.year').change(function(){
+                $('.start_date').val(null);
+                $('.end_date').val(null);
             });
         </script>
     @endpush
