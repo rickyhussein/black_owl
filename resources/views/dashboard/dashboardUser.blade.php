@@ -36,13 +36,13 @@
 
                         <li class="wallet-card-item">
                             <a class="fw_6" href="{{ url('/my-donasi') }}">
-                                <img src="{{ asset('/assets/img/donasi.jpg') }}" style="width: 50px">
+                                <img src="{{ asset('/assets/img/donasi5.png') }}" style="width: 43px">
                                 Donasi
                             </a>
                         </li>
 
                         <li class="wallet-card-item">
-                            <a class="fw_6" href="#">
+                            <a class="fw_6" href="{{ url('/my-gate-card') }}">
                                 <ul class="icon icon-group-credit-card">
                                     <li class="path1"></li>
                                     <li class="path2"></li>

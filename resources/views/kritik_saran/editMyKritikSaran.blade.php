@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:80px">
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
             <div class="tf-container">
                 <button type="submit" class="tf-btn accent large">Save</button>
             </div>

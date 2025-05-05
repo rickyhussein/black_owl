@@ -52,9 +52,13 @@
                         </div>
 
                         <div class="col">
-                            <label for="file_transaction_path" class="form-label">File</label>
-                            <input class="form-control @error('file_transaction_path') is-invalid @enderror" type="file" id="file_transaction_path" name="file_transaction_path">
-                            @error('file_transaction_path')
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
+                                <option value="">-- Pilih Status --</option>
+                                <option value="unpaid" {{ 'unpaid' == request('status') ? 'selected="selected"' : '' }}>unpaid</option>
+                                <option value="paid" {{ 'paid' == request('status') ? 'selected="selected"' : '' }}>paid</option>
+                            </select>
+                            @error('status')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -76,6 +80,30 @@
                     </div>
                     <br>
 
+                    <div class="table-responsive mb-3">
+                        <table class="table table-striped" id="tablemultiple" style="font-size:12px">
+                            <thead>
+                                <tr>
+                                    <th style="background-color:rgb(243, 243, 243);" class="text-center">File</th>
+                                    <th class="text-center" style="background-color:rgb(243, 243, 243);">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="multiple0">
+                                    <td style="vertical-align: middle;">
+                                        <input type="file" class="form-control borderi pengeluaran_file_path" id="pengeluaran_file_path" name="pengeluaran_file_path[]" multiple>
+                                    </td>
+
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <a class="btn btn-sm btn-danger delete"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a id="add_row" class="btn btn-sm btn-success float-right mt-3">+ Tambah</a>
+                    </div>
+                    <br>
+
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </form>
             </div>
@@ -87,6 +115,33 @@
         <script>
             $('.money').mask('000,000,000,000,000', {
                 reverse: true
+            });
+
+            var row_number = 1;
+            var temp_row_number = row_number-1;
+            $("#add_row").click(function(e) {
+                e.preventDefault();
+                var new_row_number = row_number - 1;
+                var table = document.getElementById("tablemultiple");
+                var tbodyRowCount = table.tBodies[0].rows.length;
+                new_row = $('#tablemultiple tbody tr:last').clone();
+                new_row.find("input").val("").end();
+                $('#tablemultiple').append(new_row);
+                $('#tablemultiple tbody tr:last').attr('id','multiple'+(tbodyRowCount));
+                row_number++;
+                temp_row_number = row_number - 1;
+            });
+
+            $('body').on('click', '.delete', function (event) {
+                var table = document.getElementById("tablemultiple");
+                var tbodyRowCount = table.tBodies[0].rows.length;
+                if (tbodyRowCount <= 1) {
+                    alert('Cannot delete if only 1 row!');
+                } else {
+                    if (confirm('Are you sure you want to delete?')) {
+                        $(this).closest('tr').remove();
+                    }
+                }
             });
         </script>
     @endpush

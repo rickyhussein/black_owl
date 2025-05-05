@@ -41,8 +41,6 @@
                     </li>
 
 
-
-
                     <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
                         <div class="content-right">
                             <p>
@@ -50,6 +48,21 @@
                             </p>
                             <h5>
                                 Rp {{ number_format($pengeluaran->nominal) }}
+                            </h5>
+                        </div>
+                    </li>
+
+                    <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
+                        <div class="content-right">
+                            <p>
+                                Status
+                            </p>
+                            <h5>
+                                @if ($pengeluaran->status == 'paid')
+                                    <div class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">{{ $pengeluaran->status ?? '-' }}</div>
+                                @else
+                                    <div class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">{{ $pengeluaran->status ?? '-' }}</div>
+                                @endif
                             </h5>
                         </div>
                     </li>
@@ -66,20 +79,35 @@
                         </div>
                     </li>
 
-                    <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
-                        <div class="content-right">
-                            <p>
-                                File
-                            </p>
-                            <h5>
-                                @if ($pengeluaran->file_transaction_path)
-                                    <div class="badge clickable" data-url="{{ url('/storage/'.$pengeluaran->file_transaction_path) }}" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px; cursor: pointer;" target="_blank"><i class="fa fa-download me-1"></i> {{ $pengeluaran->file_transaction_name }}</div>
-                                @else
+                    @if (count($pengeluaran->pengeluaranfile))
+                        @foreach ($pengeluaran->pengeluaranfile as $key => $file)
+                            <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
+                                <div class="content-right">
+                                    <p>
+                                        File {{ $key + 1 }}
+                                    </p>
+                                    <h5>
+                                        @if ($file->pengeluaran_file_path)
+                                            <div class="badge clickable" data-url="{{ url('/storage/'.$file->pengeluaran_file_path) }}" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px; cursor: pointer;" target="_blank"><i class="fa fa-download me-1"></i> {{ $file->pengeluaran_file_name }}</div>
+                                        @else
+                                            -
+                                        @endif
+                                    </h5>
+                                </div>
+                            </li>
+                        @endforeach
+                    @else
+                        <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
+                            <div class="content-right">
+                                <p>
+                                    File
+                                </p>
+                                <h5>
                                     -
-                                @endif
-                            </h5>
-                        </div>
-                    </li>
+                                </h5>
+                            </div>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

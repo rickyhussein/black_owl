@@ -105,6 +105,24 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ url('/donasi') }}" class="nav-link {{ Request::is('donasi*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-donate"></i>
+                        <p>
+                            Donasi
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/gate-card') }}" class="nav-link {{ Request::is('gate-card*') ? 'active' : '' }}">
+                        <i class="nav-icon far fa-credit-card"></i>
+                        <p>
+                            Gate Card
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ url('/pengeluaran') }}" class="nav-link {{ Request::is('pengeluaran*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>

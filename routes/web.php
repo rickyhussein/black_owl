@@ -8,6 +8,7 @@ use App\Http\Controllers\rolesController;
 use App\Http\Controllers\usersController;
 use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\KontakController;
+use App\Http\Controllers\GateCardController;
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\FasilitasController;
@@ -110,6 +111,7 @@ Route::get('/pengeluaran/edit/{id}', [PengeluaranController::class, 'edit'])->mi
 Route::put('/pengeluaran/update/{id}', [PengeluaranController::class, 'update'])->middleware('role:admin');
 Route::get('/pengeluaran/show/{id}', [PengeluaranController::class, 'show'])->middleware('role:admin');
 Route::delete('/pengeluaran/delete/{id}', [PengeluaranController::class, 'delete'])->middleware('role:admin');
+Route::post('/pengeluaran/status/{id}', [PengeluaranController::class, 'status'])->middleware('role:admin');
 
 Route::get('/laporan-pengeluaran', [PengeluaranController::class, 'laporanPengeluaran'])->middleware('role:user');
 Route::get('/laporan-pengeluaran/show/{id}', [PengeluaranController::class, 'laporanPengeluaranShow'])->middleware('role:user');
@@ -125,7 +127,7 @@ Route::get('/ganti-password', [usersController::class, 'gantiPassword'])->middle
 Route::put('/ganti-password/update/{id}', [usersController::class, 'gantiPasswordUpdate'])->middleware('role:user');
 
 Route::resource('/roles', rolesController::class)->middleware('auth')->except('show');
-Route::get('/switch/{id}', [authController::class, 'switch'])->middleware('auth');
+Route::get('/switch/{id}', [authController::class, 'switch']);
 
 Route::get('/kritik-saran', [KritiksSaranController::class, 'index'])->middleware('role:admin');
 Route::get('/kritik-saran/export', [KritiksSaranController::class, 'export'])->middleware('role:admin');
@@ -140,16 +142,44 @@ Route::get('/my-kritik-saran/edit/{id}', [KritiksSaranController::class, 'editMy
 Route::put('/my-kritik-saran/update/{id}', [KritiksSaranController::class, 'updateMyKritikSaran'])->middleware('role:user');
 Route::get('/my-kritik-saran/delete/{id}', [KritiksSaranController::class, 'deleteMyKritikSaran'])->middleware('role:user');
 
+Route::get('/donasi', [DonasiController::class, 'index'])->middleware('role:admin');
+Route::get('/donasi/show/{id}', [DonasiController::class, 'show'])->middleware('role:admin');
+Route::post('/donasi/approval/{id}', [DonasiController::class, 'approval'])->middleware('role:admin');
+Route::get('/donasi/export', [DonasiController::class, 'export'])->middleware('role:admin');
+
 Route::get('/my-donasi', [DonasiController::class, 'myDonasi'])->middleware('role:user');
 Route::get('/my-donasi/tambah', [DonasiController::class, 'tambahMyDonasi'])->middleware('role:user');
 Route::post('/my-donasi/store', [DonasiController::class, 'storeMyDonasi'])->middleware('role:user');
 Route::get('/my-donasi/show/{id}', [DonasiController::class, 'showMyDonasi'])->middleware('role:user');
+Route::post('/my-donasi/upload/{id}', [DonasiController::class, 'uploadMyDonasi'])->middleware('role:user');
+Route::get('/my-donasi/edit/{id}', [DonasiController::class, 'editMyDonasi'])->middleware('role:user');
+Route::put('/my-donasi/update/{id}', [DonasiController::class, 'updateMyDonasi'])->middleware('role:user');
+Route::get('/my-donasi/delete/{id}', [DonasiController::class, 'deleteMyDonasi'])->middleware('role:user');
+
+Route::get('/gate-card', [GateCardController::class, 'index'])->middleware('role:admin');
+Route::get('/gate-card/show/{id}', [GateCardController::class, 'show'])->middleware('role:admin');
+Route::post('/gate-card/approval/{id}', [GateCardController::class, 'approval'])->middleware('role:admin');
+Route::get('/gate-card/export', [GateCardController::class, 'export'])->middleware('role:admin');
+
+Route::get('/my-gate-card', [GateCardController::class, 'myGateCard'])->middleware('role:user');
+Route::get('/my-gate-card/tambah', [GateCardController::class, 'tambahMyGateCard'])->middleware('role:user');
+Route::post('/my-gate-card/store', [GateCardController::class, 'storeMyGateCard'])->middleware('role:user');
+Route::get('/my-gate-card/show/{id}', [GateCardController::class, 'showMyGateCard'])->middleware('role:user');
+Route::post('/my-gate-card/upload/{id}', [GateCardController::class, 'uploadMyGateCard'])->middleware('role:user');
+Route::get('/my-gate-card/edit/{id}', [GateCardController::class, 'editMyGateCard'])->middleware('role:user');
+Route::put('/my-gate-card/update/{id}', [GateCardController::class, 'updateMyGateCard'])->middleware('role:user');
+Route::get('/my-gate-card/delete/{id}', [GateCardController::class, 'deleteMyGateCard'])->middleware('role:user');
+
 
 Route::get('/reset', function () {
     Artisan::call('optimize');
     Artisan::call('config:cache');
     Artisan::call('route:clear');
     Artisan::call('migrate:fresh --seed');
+    Artisan::call('storage:link');
+});
+
+Route::get('/link', function () {
     Artisan::call('storage:link');
 });
 

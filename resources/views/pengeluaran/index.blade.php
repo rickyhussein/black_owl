@@ -46,6 +46,7 @@
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Tanggal</th>
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Jenis Transaksi</th>
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Nominal</th>
+                            <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">Status</th>
                             <th style="min-width: 170px; background-color:rgb(243, 243, 243);" class="text-center">File</th>
                             <th style="min-width: 300px; background-color:rgb(243, 243, 243);" class="text-center">Keterangan</th>
                             <th style="background-color:rgb(243, 243, 243);" class="text-center">Actions</th>
@@ -64,8 +65,21 @@
                                     <td class="text-center" style="vertical-align: middle;">{{ $pengeluaran->type ?? '-' }}</td>
                                     <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($pengeluaran->nominal) }}</td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        @if ($pengeluaran->file_transaction_path)
-                                            <a class="badge" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px;" target="_blank" href="{{ url('/storage/'.$pengeluaran->file_transaction_path) }}"><i class="fa fa-download mr-1"></i> {{ $pengeluaran->file_transaction_name }}</a>
+                                        @if ($pengeluaran->status == 'paid')
+                                            <div class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">{{ $pengeluaran->status ?? '-' }}</div>
+                                        @else
+                                            <div class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">{{ $pengeluaran->status ?? '-' }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        @if(count($pengeluaran->pengeluaranfile) > 0)
+                                            @foreach ($pengeluaran->pengeluaranfile as $key => $file)
+                                                @if ($file->pengeluaran_file_path)
+                                                    <a class="badge" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px;" target="_blank" href="{{ url('/storage/'.$file->pengeluaran_file_path) }}"><i class="fa fa-download mr-1"></i> {{ $file->pengeluaran_file_name }}</a>
+                                                @else
+                                                    -
+                                                @endif
+                                            @endforeach
                                         @else
                                             -
                                         @endif

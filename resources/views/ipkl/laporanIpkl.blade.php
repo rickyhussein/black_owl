@@ -8,10 +8,10 @@
     <div class="d-none d-md-block">
         <form action="{{ url('/laporan-ipkl') }}" class="mr-2 ml-2">
             <div class="form-row mb-2">
-                <div class="col-4 mb-4">
+                <div class="col-4 mb-2">
                     <input type="text" class="form-control" name="search" placeholder="Nama / Alamat" id="mulai" value="{{ request('search') }}">
                 </div>
-                <div class="col-4 mb-4">
+                <div class="col-4 mb-2">
                     <select name="rt" id="rt" class="form-control @error('rt') is-invalid @enderror selectpicker" data-live-search="true">
                         <option value="">-- Pilih RT --</option>
                         <option value="001" {{ '001' == request('rt') ? 'selected="selected"' : '' }}>001</option>
@@ -19,14 +19,14 @@
                         <option value="003" {{ '003' == request('rt') ? 'selected="selected"' : '' }}>003</option>
                     </select>
                 </div>
-                <div class="col-4 mb-4">
+                <div class="col-4 mb-2">
                     <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
                         <option value="">-- Pilih Status --</option>
                         <option value="Dihuni" {{ 'Dihuni' == request('status') ? 'selected="selected"' : '' }}>Dihuni</option>
                         <option value="Belum dihuni" {{ 'Belum dihuni' == request('status') ? 'selected="selected"' : '' }}>Belum dihuni</option>
                     </select>
                 </div>
-                <div class="col-4 mb-4">
+                <div class="col-4 mb-2">
                     <select name="status_transaksi" id="status_transaksi" class="form-control status_transaksi @error('status_transaksi') is-invalid @enderror">
                         <option style="color: rgb(148, 148, 148);" value="">-- Pilih Status Transaksi --</option>
                         <option value="paid" {{ 'paid' == request('status_transaksi') ? 'selected="selected"' : '' }}>paid</option>
@@ -34,7 +34,7 @@
                         <option value="tagihan belum dibuat" {{ 'tagihan belum dibuat' == request('status_transaksi') ? 'selected="selected"' : '' }}>tagihan belum dibuat</option>
                     </select>
                 </div>
-                <div class="col-4 mb-4">
+                <div class="col-4 mb-2">
                     <select name="month" id="month" class="form-control month @error('month') is-invalid @enderror selectpicker" data-live-search="true">
                         <option value="">-- Pilih Bulan --</option>
                         <option value="01" {{ '01' == request('month') ? 'selected="selected"' : '' }}>Januari</option>
@@ -315,12 +315,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_januari) }}</td>
                                         <td class="text-center" style="vertical-align: middle; width:50%;">
                                             @if ($total_januari > 0 && $count_januari_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=01&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=01&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_januari_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=01&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=01&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -330,12 +330,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_februari) }}</td>
                                         <td class="text-center" style="vertical-align: middle; width:50%;">
                                             @if ($total_februari > 0 && $count_februari_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=02&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=02&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_februari_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=02&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=02&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -345,12 +345,12 @@
                                         <td class="text-center" style="vertical-align: middle; width:50%;">Rp {{ number_format($total_maret) }}</td>
                                         <td class="text-center" style="vertical-align: middle; width:50%;">
                                             @if ($total_maret > 0 && $count_maret_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=03&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=03&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_maret_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=03&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=03&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -360,12 +360,12 @@
                                         <td class="text-center" style="vertical-align: middle; width:50%;">Rp {{ number_format($total_april) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_april > 0 && $count_april_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=04&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=04&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_april_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=04&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=04&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -375,12 +375,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_mei) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_mei > 0 && $count_mei_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=05&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=05&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_mei_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=05&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=05&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -390,12 +390,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_juni) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_juni > 0 && $count_juni_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=06&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=06&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_juni_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=06&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=06&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -405,12 +405,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_juli) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_juli > 0 && $count_juli_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=07&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=07&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_juli_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=07&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=07&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -420,12 +420,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_agustus) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_agustus > 0 && $count_agustus_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=08&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=08&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_agustus_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=08&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=08&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -435,12 +435,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_september) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_september > 0 && $count_september_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=09&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=09&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_september_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=09&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=09&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -450,12 +450,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_oktober) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_oktober > 0 && $count_oktober_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=10&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=10&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_oktober_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=10&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=10&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -465,12 +465,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_november) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_november > 0 && $count_november_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=11&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=11&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_november_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=11&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=11&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>
@@ -480,12 +480,12 @@
                                         <td class="text-center" style="vertical-align: middle;">Rp {{ number_format($total_desember) }}</td>
                                         <td class="text-center" style="vertical-align: middle;  width:50%;">
                                             @if ($total_desember > 0 && $count_desember_paid > 0)
-                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=12&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">paid</a>
+                                                <a href="{{ url('/ipkl?user_id='.$user->id.'&month=12&year='.$year) }}" class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">paid</a>
                                             @else
                                                 @if ($count_desember_unpaid > 0)
-                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=12&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">unpaid</a>
+                                                    <a href="{{ url('/ipkl?user_id='.$user->id.'&month=12&year='.$year) }}" class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">unpaid</a>
                                                 @else
-                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px;">tagihan belum dibuat</a>
+                                                    <a href="{{ url('/ipkl/tambah/peruser?user_id='.$user->id) }}" class="badge" style="color: rgba(255, 123, 0, 0.889); background-color:rgb(255, 238, 177); border-radius:10px; text-transform: uppercase;">tagihan belum dibuat</a>
                                                 @endif
                                             @endif
                                         </td>

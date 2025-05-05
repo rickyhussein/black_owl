@@ -29,4 +29,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+    public function pengeluaranfile()
+    {
+        return $this->hasMany(PengeluaranFile::class, 'transaction_id');
+    }
 }

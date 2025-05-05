@@ -15,7 +15,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class IpklExport implements FromQuery, WithColumnFormatting, WithMapping, WithHeadings,ShouldAutoSize,WithStyles
+class DonasiExport implements FromQuery, WithColumnFormatting, WithMapping, WithHeadings,ShouldAutoSize,WithStyles
 {
     use Exportable;
 
@@ -49,38 +49,31 @@ class IpklExport implements FromQuery, WithColumnFormatting, WithMapping, WithHe
             'Alamat',
             'Nama',
             'Tanggal',
-            'Expired Days',
-            'Jatuh Tempo',
             'Jenis Transaksi',
+            'Jenis Pembayaran',
             'Nominal',
             'Keterangan',
             'Status',
-            'Paid Date',
-            'Payment Source',
-            'Midtrans Trandaction ID',
+            'Status Approval',
+            'User Approval',
+            'Catatan Pengurus',
         ];
     }
 
     public function map($model): array
     {
-        Carbon::setLocale('id');
-        $month = Carbon::createFromFormat('m', $model->month)->translatedFormat('F');
-        $date = Carbon::createFromFormat('Y-m-d', $model->date);
-        $expired_date = $date->addDays($model->expired)->translatedFormat('Y-m-d');
-
         return [
             $model->user->alamat ?? '-',
             $model->user->name ?? '-',
             $model->date ?? '-',
-            $model->expired . ' Hari' ?? '-',
-            $expired_date ?? '-',
-            $model->type . ' (' . $month . $model->year . ')',
-            $model->nominal ?? 0,
+            $model->type ?? '-',
+            $model->payment_source ?? '-',
+            $model->nominal ?? '0',
             $model->notes ?? '-',
             $model->status ?? '-',
-            $model->paid_date ?? '-',
-            $model->payment_source ?? '-',
-            $model->midtrans_transaction_id ?? '-',
+            $model->status_approval ?? '-',
+            $model->approvedBy->name ?? '-',
+            $model->approver_notes ?? '-',
         ];
 
 
@@ -96,28 +89,45 @@ class IpklExport implements FromQuery, WithColumnFormatting, WithMapping, WithHe
     public function query()
     {
         $user = request()->input('user');
+        $type = request()->input('type');
         $start_date = request()->input('start_date');
         $end_date = request()->input('end_date');
+        $payment_source = request()->input('payment_source');
         $status = request()->input('status');
+        $status_approval = request()->input('status_approval');
 
-        $transaction_ipkl = Transaction::select('transactions.*')
-        ->join('users', 'transactions.user_id', '=', 'users.id')
-        ->where('type', 'IPKL')
-        ->when($user, function ($query) use ($user) {
-            $query->whereHas('user', function ($q) use ($user) {
-                $q->where('name', 'LIKE', '%'.$user.'%')
-                ->orWhere('alamat', 'LIKE', '%'.$user.'%');
+        $transaction_donasi = Transaction::when($user, function ($query) use ($user) {
+            $query->whereHas('user', function ($query) use ($user) {
+                $query->where(function ($q) use ($user) {
+                    $q->where('name', 'LIKE', '%'.$user.'%')
+                    ->orWhere('alamat', 'LIKE', '%'.$user.'%');
+                });
             });
         })
         ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
             $query->whereBetween('date', [$start_date, $end_date]);
         })
-        ->when($status, function ($query) use ($status) {
-            $query->where('transactions.status', $status);
+        ->when(!$type, function ($query) {
+            $query->where(function ($q) {
+                $q->where('type', 'Donasi Fasum')
+                ->orWhere('type', 'Donasi Umum')
+                ->orWhere('type', 'Donasi Lainnya');
+            });
         })
-        ->orderBy('date', 'DESC')
-        ->orderBy('users.alamat', 'ASC');
+        ->when($type, function ($query) use ($type) {
+            $query->where('type', $type);
+        })
+        ->when($payment_source, function ($query) use ($payment_source) {
+            $query->where('payment_source', $payment_source);
+        })
+        ->when($status, function ($query) use ($status) {
+            $query->where('status', $status);
+        })
+        ->when($status_approval, function ($query) use ($status_approval) {
+            $query->where('status_approval', $status_approval);
+        })
+        ->orderBy('id', 'DESC');
 
-        return $transaction_ipkl;
+        return $transaction_donasi;
     }
 }

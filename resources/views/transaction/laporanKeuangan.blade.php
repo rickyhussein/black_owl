@@ -89,11 +89,24 @@
                               <form action="{{ url('/laporan-keuangan') }}">
                                 <div class="row mb-2">
                                     <div class="col">
+                                        <select name="month" id="month" class="@error('month') is-invalid @enderror select2" data-live-search="true">
+                                            <option value="">Month</option>
+                                            @foreach ($months as $moth_num => $month_name)
+                                                <option value="{{ $moth_num }}" {{ $moth_num == request('month') ? 'selected="selected"' : '' }}>{{ $month_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('month')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
+                                    <div class="col">
                                         @php
                                             $last= 2020;
                                             $now = date('Y');
                                         @endphp
-                                        <select style="width: 100px" name="year" id="year" class="form-control @error('year') is-invalid @enderror select2" data-live-search="true">
+                                        <select style="width: 100px" name="year" id="year" class="@error('year') is-invalid @enderror select2" data-live-search="true">
                                             <option value="">Year</option>
                                             @for ($i = $now; $i >= $last; $i--)
                                             <option value="{{ $i }}" {{ $i == request('year') ? 'selected="selected"' : '' }}>{{ $i }}</option>
@@ -146,6 +159,9 @@
     @push('script')
         <script>
             $(function () {
+                $(".select2").select2({
+                    width: '70px',
+                });
                 var ctx = document.getElementById('transactionChart').getContext('2d');
 
                 var transactionChart = new Chart(ctx, {

@@ -71,10 +71,10 @@ class KritiksSaranController extends Controller
 
             if ($request->status == 'approved') {
                 $this->status = 'Diapprove';
-                $message = 'Kritik & Saran anda berhasil di approve oleh ' . auth()->user()->name;
+                $message = 'Kritik & Saran anda telah di approve oleh ' . auth()->user()->name;
             } else {
                 $this->status = 'Direject';
-                $message = 'Kritik & Saran anda berhasil di reject oleh ' . auth()->user()->name;
+                $message = 'Kritik & Saran anda telah di reject oleh ' . auth()->user()->name;
             }
 
             $user = User::find($kritik_saran->user_id);
@@ -245,6 +245,6 @@ class KritiksSaranController extends Controller
             $kritik_saran->delete();
         });
 
-        return redirect('/my-kritik-saran/')->with('success', 'Data Berhasil Didelete');
+        return redirect('/my-kritik-saran')->with('success', 'Data Berhasil Didelete');
     }
 }

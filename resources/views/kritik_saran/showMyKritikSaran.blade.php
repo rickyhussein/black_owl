@@ -124,14 +124,14 @@
     </div>
 
     @if ($kritik_saran->status == 'draft' && $kritik_saran->user_id == auth()->user()->id)
-        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:80px">
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
             <div class="tf-container">
                 <div class="row">
                     <div class="col">
-                        <a class="tf-btn accent large" href="{{ url('/my-kritik-saran/edit/'.$kritik_saran->id) }}">Edit</a>
+                        <a class="tf-btn success large" href="{{ url('/my-kritik-saran/edit/'.$kritik_saran->id) }}">Edit</a>
                     </div>
                     <div class="col">
-                        <a href="{{ url('/my-kritik-saran/delete/'.$kritik_saran->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn accent large" style="background-color: red">Delete</a>
+                        <a href="{{ url('/my-kritik-saran/delete/'.$kritik_saran->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
                     </div>
                 </div>
             </div>

@@ -122,8 +122,6 @@ class authController extends Controller
 
     public function switch(Request $request, $id)
     {
-        $request->session()->put('existing_user_id', Auth::user()->id);
-        $request->session()->put('user_is_switched', true);
         Auth::loginUsingId($id);
         return redirect()->to('/');
     }

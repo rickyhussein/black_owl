@@ -9,10 +9,10 @@
                 <form action="{{ url('/my-ipkl') }}" class="mt-4">
                     <div class="row">
                         <div class="col-5">
-                            <input type="datetime" name="start_date" placeholder="Start Date" id="mulai" value="{{ request('start_date') }}">
+                            <input type="datetime" name="start_date" placeholder="Start Date" id="start_date" value="{{ request('start_date') }}">
                         </div>
                         <div class="col-5">
-                            <input type="datetime" name="end_date" placeholder="End Date" id="mulai" value="{{ request('end_date') }}">
+                            <input type="datetime" name="end_date" placeholder="End Date" id="end_date" value="{{ request('end_date') }}">
                         </div>
                         <div class="col-2">
                             <button type="submit" class="btn"><i class="fa fa-search"></i></button>
@@ -39,9 +39,9 @@
                                                         <a style="font-size: 10px" href="{{ url('/my-ipkl/show/'.$ipkl->id) }}">
                                                             <span>Nominal : Rp {{ number_format($ipkl->nominal) }}</span>
                                                             @if ($ipkl->status == 'paid')
-                                                                <span class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px;">{{ $ipkl->status ?? '-' }}</span>
+                                                                <span class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">{{ $ipkl->status ?? '-' }}</span>
                                                             @else
-                                                                <span class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px;">{{ $ipkl->status ?? '-' }}</span>
+                                                                <span class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">{{ $ipkl->status ?? '-' }}</span>
                                                             @endif
                                                         </a>
                                                         <a style="font-size: 10px" href="{{ url('/my-ipkl/show/'.$ipkl->id) }}">
@@ -76,4 +76,13 @@
     <br>
     <br>
     <br>
+
+    @push('script')
+        <script>
+            $('#start_date').change(function(){
+                var start_date = $(this).val();
+                $('#end_date').val(start_date);
+            });
+        </script>
+    @endpush
 @endsection

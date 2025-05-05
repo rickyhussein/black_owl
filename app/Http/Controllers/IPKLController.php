@@ -18,7 +18,7 @@ class IPKLController extends Controller
 {
     public function index(Request $request)
     {
-        $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
+        $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
         $user = request()->input('user');
         $user_id = request()->input('user_id');
         $start_date = request()->input('start_date');
@@ -69,7 +69,7 @@ class IPKLController extends Controller
 
     public function tambah()
     {
-        $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
+        $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
         $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
 
         return view('ipkl.tambah', compact(
@@ -199,7 +199,7 @@ class IPKLController extends Controller
 
     public function tambahPerUser()
     {
-        $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
+        $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
         $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
 
         return view('ipkl.tambahPerUser', compact(
@@ -319,7 +319,7 @@ class IPKLController extends Controller
 
     public function edit($id)
     {
-        $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
+        $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
         $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
         $ipkl = Transaction::find($id);
 
@@ -448,7 +448,7 @@ class IPKLController extends Controller
 
     public function show($id)
     {
-        $title = 'IURAN PEMELIHARAAN DAN KEAMANAN LINGKUNGAN';
+        $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
         $ipkl = Transaction::find($id);
 
         return view('ipkl.show', compact(
@@ -597,6 +597,12 @@ class IPKLController extends Controller
 
                     $message_user = 'Terimakasih anda telah melakukan pembayaran IPKL (' . $month_name . ' ' . $transaction->year . ') sebesar Rp ' . number_format($transaction->nominal);
                     $action_user = '/my-ipkl/show/'.$transaction->id;
+                } else if ($transaction->type == 'Gate Card') {
+                    $message = 'Permintaan pembuatan Gate Card berhasil dibayar oleh ' . $transaction->user->name . ' sebesar Rp ' . number_format($transaction->nominal);
+                    $action = '/gate-card/show/'.$transaction->id;
+
+                    $message_user = 'Terimakasih anda telah melakukan pembayaran Gate Card sebesar Rp ' . number_format($transaction->nominal);
+                    $action_user = '/my-gate-card/show/'.$transaction->id;
                 } else {
                     $message = $transaction->type . ' berhasil dibayar oleh ' . $transaction->user->name . ' sebesar Rp ' . number_format($transaction->nominal);
                     $action = '/donasi/show/'.$transaction->id;

@@ -52,6 +52,19 @@
                       <form action="{{ url('/dashboard') }}">
                         <div class="form-row mb-2">
                             <div class="col">
+                                <select name="month" id="month" class="form-control @error('month') is-invalid @enderror selectpicker" data-live-search="true">
+                                    <option value="">Month</option>
+                                    @foreach ($months as $moth_num => $month_name)
+                                        <option value="{{ $moth_num }}" {{ $moth_num == request('month') ? 'selected="selected"' : '' }}>{{ $month_name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('month')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="col">
                                 @php
                                     $last= 2020;
                                     $now = date('Y');

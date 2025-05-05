@@ -258,7 +258,6 @@ class usersController extends Controller
             'rt' => 'required',
             'no_hp' => 'required',
             'keterangan' => 'nullable',
-            'status' => 'required',
         ];
 
         if ($request->email != $user->email) {

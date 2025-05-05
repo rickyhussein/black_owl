@@ -105,17 +105,8 @@
                             </div>
 
                             <div class="group-input">
-                                <label for="status" style="z-index: 1000">Status</label>
-                                <select name="status" id="status" class="@error('status') is-invalid @enderror select2" data-live-search="true">
-                                    <option value="">-- Pilih Status --</option>
-                                    <option value="Dihuni" {{ 'Dihuni' == old('status', $user->status) ? 'selected="selected"' : '' }}>Dihuni</option>
-                                    <option value="Belum dihuni" {{ 'Belum dihuni' == old('status', $user->status) ? 'selected="selected"' : '' }}>Belum dihuni</option>
-                                </select>
-                                @error('status')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                                <label for="status">status</label>
+                                <input type="text" class="@error('status') is-invalid @enderror" name="status" value="{{ old('status', $user->status) }}" disabled />
                             </div>
 
                             <div class="table-responsive mb-3">
@@ -205,7 +196,7 @@
             </div>
         </div>
 
-        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:80px">
+        <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
             <div class="tf-container">
                 <button type="submit" class="tf-btn accent large">Save</button>
             </div>

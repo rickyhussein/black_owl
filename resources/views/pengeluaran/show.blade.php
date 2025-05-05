@@ -1,6 +1,11 @@
 @extends('layouts.dashboard')
 @section('button')
     <li class="nav-item mr-2">
+        <button type="button" class="btn btn-success text-white" data-toggle="modal" data-target="#exampleModalCenter">
+            Status Pembayaran
+        </button>
+    </li>
+    <li class="nav-item mr-2">
         <a href="{{ url('/pengeluaran/edit/'.$pengeluaran->id) }}" class="btn btn-primary nav-link" style="color: white"><i class="fa fa-edit mr-1"></i> Edit</a>
     </li>
     <li class="nav-item mr-2">
@@ -50,6 +55,25 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-2 font-weight-bold">Status</div>
+                        <div class="col-sm-4 mt-sm-0 mt-1">
+                            <div class="row align-items-center">
+                                <div class="col-1 d-none d-sm-inline">
+                                    :
+                                </div>
+                                <div class="col">
+                                    @if ($pengeluaran->status == 'paid')
+                                        <div class="badge" style="color: rgba(20, 78, 7, 0.889); background-color:rgb(186, 238, 162); border-radius:10px; text-transform: uppercase;">{{ $pengeluaran->status ?? '-' }}</div>
+                                    @else
+                                        <div class="badge" style="color: rgba(78, 26, 26, 0.889); background-color:rgb(242, 170, 170); border-radius:10px; text-transform: uppercase;">{{ $pengeluaran->status ?? '-' }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row align-items-center">
                         <div class="col-sm-2 font-weight-bold">Keterangan</div>
                         <div class="col-sm-4 mt-sm-0 mt-1">
                             <div class="row align-items-center">
@@ -63,25 +87,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-sm-2 font-weight-bold">File</div>
-                        <div class="col-sm-4 mt-sm-0 mt-1">
-                            <div class="row align-items-center">
-                                <div class="col-1 d-none d-sm-inline">
-                                    :
-                                </div>
-                                <div class="col">
-                                    @if ($pengeluaran->file_transaction_path)
-                                        <a class="badge" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px;" target="_blank" href="{{ url('/storage/'.$pengeluaran->file_transaction_path) }}"><i class="fa fa-download mr-1"></i> {{ $pengeluaran->file_transaction_name }}</a>
-                                    @else
-                                        -
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
+
                 <li class="list-group-item">
                     <div class="row align-items-center">
                         <div class="col-sm-2 font-weight-bold">Created By</div>
@@ -108,7 +114,81 @@
                         </div>
                     </div>
                 </li>
+                @if(count($pengeluaran->pengeluaranfile) > 0)
+                    @foreach ($pengeluaran->pengeluaranfile as $key => $file)
+                        <li class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-sm-2 font-weight-bold">File {{ $key + 1 }}</div>
+                                <div class="col-sm-4 mt-sm-0 mt-1">
+                                    <div class="row align-items-center">
+                                        <div class="col-1 d-none d-sm-inline">
+                                            :
+                                        </div>
+                                        <div class="col">
+                                            @if ($file->pengeluaran_file_path)
+                                                <a class="badge" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px;" target="_blank" href="{{ url('/storage/'.$file->pengeluaran_file_path) }}"><i class="fa fa-download mr-1"></i> {{ $file->pengeluaran_file_name }}</a>
+                                            @else
+                                                -
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    @endforeach
+                @else
+                    <li class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-sm-2 font-weight-bold">File</div>
+                            <div class="col-sm-4 mt-sm-0 mt-1">
+                                <div class="row align-items-center">
+                                    <div class="col-1 d-none d-sm-inline">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        -
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                @endif
             </ul>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Change Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ url('/pengeluaran/status/'.$pengeluaran->id) }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    @csrf
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
+                            <option value="">-- Pilih Status --</option>
+                            <option value="paid" {{ 'paid' == old('status', $pengeluaran->status) ? 'selected="selected"' : '' }}>paid</option>
+                            <option value="unpaid" {{ 'unpaid' == old('status', $pengeluaran->status) ? 'selected="selected"' : '' }}>unpaid</option>
+                        </select>
+                        @error('status')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
         </div>
     </div>
 @endsection

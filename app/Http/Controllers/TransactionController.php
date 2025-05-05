@@ -17,9 +17,15 @@ class TransactionController extends Controller
             $year = date('Y');
         }
 
-        $transaction_in_paid = Transaction::where('in_out', 'in')->where('status', 'paid')->where('year', $year)->sum('nominal');
-        $transaction_in_unpaid = Transaction::where('in_out', 'in')->where('status', 'unpaid')->where('year', $year)->sum('nominal');
-        $transaction_out = Transaction::where('in_out', 'out')->where('year', $year)->sum('nominal');
+        if (request()->input('month')) {
+            $month = request()->input('month');
+        } else {
+            $month = date('m');
+        }
+
+        $transaction_in_paid = Transaction::where('in_out', 'in')->where('status', 'paid')->where('month', $month)->where('year', $year)->sum('nominal');
+        $transaction_in_unpaid = Transaction::where('in_out', 'in')->where('status', 'unpaid')->where('type', 'IPKL')->where('month', $month)->where('year', $year)->sum('nominal');
+        $transaction_out = Transaction::where('in_out', 'out')->where('status', 'paid')->where('month', $month)->where('year', $year)->sum('nominal');
 
         $transaction_in_paid_all = Transaction::where('in_out', 'in')->where('status', 'paid')->sum('nominal');
         $transaction_out_all = Transaction::where('in_out', 'out')->where('status', 'paid')->sum('nominal');
@@ -38,7 +44,7 @@ class TransactionController extends Controller
 
         foreach ($months as $num => $name) {
             $transaction_in_paid_array[] = Transaction::where('in_out', 'in')->where('status', 'paid')->where('month', $num)->where('year', $year)->sum('nominal');
-            $transaction_in_unpaid_array[] = Transaction::where('in_out', 'in')->where('status', 'unpaid')->where('month', $num)->where('year', $year)->sum('nominal');
+            $transaction_in_unpaid_array[] = Transaction::where('in_out', 'in')->where('status', 'unpaid')->where('type', 'IPKL')->where('month', $num)->where('year', $year)->sum('nominal');
             $transaction_out_array[] = Transaction::where('in_out', 'out')->where('month', $num)->where('year', $year)->sum('nominal');
         }
 
