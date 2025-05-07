@@ -113,6 +113,8 @@ Route::get('/pengeluaran/show/{id}', [PengeluaranController::class, 'show'])->mi
 Route::delete('/pengeluaran/delete/{id}', [PengeluaranController::class, 'delete'])->middleware('role:admin');
 Route::post('/pengeluaran/status/{id}', [PengeluaranController::class, 'status'])->middleware('role:admin');
 
+Route::get('/pengeluaran/fix', [PengeluaranController::class, 'fix'])->middleware('role:admin');
+
 Route::get('/laporan-pengeluaran', [PengeluaranController::class, 'laporanPengeluaran'])->middleware('role:user');
 Route::get('/laporan-pengeluaran/show/{id}', [PengeluaranController::class, 'laporanPengeluaranShow'])->middleware('role:user');
 

@@ -54,11 +54,10 @@ class TransactionController extends Controller
         ->sum('nominal');
 
         $transaction_out = Transaction::where('in_out', 'out')
-        ->where('status', 'paid')
-        ->when(!$start_date && !$start_date && $month, function ($query) use ($month) {
+        ->when(!$start_date && !$end_date && $month, function ($query) use ($month) {
             $query->where('month', $month);
         })
-        ->when(!$start_date && !$start_date && $year, function ($query) use ($year) {
+        ->when(!$start_date && !$end_date && $year, function ($query) use ($year) {
             $query->where('year', $year);
         })
         ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
@@ -67,9 +66,10 @@ class TransactionController extends Controller
         ->sum('nominal');
 
         $transaction_in_paid_all = Transaction::where('in_out', 'in')->where('status', 'paid')->sum('nominal');
-        $transaction_out_all = Transaction::where('in_out', 'out')->where('status', 'paid')->sum('nominal');
+        $transaction_out_all = Transaction::where('in_out', 'out')->sum('nominal');
 
-        if ($start_date && $end_date) {
+
+        if ($start_date && $end_date || request()->input('month') || request()->input('year')) {
             $sisa = $transaction_in_paid - $transaction_out;
         } else {
             $sisa = $transaction_in_paid_all - $transaction_out_all;
@@ -86,9 +86,38 @@ class TransactionController extends Controller
         $transaction_out_array = [];
 
         foreach ($months as $num => $name) {
-            $transaction_in_paid_array[] = Transaction::where('in_out', 'in')->where('status', 'paid')->where('month', $num)->where('year', $year)->sum('nominal');
-            $transaction_in_unpaid_array[] = Transaction::where('in_out', 'in')->where('status', 'unpaid')->where('type', 'IPKL')->where('month', $num)->where('year', $year)->sum('nominal');
-            $transaction_out_array[] = Transaction::where('in_out', 'out')->where('month', $num)->where('year', $year)->sum('nominal');
+            $transaction_in_paid_array[] = Transaction::where('in_out', 'in')
+            ->where('status', 'paid')
+            ->where('month', $num)
+            ->when(!$start_date && !$end_date && $year, function ($query) use ($year) {
+                $query->where('year', $year);
+            })
+            ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
+                $query->whereYear('date', $start_date);
+            })
+            ->sum('nominal');
+
+            $transaction_in_unpaid_array[] = Transaction::where('in_out', 'in')
+            ->where('status', 'unpaid')
+            ->where('type', 'IPKL')
+            ->where('month', $num)
+            ->when(!$start_date && !$end_date && $year, function ($query) use ($year) {
+                $query->where('year', $year);
+            })
+            ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
+                $query->whereYear('date', $start_date);
+            })
+            ->sum('nominal');
+
+            $transaction_out_array[] = Transaction::where('in_out', 'out')
+            ->where('month', $num)
+            ->when(!$start_date && !$end_date && $year, function ($query) use ($year) {
+                $query->where('year', $year);
+            })
+            ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
+                $query->whereYear('date', $start_date);
+            })
+            ->sum('nominal');
         }
 
         return view('transaction.laporanKeuangan', compact(

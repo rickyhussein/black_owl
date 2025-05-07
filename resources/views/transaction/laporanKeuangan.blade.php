@@ -97,7 +97,11 @@
 
                             <div class="d-flex flex-row justify-content-end">
                               <span class="mr-2">
-                                <i class="fas fa-square text-primary"></i> Tahun {{ $year }}
+                                @if (request('start_date'))
+                                    <i class="fas fa-square text-primary"></i> Tahun {{ date('Y', strtotime(request('start_date'))); }}
+                                @else
+                                    <i class="fas fa-square text-primary"></i> Tahun {{ $year }}
+                                @endif
                               </span>
 
                             </div>
@@ -138,8 +142,9 @@
 
             <div class="mt-5">
                 <div class="tf-container">
-                    <form class="tf-form-verify" action="{{ url('/laporan-keuangan') }}" method="GET" enctype="multipart/form-data">
+                    <form class="tf-form" action="{{ url('/laporan-keuangan') }}" method="GET" enctype="multipart/form-data">
                         <div class="group-input">
+                            <label for="month">Month</label>
                             <select name="month" id="month" class="month" data-live-search="true">
                                 <option value="">Month</option>
                                 @foreach ($months as $moth_num => $month_name)
@@ -152,6 +157,7 @@
                                 $last= 2020;
                                 $now = date('Y') + 5;
                             @endphp
+                            <label for="year">Year</label>
                             <select name="year" id="year" class="year" data-live-search="true">
                                 <option value="">Year</option>
                                 @for ($i = $now; $i >= $last; $i--)
@@ -160,9 +166,11 @@
                             </select>
                         </div>
                         <div class="group-input">
+                            <label for="start_date">Start Date</label>
                             <input type="datetime" class="start_date" name="start_date" placeholder="Start Date" id="start_date" value="{{ request('start_date') }}">
                         </div>
                         <div class="group-input">
+                            <label for="end_date">End Date</label>
                             <input type="datetime" class="end_date" name="end_date" placeholder="End Date" id="end_date" value="{{ request('end_date') }}">
                         </div>
                         <div class="mt-7 mb-6">

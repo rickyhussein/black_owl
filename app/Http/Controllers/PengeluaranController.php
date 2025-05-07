@@ -38,6 +38,20 @@ class PengeluaranController extends Controller
         ));
     }
 
+    public function fix()
+    {
+        $transaction_pengeluaran = Transaction::where('in_out', 'out')->get();
+        foreach ($transaction_pengeluaran as $pengeluaran) {
+            if ($pengeluaran->file_transaction_path) {
+                PengeluaranFile::create([
+                    'transaction_id' => $pengeluaran->id,
+                    'pengeluaran_file_path' => $pengeluaran->file_transaction_path,
+                    'pengeluaran_file_name' => $pengeluaran->file_transaction_name,
+                ]);
+            }
+        }
+    }
+
     public function export()
     {
         return (new PengeluaranExport($_GET))->download('Pengeluaran.xlsx');
