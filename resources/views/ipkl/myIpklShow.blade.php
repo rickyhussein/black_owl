@@ -10,7 +10,16 @@
         <div id="app-wrap" class="mt-4">
             <div class="bill-content">
                 <div class="tf-container ms-4 me-4">
-                    <ul>
+                    @if ($ipkl_unpaid && $ipkl_unpaid->id != $ipkl->id && $ipkl->date > $ipkl_unpaid->date)
+                        @php
+                            $ipkl_unpaid_month = Carbon\Carbon::createFromFormat('m', $ipkl_unpaid->month)->translatedFormat('F');
+                        @endphp
+                        <div class="alert alert-warning" role="alert">
+                            Harap untuk melakukan pembayaran <span class="me-1" style="font-weight: bold;">IPKL {{ $ipkl_unpaid_month }} {{ $ipkl_unpaid->year }}</span> terlebih dahulu. </a>
+                        </div>
+                    @endif
+
+                    <ul class="mt-4">
                         <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
                             <div class="content-right">
                                 <p>
@@ -132,14 +141,28 @@
             </div>
         </div>
 
-        @if ($ipkl->status == 'unpaid')
-            <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
-                <div class="tf-container">
-                    <button  id="pay-button" class="tf-btn accent large">Bayar Sekarang</button>
+        @if ($ipkl_unpaid)
+            @if ($ipkl_unpaid->id == $ipkl->id)
+                <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
+                    <div class="tf-container">
+                        <button  id="pay-button" class="tf-btn accent large">Bayar Sekarang</button>
+                    </div>
                 </div>
-            </div>
+            @else
+                @if ($ipkl->date > $ipkl_unpaid->date)
+                    @php
+                        $ipkl_unpaid_month = Carbon\Carbon::createFromFormat('m', $ipkl_unpaid->month)->translatedFormat('F');
+                    @endphp
+                    <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
+                        <div class="tf-container">
+                            <a href="{{ url('/my-ipkl/show/'.$ipkl_unpaid->id) }}" class="tf-btn accent large">Link IPKL {{ $ipkl_unpaid_month }} {{ $ipkl_unpaid->year }}</a>
+                        </div>
+                    </div>
+                @endif
+            @endif
         @endif
-    @else
+
+        @else
         <div id="app-wrap" class="d-flex justify-content-center align-items-center vh-100">
             <div class="bill-content text-center">
                 <div class="tf-container">

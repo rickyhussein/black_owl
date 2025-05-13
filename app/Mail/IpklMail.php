@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class IpklMail extends Mailable
+class IpklMail extends Mailable implements ShouldQueue
 {
     public $ipkl;
     use Queueable, SerializesModels;
@@ -19,7 +19,7 @@ class IpklMail extends Mailable
      */
     public function __construct($ipkl)
     {
-        return $this->ipkl = $ipkl;
+        $this->ipkl = $ipkl;
     }
 
     /**

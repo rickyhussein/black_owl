@@ -7,6 +7,7 @@ use App\Models\KritikSaran;
 use Illuminate\Http\Request;
 use App\Exports\KritikSaranExport;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\UserNotification;
 
 class KritiksSaranController extends Controller
 {
@@ -78,14 +79,13 @@ class KritiksSaranController extends Controller
             }
 
             $user = User::find($kritik_saran->user_id);
-            $user->messages = [
+            $data = [
                 'user_id'   =>  auth()->user()->id,
                 'from'   =>  auth()->user()->name,
                 'message'   =>  $message ,
                 'action'   =>  '/my-kritik-saran/show/'.$kritik_saran->id
             ];
-            $user->notify(new \App\Notifications\UserNotification);
-
+            $user->notify(new UserNotification($data));
         });
 
         return redirect('/kritik-saran/show/'.$id)->with('success', 'Data Berhasil ' . $this->status);
@@ -168,13 +168,13 @@ class KritiksSaranController extends Controller
             })->get();
 
             foreach ($users as $user) {
-                $user->messages = [
+                $data = [
                     'user_id'   =>  auth()->user()->id,
                     'from'   =>  auth()->user()->name,
                     'message'   =>  'Kritik & Saran dari ' . auth()->user()->name . ' dengan judul ' . $kritik_saran->judul . ' membutuhkan approval dari anda.',
                     'action'   =>  '/kritik-saran/show/'.$kritik_saran->id
                 ];
-                $user->notify(new \App\Notifications\UserNotification);
+                $user->notify(new UserNotification($data));
             }
         });
 
@@ -214,13 +214,13 @@ class KritiksSaranController extends Controller
             })->get();
 
             foreach ($users as $user) {
-                $user->messages = [
+                $data = [
                     'user_id'   =>  auth()->user()->id,
                     'from'   =>  auth()->user()->name,
                     'message'   =>  'Kritik & Saran dari ' . auth()->user()->name . ' dengan judul ' . $kritik_saran->judul . ' membutuhkan approval dari anda.',
                     'action'   =>  '/kritik-saran/show/'.$kritik_saran->id
                 ];
-                $user->notify(new \App\Notifications\UserNotification);
+                $user->notify(new UserNotification($data));
             }
         });
 

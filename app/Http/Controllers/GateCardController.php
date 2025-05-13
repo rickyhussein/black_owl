@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Exports\GateCardExport;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\UserNotification;
 
 class GateCardController extends Controller
 {
@@ -94,13 +95,15 @@ class GateCardController extends Controller
             $gate_card->update($validated);
 
             $user = User::find($gate_card->user_id);
-            $user->messages = [
+
+            $data = [
                 'user_id'   =>  auth()->user()->id,
                 'from'   =>  auth()->user()->name,
                 'message'   =>  $message ,
                 'action'   =>  '/my-gate-card/show/'.$gate_card->id
             ];
-            $user->notify(new \App\Notifications\UserNotification);
+
+            $user->notify(new UserNotification($data));
 
         });
 
@@ -220,13 +223,14 @@ class GateCardController extends Controller
             })->get();
 
             foreach ($users as $user) {
-                $user->messages = [
+                $data = [
                     'user_id'   =>  auth()->user()->id,
                     'from'   =>  auth()->user()->name,
                     'message'   =>  $message,
                     'action'   =>  '/gate-card/show/'.$gate_card->id
                 ];
-                $user->notify(new \App\Notifications\UserNotification);
+
+                $user->notify(new UserNotification($data));
             }
         });
 
@@ -335,13 +339,13 @@ class GateCardController extends Controller
             })->get();
 
             foreach ($users as $user) {
-                $user->messages = [
+                $data = [
                     'user_id'   =>  auth()->user()->id,
                     'from'   =>  auth()->user()->name,
                     'message'   =>  $message,
                     'action'   =>  '/gate-card/show/'.$gate_card->id
                 ];
-                $user->notify(new \App\Notifications\UserNotification);
+                $user->notify(new UserNotification($data));
             }
         });
 

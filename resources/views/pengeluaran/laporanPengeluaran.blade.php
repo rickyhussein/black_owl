@@ -26,7 +26,7 @@
                                 <option value="">Year</option>
                                 @php
                                     $last= 2020;
-                                    $now = date('Y');
+                                    $now = date('Y')  + 5;
                                 @endphp
                                 @for ($i = $now; $i >= $last; $i--)
                                     <option value="{{ $i }}" {{ $i == request('year') ? 'selected="selected"' : '' }}>{{ $i }}</option>
@@ -78,6 +78,9 @@
                                                         </a>
                                                         <a style="font-size: 10px" href="{{ url('/laporan-pengeluaran/show/'.$pengeluaran->id) }}">
                                                             <span>Nominal : Rp {{ number_format($pengeluaran->nominal) }}</span>
+                                                        </a>
+                                                        <a style="font-size: 10px" href="{{ url('/laporan-pengeluaran/show/'.$pengeluaran->id) }}">
+                                                            <span>{!! $pengeluaran->notes ? nl2br(e($pengeluaran->notes)) : '-' !!}</span>
                                                         </a>
                                                     </h4>
 

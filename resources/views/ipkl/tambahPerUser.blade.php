@@ -64,7 +64,7 @@
 
                         <div class="col">
                             <label for="expired">Expired Days</label>
-                            <input type="integer" class="form-control @error('expired') is-invalid @enderror" id="expired" name="expired" value="{{ old('expired') }}">
+                            <input type="number" class="form-control @error('expired') is-invalid @enderror" id="expired" name="expired" value="{{ old('expired') }}">
                             @error('expired')
                                 <div class="invalid-feedback">
                                     {{ $message }}

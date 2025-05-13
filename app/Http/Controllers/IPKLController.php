@@ -8,11 +8,13 @@ use App\Mail\IpklMail;
 use App\Exports\IpklExport;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Jobs\SendNotification;
 use App\Exports\LaporanIpklExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Notifications\UserNotification;
 
 class IPKLController extends Controller
 {
@@ -152,13 +154,15 @@ class IPKLController extends Controller
                         ]);
 
                         $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
-                        $user->messages = [
-                            'user_id'   =>  auth()->user()->id,
-                            'from'   =>  auth()->user()->name,
-                            'message'   =>  'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
-                            'action'   =>  '/my-ipkl/show/'.$ipkl->id
+
+                        $data = [
+                            'user_id' => auth()->user()->id,
+                            'from' => auth()->user()->name,
+                            'message' => 'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
+                            'action' => '/my-ipkl/show/' . $ipkl->id
                         ];
-                        $user->notify(new \App\Notifications\UserNotification);
+
+                        $user->notify(new UserNotification($data));
 
                         if ($ipkl->date) {
                             Carbon::setLocale('id');
@@ -168,25 +172,7 @@ class IPKLController extends Controller
                             $expired_date = '-';
                         }
 
-                        Http::post(config('midtrans.whatsapp_api_url'), [
-                            'api_key' => config('midtrans.whatsapp_api_key'),
-                            'sender' => config('midtrans.whatsapp_sender'),
-                            'number' => $user->no_hp,
-                            'message' =>
-                                "Ini adalah pesan otomatis dari sistem layanan Cluster Madrid\n\n" .
-
-                                "Salam sejahtera Bapak/Ibu, Kami informasikan data dibawah ini belum melakukan pembayaran\n" .
-                                "Nama : " . $user->name . "\n" .
-                                "Alamat : " . $user->alamat . "\n" .
-                                "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $year . ") \n" .
-                                "Jatuh Tempo : " . $expired_date . "\n" .
-                                "Status : " . $ipkl->status . "\n" .
-                                "Nominal : Rp " . $request->nominal . "\n\n" .
-
-                                "Pembayaran Melalui Link Dibawah Ini \n",
-
-                            'footer' => url('/my-ipkl/show/'.$ipkl->id),
-                        ]);
+                        SendNotification::dispatch($user, $ipkl, $month_name, $expired_date, $request->nominal);
 
                         Mail::to($user->email)->send(new IpklMail($ipkl));
                     }
@@ -275,13 +261,15 @@ class IPKLController extends Controller
             ]);
 
             $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
-            $user->messages = [
-                'user_id'   =>  auth()->user()->id,
-                'from'   =>  auth()->user()->name,
-                'message'   =>  'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
-                'action'   =>  '/my-ipkl/show/'.$ipkl->id
+
+            $data = [
+                'user_id' => auth()->user()->id,
+                'from' => auth()->user()->name,
+                'message' => 'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
+                'action' => '/my-ipkl/show/' . $ipkl->id
             ];
-            $user->notify(new \App\Notifications\UserNotification);
+
+            $user->notify(new UserNotification($data));
 
             if ($ipkl->date) {
                 Carbon::setLocale('id');
@@ -291,25 +279,7 @@ class IPKLController extends Controller
                 $expired_date = '-';
             }
 
-            Http::post(config('midtrans.whatsapp_api_url'), [
-                'api_key' => config('midtrans.whatsapp_api_key'),
-                'sender' => config('midtrans.whatsapp_sender'),
-                'number' => $user->no_hp,
-                'message' =>
-                    "Ini adalah pesan otomatis dari sistem layanan Cluster Madrid\n\n" .
-
-                    "Salam sejahtera Bapak/Ibu, Kami informasikan data dibawah ini belum melakukan pembayaran\n" .
-                    "Nama : " . $user->name . "\n" .
-                    "Alamat : " . $user->alamat . "\n" .
-                    "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $year . ") \n" .
-                    "Jatuh Tempo : " . $expired_date . "\n" .
-                    "Status : " . $ipkl->status . "\n" .
-                    "Nominal : Rp " . $request->nominal . "\n\n" .
-
-                    "Pembayaran Melalui Link Dibawah Ini \n",
-
-                'footer' => url('/my-ipkl/show/'.$ipkl->id),
-            ]);
+            SendNotification::dispatch($user, $ipkl, $month_name, $expired_date, $request->nominal);
 
             Mail::to($user->email)->send(new IpklMail($ipkl));
         });
@@ -404,13 +374,15 @@ class IPKLController extends Controller
             ]);
 
             $month_name = Carbon::createFromFormat('m', $month)->translatedFormat('F');
-            $user->messages = [
-                'user_id'   =>  auth()->user()->id,
-                'from'   =>  auth()->user()->name,
-                'message'   =>  'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
-                'action'   =>  '/my-ipkl/show/'.$ipkl->id
+
+            $data = [
+                'user_id' => auth()->user()->id,
+                'from' => auth()->user()->name,
+                'message' => 'IPKL (' . $month_name . ' ' . $year . ') Harap untuk segera melakukan pembayaran!',
+                'action' => '/my-ipkl/show/' . $ipkl->id
             ];
-            $user->notify(new \App\Notifications\UserNotification);
+
+            $user->notify(new UserNotification($data));
 
             if ($ipkl->date) {
                 Carbon::setLocale('id');
@@ -420,25 +392,7 @@ class IPKLController extends Controller
                 $expired_date = '-';
             }
 
-            Http::post(config('midtrans.whatsapp_api_url'), [
-                'api_key' => config('midtrans.whatsapp_api_key'),
-                'sender' => config('midtrans.whatsapp_sender'),
-                'number' => $user->no_hp,
-                'message' =>
-                    "Ini adalah pesan otomatis dari sistem layanan Cluster Madrid\n\n" .
-
-                    "Salam sejahtera Bapak/Ibu, Kami informasikan data dibawah ini belum melakukan pembayaran\n" .
-                    "Nama : " . $user->name . "\n" .
-                    "Alamat : " . $user->alamat . "\n" .
-                    "Jenis Pembayaran : IPKL (" . $month_name . ' ' . $year . ") \n" .
-                    "Jatuh Tempo : " . $expired_date . "\n" .
-                    "Status : " . $ipkl->status . "\n" .
-                    "Nominal : Rp " . $request->nominal . "\n\n" .
-
-                    "Pembayaran Melalui Link Dibawah Ini \n",
-
-                'footer' => url('/my-ipkl/show/'.$ipkl->id),
-            ]);
+            SendNotification::dispatch($user, $ipkl, $month_name, $expired_date, $request->nominal);
 
             Mail::to($user->email)->send(new IpklMail($ipkl));
         });
@@ -490,10 +444,12 @@ class IPKLController extends Controller
     {
         $title = 'IPKL';
         $ipkl = Transaction::find($id);
+        $ipkl_unpaid = Transaction::where('user_id', $ipkl->user_id)->where('status', 'unpaid')->orderBy('date', 'ASC')->first();
 
         return view('ipkl.myIpklShow', compact(
             'title',
             'ipkl',
+            'ipkl_unpaid',
         ));
     }
 
@@ -613,23 +569,25 @@ class IPKLController extends Controller
 
 
                 foreach ($users as $user) {
-                    $user->messages = [
+                    $data = [
                         'user_id'   =>  $transaction->user_id,
                         'from'   =>  $transaction->user->name,
                         'message'   =>  $message,
                         'action'   =>  $action
                     ];
-                    $user->notify(new \App\Notifications\UserNotification);
+
+                    $user->notify(new UserNotification($data));
                 }
 
                 $user_payment = User::find($transaction->user_id);
-                $user_payment->messages = [
+                $data_user = [
                     'user_id'   =>  $transaction->user_id,
                     'from'   =>  $transaction->user->name,
                     'message'   =>  $message_user,
                     'action'   =>  $action_user
                 ];
-                $user_payment->notify(new \App\Notifications\UserNotification);
+
+                $user->notify(new UserNotification($data_user));
             }
         }
     }

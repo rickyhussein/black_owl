@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('back')
-    <a href="{{ url('/dashboard-user') }}" class="back-btn d-inline-block"> <i class="icon-left"></i> </a>
+    <a href="{{ url('/dashboard-user') }}" class="back-btn"> <i class="icon-left"></i> </a>
 @endsection
 @section('container')
     <div id="app-wrap">

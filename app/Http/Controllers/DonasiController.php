@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Exports\DonasiExport;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\UserNotification;
 
 class DonasiController extends Controller
 {
@@ -105,13 +106,15 @@ class DonasiController extends Controller
             $donasi->update($validated);
 
             $user = User::find($donasi->user_id);
-            $user->messages = [
+
+            $data = [
                 'user_id'   =>  auth()->user()->id,
                 'from'   =>  auth()->user()->name,
                 'message'   =>  $message ,
                 'action'   =>  '/my-donasi/show/'.$donasi->id
             ];
-            $user->notify(new \App\Notifications\UserNotification);
+
+            $user->notify(new UserNotification($data));
 
         });
 
@@ -233,13 +236,14 @@ class DonasiController extends Controller
             })->get();
 
             foreach ($users as $user) {
-                $user->messages = [
+                $data = [
                     'user_id'   =>  auth()->user()->id,
                     'from'   =>  auth()->user()->name,
                     'message'   =>  $message,
                     'action'   =>  '/donasi/show/'.$donasi->id
                 ];
-                $user->notify(new \App\Notifications\UserNotification);
+
+                $user->notify(new UserNotification($data));
             }
         });
 
@@ -281,9 +285,9 @@ class DonasiController extends Controller
             $validated['status'] = 'unpaid';
             $validated['in_out'] = 'in';
 
-            if ($gate_card_old->file_transaction_path) {
-                $validated['file_transaction_path'] = $gate_card_old->file_transaction_path;
-                $validated['file_transaction_name'] = $gate_card_old->file_transaction_name;
+            if ($donasi_old->file_transaction_path) {
+                $validated['file_transaction_path'] = $donasi_old->file_transaction_path;
+                $validated['file_transaction_name'] = $donasi_old->file_transaction_name;
             }
 
             if ($request->payment_source == 'Bank Transfer (Perlu Konfirmasi Pembayaran Manual)') {
@@ -346,13 +350,14 @@ class DonasiController extends Controller
             })->get();
 
             foreach ($users as $user) {
-                $user->messages = [
+                $data = [
                     'user_id'   =>  auth()->user()->id,
                     'from'   =>  auth()->user()->name,
                     'message'   =>  $message,
                     'action'   =>  '/donasi/show/'.$donasi->id
                 ];
-                $user->notify(new \App\Notifications\UserNotification);
+
+                $user->notify(new UserNotification($data));
             }
         });
 
