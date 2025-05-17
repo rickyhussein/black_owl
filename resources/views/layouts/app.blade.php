@@ -56,6 +56,11 @@
             border: 1px solid #9e9e9e;
         }
 
+        .readonly-checkbox {
+    pointer-events: none !important; /* Blok semua klik */
+    opacity: 1 !important;           /* Hilangkan efek pudar */
+}
+
 
     </style>
     @stack('style')
@@ -299,6 +304,16 @@
                             <li>
                                 <a href="{{ url('/my-kritik-saran') }}" class="nav-link">
                                     <span style="{{ Request::is('my-kritik-saran*') ? 'color: blue' : '' }}">Kritik & Saran</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/my-surat-pengantar') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-surat-pengantar*') ? 'color: blue' : '' }}">Surat Pengantar</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/my-surat-izin-renovasi') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-surat-izin-renovasi*') ? 'color: blue' : '' }}">Surat Izin Renovasi</span>
                                 </a>
                             </li>
                             <li>

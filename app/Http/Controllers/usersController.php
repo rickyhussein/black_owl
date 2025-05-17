@@ -22,6 +22,7 @@ class usersController extends Controller
         $title = 'Users';
         $search = request()->input('search');
         $rt = request()->input('rt');
+        $rw = request()->input('rw');
         $status = request()->input('status');
 
         $users = User::when($search, function ($query) use ($search) {
@@ -34,9 +35,13 @@ class usersController extends Controller
         ->when($rt, function ($query) use ($rt) {
             $query->where('rt', $rt);
         })
+        ->when($rw, function ($query) use ($rw) {
+            $query->where('rw', $rw);
+        })
         ->when($status, function ($query) use ($status) {
             $query->where('status', $status);
         })
+        ->orderBy('rw', 'asc')
         ->orderBy('rt', 'asc')
         ->orderBy('alamat', 'asc')
         ->paginate(10)
@@ -52,7 +57,18 @@ class usersController extends Controller
     {
         User::where('status', 'belum huni')->update(['status' => 'Belum dihuni']);
         User::where('status', 'Dihuni / Kunjungan')->orWhere('status', 'Dikontrakan')->orWhere('status', 'MENETAP')->update(['status' => 'Belum dihuni']);
-        return back()->with('success', 'Data Berhasil Di Update');
+        return redirect('/users')->with('success', 'Data Berhasil Di Update');
+    }
+
+    public function updateRw()
+    {
+        $users = User::get();
+        foreach ($users as $user) {
+            $user->update([
+                'rw' => '016'
+            ]);
+        }
+        return redirect('/users')->with('success', 'Data Berhasil Di Update');
     }
 
     public function export()
@@ -92,6 +108,7 @@ class usersController extends Controller
             'password' => 'required|min:6|max:255',
             'alamat' => 'required|unique:users',
             'rt' => 'required',
+            'rw' => 'required',
             'no_hp' => 'required',
             'keterangan' => 'nullable',
             'status' => 'required',
@@ -106,13 +123,29 @@ class usersController extends Controller
 
         $nama_keluarga = $request->input('nama_keluarga', []);
         $status_keluarga = $request->input('status_keluarga', []);
+        $born_place = $request->input('born_place', []);
+        $born_date = $request->input('born_date', []);
+        $gender = $request->input('gender', []);
+        $nation = $request->input('nation', []);
+        $religion = $request->input('religion', []);
+        $ktp_number = $request->input('ktp_number', []);
+        $married_status = $request->input('married_status', []);
+        $job = $request->input('job', []);
 
         for ($i = 0; $i < count($nama_keluarga); $i++) {
-            if ($nama_keluarga[$i] !== null && $status_keluarga[$i] !== null) {
+            if ($nama_keluarga[$i] !== null) {
                 Keluarga::create([
                     'user_id' => $user->id,
                     'nama_keluarga' => $nama_keluarga[$i],
                     'status_keluarga' => $status_keluarga[$i],
+                    'born_place' => $born_place[$i],
+                    'born_date' => $born_date[$i],
+                    'gender' => $gender[$i],
+                    'nation' => $nation[$i],
+                    'religion' => $religion[$i],
+                    'ktp_number' => $ktp_number[$i],
+                    'married_status' => $married_status[$i],
+                    'job' => $job[$i],
                 ]);
             }
         }
@@ -149,6 +182,7 @@ class usersController extends Controller
             'name' => 'required',
             'foto' => 'image|file|max:10240',
             'rt' => 'required',
+            'rw' => 'required',
             'no_hp' => 'required',
             'keterangan' => 'nullable',
             'status' => 'required',
@@ -177,14 +211,30 @@ class usersController extends Controller
 
         $nama_keluarga = $request->input('nama_keluarga', []);
         $status_keluarga = $request->input('status_keluarga', []);
+        $born_place = $request->input('born_place', []);
+        $born_date = $request->input('born_date', []);
+        $gender = $request->input('gender', []);
+        $nation = $request->input('nation', []);
+        $religion = $request->input('religion', []);
+        $ktp_number = $request->input('ktp_number', []);
+        $married_status = $request->input('married_status', []);
+        $job = $request->input('job', []);
 
         Keluarga::where('user_id', $user->id)->delete();
         for ($i = 0; $i < count($nama_keluarga); $i++) {
-            if ($nama_keluarga[$i] !== null && $status_keluarga[$i] !== null) {
+            if ($nama_keluarga[$i] !== null) {
                 Keluarga::create([
                     'user_id' => $user->id,
                     'nama_keluarga' => $nama_keluarga[$i],
                     'status_keluarga' => $status_keluarga[$i],
+                    'born_place' => $born_place[$i],
+                    'born_date' => $born_date[$i],
+                    'gender' => $gender[$i],
+                    'nation' => $nation[$i],
+                    'religion' => $religion[$i],
+                    'ktp_number' => $ktp_number[$i],
+                    'married_status' => $married_status[$i],
+                    'job' => $job[$i],
                 ]);
             }
         }
@@ -256,6 +306,7 @@ class usersController extends Controller
             'name' => 'required',
             'foto' => 'image|file|max:10240',
             'rt' => 'required',
+            'rw' => 'required',
             'no_hp' => 'required',
             'keterangan' => 'nullable',
         ];
@@ -279,14 +330,30 @@ class usersController extends Controller
 
         $nama_keluarga = $request->input('nama_keluarga', []);
         $status_keluarga = $request->input('status_keluarga', []);
+        $born_place = $request->input('born_place', []);
+        $born_date = $request->input('born_date', []);
+        $gender = $request->input('gender', []);
+        $nation = $request->input('nation', []);
+        $religion = $request->input('religion', []);
+        $ktp_number = $request->input('ktp_number', []);
+        $married_status = $request->input('married_status', []);
+        $job = $request->input('job', []);
 
         Keluarga::where('user_id', $user->id)->delete();
         for ($i = 0; $i < count($nama_keluarga); $i++) {
-            if ($nama_keluarga[$i] !== null && $status_keluarga[$i] !== null) {
+            if ($nama_keluarga[$i] !== null) {
                 Keluarga::create([
                     'user_id' => $user->id,
                     'nama_keluarga' => $nama_keluarga[$i],
                     'status_keluarga' => $status_keluarga[$i],
+                    'born_place' => $born_place[$i],
+                    'born_date' => $born_date[$i],
+                    'gender' => $gender[$i],
+                    'nation' => $nation[$i],
+                    'religion' => $religion[$i],
+                    'ktp_number' => $ktp_number[$i],
+                    'married_status' => $married_status[$i],
+                    'job' => $job[$i],
                 ]);
             }
         }

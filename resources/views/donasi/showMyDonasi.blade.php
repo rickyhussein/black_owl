@@ -189,25 +189,21 @@
             </div>
         </div>
 
-        @if ($donasi->status == 'unpaid')
-            <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:135px">
-                <div class="tf-container">
-                    <div class="row">
-                        <div class="col">
-                            <a class="tf-btn success large" href="{{ url('/my-donasi/edit/'.$donasi->id) }}">Edit</a>
-                        </div>
-                        <div class="col">
-                            <a href="{{ url('/my-donasi/delete/'.$donasi->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
 
         @if ($donasi->status == 'unpaid' && $donasi->payment_source == 'midtrans')
             <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
                 <div class="tf-container">
-                    <button  id="pay-button" class="tf-btn accent large">Bayar Sekarang</button>
+                    <div class="row">
+                        <div class="col-6 mb-4">
+                            <a class="tf-btn success large" href="{{ url('/my-donasi/edit/'.$donasi->id) }}">Edit</a>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <a href="{{ url('/my-donasi/delete/'.$donasi->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
+                        </div>
+                        <div class="col-12">
+                            <button  id="pay-button" class="tf-btn accent large">Bayar Sekarang</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif
@@ -215,7 +211,17 @@
         @if ($donasi->status == 'unpaid' && $donasi->payment_source == 'Bank Transfer (Perlu Konfirmasi Pembayaran Manual)')
             <div class="bottom-navigation-bar st2 bottom-btn-fixed" style="bottom:65px">
                 <div class="tf-container">
-                    <a href="#" id="btn-popup-down" class="tf-btn accent large">Upload Bukti Pembayaran</a>
+                    <div class="row">
+                        <div class="col-6 mb-4">
+                            <a class="tf-btn success large" href="{{ url('/my-donasi/edit/'.$donasi->id) }}">Edit</a>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <a href="{{ url('/my-donasi/delete/'.$donasi->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
+                        </div>
+                        <div class="col-12">
+                            <a href="#" id="btn-popup-down" class="tf-btn accent large">Upload Bukti Pembayaran</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 

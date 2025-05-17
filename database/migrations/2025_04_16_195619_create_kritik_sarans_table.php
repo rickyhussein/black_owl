@@ -25,7 +25,7 @@ class CreateKritikSaransTable extends Migration
 
             $table->text('catatan_pengurus')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
-            $table->foreign('approved_by')->references('id')->on('users');
+            $table->foreign('approved_by')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

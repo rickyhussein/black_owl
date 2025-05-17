@@ -40,6 +40,36 @@
   {{-- timepicker --}}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <style>
+        .select2-container .select2-selection--single {
+            height: 37px;
+            line-height: 37px;
+        }
+
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            line-height: 37px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 37px;
+        }
+
+        .select2-results__option {
+            line-height: 37px;
+        }
+
+        .select2-selection__choice {
+            line-height: 37px;
+        }
+
+        select {
+            border: 1px solid rgb(201, 201, 201);
+        }
+
+
+    </style>
+
   <style>
     .btn{
       border-radius: 10px

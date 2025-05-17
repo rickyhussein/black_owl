@@ -17,6 +17,8 @@ use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\KritiksSaranController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SuratPengantarController;
+use App\Http\Controllers\SuratIzinRenovasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,7 @@ Route::get('/notifications/read-message/{id}', [NotificationController::class, '
 Route::get('/notification', [NotificationController::class, 'notification'])->middleware('role:user');
 
 Route::get('/users/updateStatus', [usersController::class, 'updateStatus'])->middleware('role:admin');
+Route::get('/users/updateRw', [usersController::class, 'updateRw'])->middleware('role:admin');
 
 Route::get('/users', [usersController::class, 'index'])->middleware('role:admin');
 Route::get('/users/tambah', [usersController::class, 'tambah'])->middleware('role:admin');
@@ -172,6 +175,28 @@ Route::get('/my-gate-card/edit/{id}', [GateCardController::class, 'editMyGateCar
 Route::put('/my-gate-card/update/{id}', [GateCardController::class, 'updateMyGateCard'])->middleware('role:user');
 Route::get('/my-gate-card/delete/{id}', [GateCardController::class, 'deleteMyGateCard'])->middleware('role:user');
 
+Route::get('/surat-pengantar', [SuratPengantarController::class, 'index'])->middleware('role:user');
+Route::get('/surat-pengantar/print/{id}', [SuratPengantarController::class, 'print'])->middleware('role:user');
+
+Route::get('/my-surat-pengantar', [SuratPengantarController::class, 'mySuratPengantar'])->middleware('role:user');
+Route::get('/my-surat-pengantar/tambah', [SuratPengantarController::class, 'tambahMySuratPengantar'])->middleware('role:user');
+Route::post('/my-surat-pengantar/store', [SuratPengantarController::class, 'storeMySuratPengantar'])->middleware('role:user');
+Route::get('/my-surat-pengantar/show/{id}', [SuratPengantarController::class, 'showMySuratPengantar'])->middleware('role:user');
+Route::get('/my-surat-pengantar/print/{id}', [SuratPengantarController::class, 'printMySuratPengantar'])->middleware('role:user');
+Route::get('/my-surat-pengantar/edit/{id}', [SuratPengantarController::class, 'editMySuratPengantar'])->middleware('role:user');
+Route::put('/my-surat-pengantar/update/{id}', [SuratPengantarController::class, 'updateMySuratPengantar'])->middleware('role:user');
+Route::get('/my-surat-pengantar/delete/{id}', [SuratPengantarController::class, 'deleteMySuratPengantar'])->middleware('role:user');
+Route::get('/my-surat-pengantar/getKeluarga', [SuratPengantarController::class, 'getKeluarga'])->middleware('role:user');
+
+Route::get('/my-surat-izin-renovasi', [SuratIzinRenovasiController::class, 'mySuratIzinRenovasi'])->middleware('role:user');
+Route::get('/my-surat-izin-renovasi/tambah', [SuratIzinRenovasiController::class, 'tambahMySuratIzinRenovasi'])->middleware('role:user');
+Route::post('/my-surat-izin-renovasi/store', [SuratIzinRenovasiController::class, 'storeMySuratIzinRenovasi'])->middleware('role:user');
+Route::get('/my-surat-izin-renovasi/show/{id}', [SuratIzinRenovasiController::class, 'showMySuratIzinRenovasi'])->middleware('role:user');
+Route::get('/my-surat-izin-renovasi/print/{id}', [SuratIzinRenovasiController::class, 'printMySuratIzinRenovasi'])->middleware('role:user');
+Route::get('/my-surat-izin-renovasi/edit/{id}', [SuratIzinRenovasiController::class, 'editMySuratIzinRenovasi'])->middleware('role:user');
+Route::put('/my-surat-izin-renovasi/update/{id}', [SuratIzinRenovasiController::class, 'updateMySuratIzinRenovasi'])->middleware('role:user');
+Route::get('/my-surat-izin-renovasi/delete/{id}', [SuratIzinRenovasiController::class, 'deleteMySuratIzinRenovasi'])->middleware('role:user');
+Route::get('/my-surat-izin-renovasi/getKeluarga', [SuratIzinRenovasiController::class, 'getKeluarga'])->middleware('role:user');
 
 Route::get('/reset', function () {
     Artisan::call('optimize');

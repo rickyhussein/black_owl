@@ -132,6 +132,15 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ url('/surat-pengantar') }}" class="nav-link {{ Request::is('surat-pengantar*') ? 'active' : '' }}">
+                        <i class="nav-icon far fa-envelope"></i>
+                        <p>
+                            Surat Pengantar
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ url('/kritik-saran') }}" class="nav-link {{ Request::is('kritik-saran*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-handshake"></i>
                         <p>

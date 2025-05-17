@@ -197,6 +197,15 @@
         $(".logout").removeClass("panel-open");
       })
       }
+
+    if ($(".logout2").length){
+      $("#btn-logout2").on("click", function () {
+        $(".logout2").addClass("panel-open");
+      })
+      $(".panel_overlay, .clear-panel").on("click", function () {
+        $(".logout2").removeClass("panel-open");
+      })
+      }
     if ($(".lock-app").length){
       $("#btn-lock").on("click", function () {
         $(".lock-app").addClass("panel-open");

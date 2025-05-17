@@ -34,12 +34,13 @@ class DatabaseSeeder extends Seeder
 
         $admin = User::create([
             'name' => 'Admin',
-            'alamat' => 'ADMIN',
+            'alamat' => 'Q92/89',
             'status' => 'Dihuni',
             'no_hp' => '081818607319',
             'email' => 'admin@gmail.com',
             'keterangan' => '',
             'rt' => '001',
+            'rw' => '016',
             'password' => Hash::make('admin123'),
         ]);
         $admin->assignRole('admin');
@@ -52,7 +53,8 @@ class DatabaseSeeder extends Seeder
             'no_hp' => '085171744592',
             'email' => 'rickykiki260198@gmail.com',
             'keterangan' => 'Test',
-            'rt' => '001',
+            'rt' => '002',
+            'rw' => '021',
             'password' => Hash::make('madrid123'),
         ]);
         $user->assignRole('user');

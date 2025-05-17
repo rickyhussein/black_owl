@@ -17,6 +17,33 @@
                         <option value="001" {{ '001' == request('rt') ? 'selected="selected"' : '' }}>001</option>
                         <option value="002" {{ '002' == request('rt') ? 'selected="selected"' : '' }}>002</option>
                         <option value="003" {{ '003' == request('rt') ? 'selected="selected"' : '' }}>003</option>
+                        <option value="004" {{ '004' == request('rt') ? 'selected="selected"' : '' }}>004</option>
+                        <option value="005" {{ '005' == request('rt') ? 'selected="selected"' : '' }}>005</option>
+                        <option value="006" {{ '006' == request('rt') ? 'selected="selected"' : '' }}>006</option>
+                        <option value="007" {{ '007' == request('rt') ? 'selected="selected"' : '' }}>007</option>
+                        <option value="008" {{ '008' == request('rt') ? 'selected="selected"' : '' }}>008</option>
+                        <option value="009" {{ '009' == request('rt') ? 'selected="selected"' : '' }}>009</option>
+                        <option value="010" {{ '010' == request('rt') ? 'selected="selected"' : '' }}>010</option>
+                        <option value="011" {{ '011' == request('rt') ? 'selected="selected"' : '' }}>011</option>
+                        <option value="012" {{ '012' == request('rt') ? 'selected="selected"' : '' }}>012</option>
+                        <option value="013" {{ '013' == request('rt') ? 'selected="selected"' : '' }}>013</option>
+                        <option value="014" {{ '014' == request('rt') ? 'selected="selected"' : '' }}>014</option>
+                        <option value="015" {{ '015' == request('rt') ? 'selected="selected"' : '' }}>015</option>
+                        <option value="016" {{ '016' == request('rt') ? 'selected="selected"' : '' }}>016</option>
+                        <option value="017" {{ '017' == request('rt') ? 'selected="selected"' : '' }}>017</option>
+                        <option value="018" {{ '018' == request('rt') ? 'selected="selected"' : '' }}>018</option>
+                        <option value="019" {{ '019' == request('rt') ? 'selected="selected"' : '' }}>019</option>
+                        <option value="020" {{ '020' == request('rt') ? 'selected="selected"' : '' }}>020</option>
+                        <option value="021" {{ '021' == request('rt') ? 'selected="selected"' : '' }}>021</option>
+                        <option value="022" {{ '022' == request('rt') ? 'selected="selected"' : '' }}>022</option>
+                        <option value="023" {{ '023' == request('rt') ? 'selected="selected"' : '' }}>023</option>
+                        <option value="024" {{ '024' == request('rt') ? 'selected="selected"' : '' }}>024</option>
+                        <option value="025" {{ '025' == request('rt') ? 'selected="selected"' : '' }}>025</option>
+                        <option value="026" {{ '026' == request('rt') ? 'selected="selected"' : '' }}>026</option>
+                        <option value="027" {{ '027' == request('rt') ? 'selected="selected"' : '' }}>027</option>
+                        <option value="028" {{ '028' == request('rt') ? 'selected="selected"' : '' }}>028</option>
+                        <option value="029" {{ '029' == request('rt') ? 'selected="selected"' : '' }}>029</option>
+                        <option value="030" {{ '030' == request('rt') ? 'selected="selected"' : '' }}>030</option>
                     </select>
                 </div>
                 <div class="col-4 mb-2">
@@ -94,6 +121,33 @@
                                 <option value="001" {{ '001' == request('rt') ? 'selected="selected"' : '' }}>001</option>
                                 <option value="002" {{ '002' == request('rt') ? 'selected="selected"' : '' }}>002</option>
                                 <option value="003" {{ '003' == request('rt') ? 'selected="selected"' : '' }}>003</option>
+                                <option value="004" {{ '004' == request('rt') ? 'selected="selected"' : '' }}>004</option>
+                                <option value="005" {{ '005' == request('rt') ? 'selected="selected"' : '' }}>005</option>
+                                <option value="006" {{ '006' == request('rt') ? 'selected="selected"' : '' }}>006</option>
+                                <option value="007" {{ '007' == request('rt') ? 'selected="selected"' : '' }}>007</option>
+                                <option value="008" {{ '008' == request('rt') ? 'selected="selected"' : '' }}>008</option>
+                                <option value="009" {{ '009' == request('rt') ? 'selected="selected"' : '' }}>009</option>
+                                <option value="010" {{ '010' == request('rt') ? 'selected="selected"' : '' }}>010</option>
+                                <option value="011" {{ '011' == request('rt') ? 'selected="selected"' : '' }}>011</option>
+                                <option value="012" {{ '012' == request('rt') ? 'selected="selected"' : '' }}>012</option>
+                                <option value="013" {{ '013' == request('rt') ? 'selected="selected"' : '' }}>013</option>
+                                <option value="014" {{ '014' == request('rt') ? 'selected="selected"' : '' }}>014</option>
+                                <option value="015" {{ '015' == request('rt') ? 'selected="selected"' : '' }}>015</option>
+                                <option value="016" {{ '016' == request('rt') ? 'selected="selected"' : '' }}>016</option>
+                                <option value="017" {{ '017' == request('rt') ? 'selected="selected"' : '' }}>017</option>
+                                <option value="018" {{ '018' == request('rt') ? 'selected="selected"' : '' }}>018</option>
+                                <option value="019" {{ '019' == request('rt') ? 'selected="selected"' : '' }}>019</option>
+                                <option value="020" {{ '020' == request('rt') ? 'selected="selected"' : '' }}>020</option>
+                                <option value="021" {{ '021' == request('rt') ? 'selected="selected"' : '' }}>021</option>
+                                <option value="022" {{ '022' == request('rt') ? 'selected="selected"' : '' }}>022</option>
+                                <option value="023" {{ '023' == request('rt') ? 'selected="selected"' : '' }}>023</option>
+                                <option value="024" {{ '024' == request('rt') ? 'selected="selected"' : '' }}>024</option>
+                                <option value="025" {{ '025' == request('rt') ? 'selected="selected"' : '' }}>025</option>
+                                <option value="026" {{ '026' == request('rt') ? 'selected="selected"' : '' }}>026</option>
+                                <option value="027" {{ '027' == request('rt') ? 'selected="selected"' : '' }}>027</option>
+                                <option value="028" {{ '028' == request('rt') ? 'selected="selected"' : '' }}>028</option>
+                                <option value="029" {{ '029' == request('rt') ? 'selected="selected"' : '' }}>029</option>
+                                <option value="030" {{ '030' == request('rt') ? 'selected="selected"' : '' }}>030</option>
                             </select>
                         </div>
                         <div class="form-group">
