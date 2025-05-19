@@ -23,6 +23,8 @@ class SuratPengantarController extends Controller
         ->when($search, function ($query) use ($search) {
             $query->where(function ($query) use ($search) {
                 $query->where('surat_pengantar_number', 'LIKE', '%' . $search . '%')
+                ->orWhere('letter_type', 'LIKE', '%' . $search . '%')
+                ->orWhere('alamat', 'LIKE', '%' . $search . '%')
                 ->orWhereHas('keluarga', function ($q) use ($search) {
                     $q->where('nama_keluarga', 'LIKE', '%' . $search . '%');
                 });

@@ -47,6 +47,41 @@
                     </select>
                 </div>
                 <div class="col-4 mb-2">
+                    <select name="rw" id="rw" class="form-control @error('rw') is-invalid @enderror selectpicker" data-live-search="true">
+                        <option value="">-- Pilih RW --</option>
+                        <option value="001" {{ '001' == request('rw') ? 'selected="selected"' : '' }}>001</option>
+                        <option value="002" {{ '002' == request('rw') ? 'selected="selected"' : '' }}>002</option>
+                        <option value="003" {{ '003' == request('rw') ? 'selected="selected"' : '' }}>003</option>
+                        <option value="004" {{ '004' == request('rw') ? 'selected="selected"' : '' }}>004</option>
+                        <option value="005" {{ '005' == request('rw') ? 'selected="selected"' : '' }}>005</option>
+                        <option value="006" {{ '006' == request('rw') ? 'selected="selected"' : '' }}>006</option>
+                        <option value="007" {{ '007' == request('rw') ? 'selected="selected"' : '' }}>007</option>
+                        <option value="008" {{ '008' == request('rw') ? 'selected="selected"' : '' }}>008</option>
+                        <option value="009" {{ '009' == request('rw') ? 'selected="selected"' : '' }}>009</option>
+                        <option value="010" {{ '010' == request('rw') ? 'selected="selected"' : '' }}>010</option>
+                        <option value="011" {{ '011' == request('rw') ? 'selected="selected"' : '' }}>011</option>
+                        <option value="012" {{ '012' == request('rw') ? 'selected="selected"' : '' }}>012</option>
+                        <option value="013" {{ '013' == request('rw') ? 'selected="selected"' : '' }}>013</option>
+                        <option value="014" {{ '014' == request('rw') ? 'selected="selected"' : '' }}>014</option>
+                        <option value="015" {{ '015' == request('rw') ? 'selected="selected"' : '' }}>015</option>
+                        <option value="016" {{ '016' == request('rw') ? 'selected="selected"' : '' }}>016</option>
+                        <option value="017" {{ '017' == request('rw') ? 'selected="selected"' : '' }}>017</option>
+                        <option value="018" {{ '018' == request('rw') ? 'selected="selected"' : '' }}>018</option>
+                        <option value="019" {{ '019' == request('rw') ? 'selected="selected"' : '' }}>019</option>
+                        <option value="020" {{ '020' == request('rw') ? 'selected="selected"' : '' }}>020</option>
+                        <option value="021" {{ '021' == request('rw') ? 'selected="selected"' : '' }}>021</option>
+                        <option value="022" {{ '022' == request('rw') ? 'selected="selected"' : '' }}>022</option>
+                        <option value="023" {{ '023' == request('rw') ? 'selected="selected"' : '' }}>023</option>
+                        <option value="024" {{ '024' == request('rw') ? 'selected="selected"' : '' }}>024</option>
+                        <option value="025" {{ '025' == request('rw') ? 'selected="selected"' : '' }}>025</option>
+                        <option value="026" {{ '026' == request('rw') ? 'selected="selected"' : '' }}>026</option>
+                        <option value="027" {{ '027' == request('rw') ? 'selected="selected"' : '' }}>027</option>
+                        <option value="028" {{ '028' == request('rw') ? 'selected="selected"' : '' }}>028</option>
+                        <option value="029" {{ '029' == request('rw') ? 'selected="selected"' : '' }}>029</option>
+                        <option value="030" {{ '030' == request('rw') ? 'selected="selected"' : '' }}>030</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-2">
                     <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
                         <option value="">-- Pilih Status --</option>
                         <option value="Dihuni" {{ 'Dihuni' == request('status') ? 'selected="selected"' : '' }}>Dihuni</option>
@@ -78,7 +113,7 @@
                         <option value="12" {{ '12' == request('month') ? 'selected="selected"' : '' }}>Desember</option>
                     </select>
                 </div>
-                <div class="col-3 mb-4">
+                <div class="col-4 mb-4">
                     @php
                         $last= 2020;
                         $now = date('Y') + 5;
@@ -151,6 +186,41 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <select name="rw" id="rw" class="form-control @error('rw') is-invalid @enderror selectpicker" data-live-search="true">
+                                <option value="">-- Pilih RW --</option>
+                                <option value="001" {{ '001' == request('rw') ? 'selected="selected"' : '' }}>001</option>
+                                <option value="002" {{ '002' == request('rw') ? 'selected="selected"' : '' }}>002</option>
+                                <option value="003" {{ '003' == request('rw') ? 'selected="selected"' : '' }}>003</option>
+                                <option value="004" {{ '004' == request('rw') ? 'selected="selected"' : '' }}>004</option>
+                                <option value="005" {{ '005' == request('rw') ? 'selected="selected"' : '' }}>005</option>
+                                <option value="006" {{ '006' == request('rw') ? 'selected="selected"' : '' }}>006</option>
+                                <option value="007" {{ '007' == request('rw') ? 'selected="selected"' : '' }}>007</option>
+                                <option value="008" {{ '008' == request('rw') ? 'selected="selected"' : '' }}>008</option>
+                                <option value="009" {{ '009' == request('rw') ? 'selected="selected"' : '' }}>009</option>
+                                <option value="010" {{ '010' == request('rw') ? 'selected="selected"' : '' }}>010</option>
+                                <option value="011" {{ '011' == request('rw') ? 'selected="selected"' : '' }}>011</option>
+                                <option value="012" {{ '012' == request('rw') ? 'selected="selected"' : '' }}>012</option>
+                                <option value="013" {{ '013' == request('rw') ? 'selected="selected"' : '' }}>013</option>
+                                <option value="014" {{ '014' == request('rw') ? 'selected="selected"' : '' }}>014</option>
+                                <option value="015" {{ '015' == request('rw') ? 'selected="selected"' : '' }}>015</option>
+                                <option value="016" {{ '016' == request('rw') ? 'selected="selected"' : '' }}>016</option>
+                                <option value="017" {{ '017' == request('rw') ? 'selected="selected"' : '' }}>017</option>
+                                <option value="018" {{ '018' == request('rw') ? 'selected="selected"' : '' }}>018</option>
+                                <option value="019" {{ '019' == request('rw') ? 'selected="selected"' : '' }}>019</option>
+                                <option value="020" {{ '020' == request('rw') ? 'selected="selected"' : '' }}>020</option>
+                                <option value="021" {{ '021' == request('rw') ? 'selected="selected"' : '' }}>021</option>
+                                <option value="022" {{ '022' == request('rw') ? 'selected="selected"' : '' }}>022</option>
+                                <option value="023" {{ '023' == request('rw') ? 'selected="selected"' : '' }}>023</option>
+                                <option value="024" {{ '024' == request('rw') ? 'selected="selected"' : '' }}>024</option>
+                                <option value="025" {{ '025' == request('rw') ? 'selected="selected"' : '' }}>025</option>
+                                <option value="026" {{ '026' == request('rw') ? 'selected="selected"' : '' }}>026</option>
+                                <option value="027" {{ '027' == request('rw') ? 'selected="selected"' : '' }}>027</option>
+                                <option value="028" {{ '028' == request('rw') ? 'selected="selected"' : '' }}>028</option>
+                                <option value="029" {{ '029' == request('rw') ? 'selected="selected"' : '' }}>029</option>
+                                <option value="030" {{ '030' == request('rw') ? 'selected="selected"' : '' }}>030</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <select name="status" id="status" class="form-control @error('status') is-invalid @enderror selectpicker" data-live-search="true">
                                 <option value="">-- Pilih Status --</option>
                                 <option value="Dihuni" {{ 'Dihuni' == request('status') ? 'selected="selected"' : '' }}>Dihuni</option>
@@ -214,7 +284,8 @@
                             <th class="text-center" style="position: sticky; left: 0; background-color: rgb(215, 215, 215); z-index: 2;">No.</th>
                             <th style="min-width: 300px; background-color:rgb(243, 243, 243);" class="text-center">Nama</th>
                             <th style="min-width: 300px; background-color:rgb(243, 243, 243);" class="text-center">Alamat</th>
-                            <th style="min-width: 300px; background-color:rgb(243, 243, 243);" class="text-center">RT</th>
+                            <th style="min-width: 120px; background-color:rgb(243, 243, 243);" class="text-center">RT</th>
+                            <th style="min-width: 120px; background-color:rgb(243, 243, 243);" class="text-center">RW</th>
                             <th style="min-width: 300px; background-color:rgb(243, 243, 243);" class="text-center">Status</th>
 
                             @if (!request('month') || request('month') == '01')
@@ -274,7 +345,7 @@
                     <tbody>
                         @if (count($users) <= 0)
                             <tr>
-                                <td colspan="30" class="text-center">Tidak Ada Data</td>
+                                <td colspan="31" class="text-center">Tidak Ada Data</td>
                             </tr>
                         @else
                             @php
@@ -363,6 +434,7 @@
                                     <td class="text-center" style="vertical-align: middle;">{{ $user->name }}</td>
                                     <td class="text-center" style="vertical-align: middle;">{{ $user->alamat ?? '-' }}</td>
                                     <td class="text-center" style="vertical-align: middle;">{{ $user->rt ?? '-' }}</td>
+                                    <td class="text-center" style="vertical-align: middle;">{{ $user->rw ?? '-' }}</td>
                                     <td class="text-center" style="vertical-align: middle;">{{ $user->status ?? '-' }}</td>
 
                                     @if (!request('month') || request('month') == '01')
@@ -552,7 +624,7 @@
                             @endforeach
                             <tr>
                                 <td class="text-center" style="position: sticky; left: 0; background-color: rgb(215, 215, 215); z-index: 1; vertical-align: middle;"></td>
-                                <td class="text-center" colspan="4" style="vertical-align: middle; background-color: rgb(215, 215, 215);">Total</td>
+                                <td class="text-center" colspan="5" style="vertical-align: middle; background-color: rgb(215, 215, 215);">Total</td>
 
                                 @if (!request('month') || request('month') == '01')
                                     <td class="text-center" colspan="2" style="vertical-align: middle; background-color: rgb(235, 235, 235);">Rp {{ number_format($total_total_januari) }}</td>

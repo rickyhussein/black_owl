@@ -72,7 +72,7 @@ class IPKLController extends Controller
     public function tambah()
     {
         $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
-        $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
+        $users = User::select('id', 'name', 'alamat', 'status')->orderBy('alamat', 'ASC')->get();
 
         return view('ipkl.tambah', compact(
             'title',
@@ -186,7 +186,7 @@ class IPKLController extends Controller
     public function tambahPerUser()
     {
         $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
-        $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
+        $users = User::select('id', 'name', 'alamat', 'status')->orderBy('alamat', 'ASC')->get();
 
         return view('ipkl.tambahPerUser', compact(
             'title',
@@ -290,7 +290,7 @@ class IPKLController extends Controller
     public function edit($id)
     {
         $title = 'Iuran Pemeliharaan dan  Keamanan Lingkungan';
-        $users = User::select('id', 'name', 'alamat', 'status')->where('name', '!=', 'Admin')->orderBy('alamat', 'ASC')->get();
+        $users = User::select('id', 'name', 'alamat', 'status')->orderBy('alamat', 'ASC')->get();
         $ipkl = Transaction::find($id);
 
         return view('ipkl.edit', compact(
@@ -464,12 +464,12 @@ class IPKLController extends Controller
         $title = 'Laporan IPKL ' . $year;
         $search = request()->input('search');
         $rt = request()->input('rt');
+        $rw = request()->input('rw');
         $status = request()->input('status');
         $month = request()->input('month');
         $status_transaksi = request()->input('status_transaksi');
 
-        $users = User::where('name', '!=', 'Admin')
-        ->when($search, function ($query) use ($search) {
+        $users = User::when($search, function ($query) use ($search) {
             $query->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%'.$search.'%')
                 ->orWhere('alamat', 'LIKE', '%'.$search.'%');
@@ -477,6 +477,9 @@ class IPKLController extends Controller
         })
         ->when($rt, function ($query) use ($rt) {
             $query->where('rt', $rt);
+        })
+        ->when($rw, function ($query) use ($rw) {
+            $query->where('rw', $rw);
         })
         ->when($status, function ($query) use ($status) {
             $query->where('status', $status);

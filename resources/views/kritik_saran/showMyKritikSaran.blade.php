@@ -131,12 +131,25 @@
                         <a class="tf-btn success large" href="{{ url('/my-kritik-saran/edit/'.$kritik_saran->id) }}">Edit</a>
                     </div>
                     <div class="col">
-                        <a href="{{ url('/my-kritik-saran/delete/'.$kritik_saran->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
+                        <a id="btn-logout" href="#" class="tf-btn danger large">Delete</a>
                     </div>
                 </div>
             </div>
         </div>
     @endif
+
+    <div class="tf-panel logout">
+        <div class="panel_overlay"></div>
+        <div class="panel-box panel-center panel-logout">
+                <div class="heading">
+                    <h2 class="text-center">Anda yakin ingin menghapus data ini?</h2>
+                </div>
+                <div class="bottom">
+                    <a class="clear-panel" href="#">Cancel</a>
+                    <a class="clear-panel critical_color" href="{{ url('/my-kritik-saran/delete/'.$kritik_saran->id) }}">Delete</a>
+                </div>
+        </div>
+    </div>
 
 
     <br>

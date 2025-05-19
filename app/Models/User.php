@@ -61,6 +61,27 @@ class User extends Authenticatable
         return $count_ipkl_unpaid;
     }
 
+    public function getDonasiFasum($user_id, $month, $year)
+    {
+        $total_donasi_fasum = Transaction::where('type', 'Donasi Fasum')->where('status', 'paid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->sum('nominal');
+
+        return $total_donasi_fasum;
+    }
+
+    public function getDonasiUmum($user_id, $month, $year)
+    {
+        $total_donasi_umum = Transaction::where('type', 'Donasi Umum')->where('status', 'paid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->sum('nominal');
+
+        return $total_donasi_umum;
+    }
+
+    public function getDonasiLainnya($user_id, $month, $year)
+    {
+        $total_donasi_lainnya = Transaction::where('type', 'Donasi Lainnya')->where('status', 'paid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->sum('nominal');
+
+        return $total_donasi_lainnya;
+    }
+
     public function whatsapp($phoneNumber)
     {
         if (substr($phoneNumber, 0, 1) == '0') {

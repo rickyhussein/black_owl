@@ -160,12 +160,25 @@
                     <a class="tf-btn success large" href="{{ url('/my-surat-pengantar/edit/'.$surat_pengantar->id) }}">Edit</a>
                 </div>
                 <div class="col-6 mb-4">
-                    <a href="{{ url('/my-surat-pengantar/delete/'.$surat_pengantar->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
+                    <a id="btn-logout" href="#" class="tf-btn danger large">Delete</a>
                 </div>
                 <div class="col-12">
                     <a class="tf-btn accent large" href="{{ url('/my-surat-pengantar/print/'.$surat_pengantar->id) }}">Print</a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="tf-panel logout">
+        <div class="panel_overlay"></div>
+        <div class="panel-box panel-center panel-logout">
+                <div class="heading">
+                    <h2 class="text-center">Anda yakin ingin menghapus data ini?</h2>
+                </div>
+                <div class="bottom">
+                    <a class="clear-panel" href="#">Cancel</a>
+                    <a class="clear-panel critical_color" href="{{ url('/my-surat-pengantar/delete/'.$surat_pengantar->id) }}">Delete</a>
+                </div>
         </div>
     </div>
 

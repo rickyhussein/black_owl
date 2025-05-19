@@ -114,6 +114,15 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ url('/laporan-donasi') }}" class="nav-link {{ Request::is('laporan-donasi*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chart-bar"></i>
+                        <p>
+                            Laporan Donasi
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ url('/gate-card') }}" class="nav-link {{ Request::is('gate-card*') ? 'active' : '' }}">
                         <i class="nav-icon far fa-credit-card"></i>
                         <p>
@@ -136,6 +145,15 @@
                         <i class="nav-icon far fa-envelope"></i>
                         <p>
                             Surat Pengantar
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/surat-izin-renovasi') }}" class="nav-link {{ Request::is('surat-izin-renovasi*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-house-user"></i>
+                        <p>
+                            Surat Izin Renovasi
                         </p>
                     </a>
                 </li>

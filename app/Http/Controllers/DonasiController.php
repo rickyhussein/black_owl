@@ -8,6 +8,8 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Exports\DonasiExport;
 use Illuminate\Support\Facades\DB;
+use App\Exports\laporanDonasiExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Notifications\UserNotification;
 
 class DonasiController extends Controller
@@ -402,5 +404,52 @@ class DonasiController extends Controller
         });
 
         return redirect('/my-donasi')->with('success', 'Data Berhasil Didelete');
+    }
+
+    public function laporanDonasi()
+    {
+        if (request()->input('year')) {
+            $year = request()->input('year');
+        } else {
+            $year = date('Y');
+        }
+
+        $title = 'Laporan Donasi ' . $year;
+        $search = request()->input('search');
+        $rt = request()->input('rt');
+        $rw = request()->input('rw');
+        $status = request()->input('status');
+        $month = request()->input('month');
+
+        $users = User::when($search, function ($query) use ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('alamat', 'LIKE', '%'.$search.'%');
+            });
+        })
+        ->when($rt, function ($query) use ($rt) {
+            $query->where('rt', $rt);
+        })
+        ->when($rw, function ($query) use ($rw) {
+            $query->where('rw', $rw);
+        })
+        ->when($status, function ($query) use ($status) {
+            $query->where('status', $status);
+        })
+        ->orderBy('rt', 'asc')
+        ->orderBy('alamat', 'asc')
+        ->paginate(10)
+        ->withQueryString();
+
+        return view('donasi.laporanDonasi', compact(
+            'title',
+            'users',
+            'year',
+        ));
+    }
+
+    public function laporanDonasiExport(Request $request)
+    {
+        return Excel::download(new laporanDonasiExport($request), 'laporan-donasi.xlsx');
     }
 }

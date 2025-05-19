@@ -12,6 +12,7 @@
                 <th>Nama</th>
                 <th>Alamat</th>
                 <th>RT</th>
+                <th>RW</th>
                 <th>Status</th>
 
                 @if (!request('month') || request('month') == '01')
@@ -71,7 +72,7 @@
         <tbody>
             @if (count($users) <= 0)
                 <tr>
-                    <td colspan="30">Tidak Ada Data</td>
+                    <td colspan="31">Tidak Ada Data</td>
                 </tr>
             @else
                 @php
@@ -160,6 +161,7 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->alamat ?? '-' }}</td>
                         <td>{{ $user->rt ?? '-' }}</td>
+                        <td>{{ $user->rw ?? '-' }}</td>
                         <td>{{ $user->status ?? '-' }}</td>
 
                         @if (!request('month') || request('month') == '01')
@@ -348,7 +350,7 @@
                     </tr>
                 @endforeach
                 <tr>
-                    <td colspan="5">Total</td>
+                    <td colspan="6">Total</td>
 
                     @if (!request('month') || request('month') == '01')
                         <td colspan="2">{{ $total_total_januari }}</td>

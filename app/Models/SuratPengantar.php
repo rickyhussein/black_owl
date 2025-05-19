@@ -42,7 +42,7 @@ class SuratPengantar extends Model
         ];
 
         $number = str_pad($counter->counter, 4, '0', STR_PAD_LEFT);
-        $surat_pengantar_number = $number . "/" . $counter->text_1 . auth()->user()->rt . "-016/" . $romawi[intval(date('m')) - 1] . '/' . date('Y');
+        $surat_pengantar_number = $number . "/" . $counter->text_1 . auth()->user()->rt . "-" . auth()->user()->rw . '/' . $romawi[intval(date('m')) - 1] . '/' . date('Y');
 
         return $surat_pengantar_number;
     }

@@ -50,7 +50,7 @@
                             $data = file_get_contents($path);
                             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                         @endphp
-                        <img src="{{ $base64 }}" style="width: 75px;" alt="UNITEDA ARKATO">
+                        <img src="{{ $base64 }}" style="width: 75px;" alt="Cluster Madrid">
                     </td>
                     <td style="text-align:center; padding-right:50px;">
                         <span style="font-size:20px; font-weight:bold; text-transform: uppercase; padding:15px 0px 5px;">

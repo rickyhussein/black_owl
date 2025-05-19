@@ -13,24 +13,48 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnFormatting
+class laporanDonasiExport implements FromView, WithStyles, WithEvents, WithColumnFormatting
 {
     public function columnFormats(): array
     {
         return [
             'G' => '"Rp" #,##0',
+            'H' => '"Rp" #,##0',
             'I' => '"Rp" #,##0',
+            'J' => '"Rp" #,##0',
             'K' => '"Rp" #,##0',
+            'L' => '"Rp" #,##0',
             'M' => '"Rp" #,##0',
+            'N' => '"Rp" #,##0',
             'O' => '"Rp" #,##0',
+            'P' => '"Rp" #,##0',
             'Q' => '"Rp" #,##0',
+            'R' => '"Rp" #,##0',
             'S' => '"Rp" #,##0',
+            'T' => '"Rp" #,##0',
             'U' => '"Rp" #,##0',
+            'V' => '"Rp" #,##0',
             'W' => '"Rp" #,##0',
+            'X' => '"Rp" #,##0',
             'Y' => '"Rp" #,##0',
+            'Z' => '"Rp" #,##0',
             'AA' => '"Rp" #,##0',
+            'AB' => '"Rp" #,##0',
             'AC' => '"Rp" #,##0',
+            'AD' => '"Rp" #,##0',
             'AE' => '"Rp" #,##0',
+            'AF' => '"Rp" #,##0',
+            'AG' => '"Rp" #,##0',
+            'AH' => '"Rp" #,##0',
+            'AI' => '"Rp" #,##0',
+            'AJ' => '"Rp" #,##0',
+            'AK' => '"Rp" #,##0',
+            'AL' => '"Rp" #,##0',
+            'AM' => '"Rp" #,##0',
+            'AN' => '"Rp" #,##0',
+            'AO' => '"Rp" #,##0',
+            'AP' => '"Rp" #,##0',
+            'AQ' => '"Rp" #,##0',
         ];
     }
 
@@ -47,7 +71,6 @@ class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnF
         $rw = request()->input('rw');
         $status = request()->input('status');
         $month = request()->input('month');
-        $status_transaksi = request()->input('status_transaksi');
 
         $users = User::when($search, function ($query) use ($search) {
             $query->where(function ($query) use ($search) {
@@ -64,40 +87,11 @@ class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnF
         ->when($status, function ($query) use ($status) {
             $query->where('status', $status);
         })
-        ->when($status_transaksi == 'tagihan belum dibuat', function ($query) use ($month, $year) {
-            $query->whereDoesntHave('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            });
-        })
-        ->when($status_transaksi == 'paid', function ($query) use ($month, $year) {
-            $query->whereHas('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('status', 'paid')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            });
-        })
-        ->when($status_transaksi == 'unpaid', function ($query) use ($month, $year) {
-            $query->whereHas('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('status', 'unpaid')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            })
-            ->whereDoesntHave('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('status', 'paid')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            });
-        })
         ->orderBy('rt', 'asc')
         ->orderBy('alamat', 'asc')
         ->get();
 
-        return view('ipkl.laporanIpklExport', [
+        return view('ipkl.laporanDonasiExport', [
             'users' => $users,
             'year' => $year,
         ]);
@@ -107,18 +101,22 @@ class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnF
 
     public function styles(Worksheet $sheet)
     {
-        $year = request()->input('year') ?? date('Y');
+        if (request()->input('year')) {
+            $year = request()->input('year');
+        } else {
+            $year = date('Y');
+        }
+
         $search = request()->input('search');
         $rt = request()->input('rt');
         $rw = request()->input('rw');
         $status = request()->input('status');
         $month = request()->input('month');
-        $status_transaksi = request()->input('status_transaksi');
 
         $totalUsers = User::when($search, function ($query) use ($search) {
             $query->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%'.$search.'%')
-                      ->orWhere('alamat', 'LIKE', '%'.$search.'%');
+                ->orWhere('alamat', 'LIKE', '%'.$search.'%');
             });
         })
         ->when($rt, function ($query) use ($rt) {
@@ -130,65 +128,38 @@ class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnF
         ->when($status, function ($query) use ($status) {
             $query->where('status', $status);
         })
-        ->when($status_transaksi == 'tagihan belum dibuat', function ($query) use ($month, $year) {
-            $query->whereDoesntHave('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            });
-        })
-        ->when($status_transaksi == 'paid', function ($query) use ($month, $year) {
-            $query->whereHas('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('status', 'paid')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            });
-        })
-        ->when($status_transaksi == 'unpaid', function ($query) use ($month, $year) {
-            $query->whereHas('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('status', 'unpaid')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            })
-            ->whereDoesntHave('transaction', function ($q) use ($month, $year) {
-                $q->where('type', 'IPKL')
-                  ->where('status', 'paid')
-                  ->where('month', $month)
-                  ->where('year', $year);
-            });
-        })
+        ->orderBy('rt', 'asc')
+        ->orderBy('alamat', 'asc')
         ->count();
 
-        // Baris awal tabel (header) adalah 1
         $startRow = 1;
-        $endRow = $totalUsers + 2; // +1 untuk header, +1 untuk footer
+        $endRow = $totalUsers + 3;
 
-        // Tentukan range tabel sesuai kondisi month
         if ($month) {
-            $tableRange = "A{$startRow}:H" . ($endRow - 1); // hanya sampai kolom H
+            $tableRange = "A{$startRow}:J" . ($endRow - 1);
         } else {
-            $tableRange = "A{$startRow}:AE" . ($endRow - 1); // sampai kolom AE
+            $tableRange = "A{$startRow}:AQ" . ($endRow - 1);
         }
 
         $footerTotalRange = "A{$endRow}:F{$endRow}";
         $footerOtherRange = $month
-            ? "G{$endRow}:H{$endRow}"
-            : "G{$endRow}:AE{$endRow}";
+            ? "G{$endRow}:J{$endRow}"
+            : "G{$endRow}:AQ{$endRow}";
 
         return [
-            // Header styling sesuai kondisi month
-            ($month ? 'A1:H1' : 'A1:AE1') => [
+            ($month ? 'A1:J2' : 'A1:AQ2') => [
                 'font' => ['bold' => true, 'size' => 12],
-                'alignment' => ['horizontal' => 'center'],
+                'alignment' => [
+                    'horizontal' => 'center',
+                    'vertical' => 'center',
+                    'wrapText' => true
+                ],
                 'fill' => [
                     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                     'startColor' => ['rgb' => 'D7D7D7'],
                 ],
             ],
 
-            // Border untuk data tabel sesuai kondisi
             $tableRange => [
                 'alignment' => ['horizontal' => 'center'],
                 'borders' => [
@@ -198,7 +169,6 @@ class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnF
                 ],
             ],
 
-            // Footer bagian total
             $footerTotalRange => [
                 'font' => ['bold' => true],
                 'alignment' => ['horizontal' => 'center'],
@@ -208,7 +178,6 @@ class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnF
                 ],
             ],
 
-            // Footer bagian bulan dan total lainnya
             $footerOtherRange => [
                 'alignment' => ['horizontal' => 'center'],
                 'fill' => [
@@ -234,9 +203,7 @@ class LaporanIpklExport implements FromView, WithStyles, WithEvents, WithColumnF
             AfterSheet::class => function(AfterSheet $event) {
                 // Daftar kolom dari F sampai AD (total 25 kolom)
                 $columns = [
-                    'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-                    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
-                    'Z', 'AA', 'AB', 'AC', 'AD', 'AE'
+                    'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ'
                 ];
 
                 // Set lebar kolom secara manual

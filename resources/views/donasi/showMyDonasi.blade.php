@@ -198,7 +198,7 @@
                             <a class="tf-btn success large" href="{{ url('/my-donasi/edit/'.$donasi->id) }}">Edit</a>
                         </div>
                         <div class="col-6 mb-4">
-                            <a href="{{ url('/my-donasi/delete/'.$donasi->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
+                            <a href="#" id="btn-logout" class="tf-btn danger large">Delete</a>
                         </div>
                         <div class="col-12">
                             <button  id="pay-button" class="tf-btn accent large">Bayar Sekarang</button>
@@ -216,7 +216,7 @@
                             <a class="tf-btn success large" href="{{ url('/my-donasi/edit/'.$donasi->id) }}">Edit</a>
                         </div>
                         <div class="col-6 mb-4">
-                            <a href="{{ url('/my-donasi/delete/'.$donasi->id) }}" onclick="return confirm('Anda yakin ingin menghapus data ini?')" class="tf-btn danger large">Delete</a>
+                            <a href="#" id="btn-logout" class="tf-btn danger large">Delete</a>
                         </div>
                         <div class="col-12">
                             <a href="#" id="btn-popup-down" class="tf-btn accent large">Upload Bukti Pembayaran</a>
@@ -262,6 +262,19 @@
                 </div>
             </div>
         @endif
+
+        <div class="tf-panel logout">
+            <div class="panel_overlay"></div>
+            <div class="panel-box panel-center panel-logout">
+                    <div class="heading">
+                        <h2 class="text-center">Anda yakin ingin menghapus data ini?</h2>
+                    </div>
+                    <div class="bottom">
+                        <a class="clear-panel" href="#">Cancel</a>
+                        <a class="clear-panel critical_color" href="{{ url('/my-donasi/delete/'.$donasi->id) }}">Delete</a>
+                    </div>
+            </div>
+        </div>
 
         <br>
         <br>

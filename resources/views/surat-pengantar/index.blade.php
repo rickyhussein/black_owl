@@ -65,9 +65,9 @@
                                     <td class="text-center" style="vertical-align: middle;">{{ $surat_pengantar->job ?? '-' }}</td>
                                     <td class="text-center" style="vertical-align: middle;">{{ $surat_pengantar->alamat ?? '-' }}</td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <div style="display: flex; gap: 5px;">
+                                        <center>
                                             <a target="_blank" href="{{ url('/surat-pengantar/print/'.$surat_pengantar->id) }}" class="btn btn-primary btn-sm" title="Download PDF"><i class="fa fa-file-pdf"></i></a>
-                                        </div>
+                                        </center>
                                     </td>
                                 </tr>
                             @endforeach
