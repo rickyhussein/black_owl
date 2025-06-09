@@ -161,6 +161,6 @@ class DatabaseSeeder extends Seeder
             'foto_pengurus' => 'foto_pengurus/team-3.jpg',
         ]);
 
-        DB::statement('ALTER TABLE transactions AUTO_INCREMENT = 1300');
+        DB::statement('ALTER TABLE transactions AUTO_INCREMENT = 4520');
     }
 }

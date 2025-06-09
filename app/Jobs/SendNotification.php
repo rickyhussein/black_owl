@@ -19,8 +19,7 @@ class SendNotification implements ShouldQueue
     protected $expired_date;
     protected $nominal;
     protected $whatsappApiUrl;
-    protected $whatsappApiKey;
-    protected $whatsappSender;
+    protected $whatsappApiSession;
 
     public function __construct($user, $ipkl, $month_name, $expired_date, $nominal)
     {
@@ -29,9 +28,8 @@ class SendNotification implements ShouldQueue
         $this->month_name = $month_name;
         $this->expired_date = $expired_date;
         $this->nominal = $nominal;
-        $this->whatsappApiUrl = config('midtrans.whatsapp_api_url');
-        $this->whatsappApiKey = config('midtrans.whatsapp_api_key');
-        $this->whatsappSender = config('midtrans.whatsapp_sender');
+        $this->whatsappApiUrl = config('midtrans.railway_whatsapp_api_url');
+        $this->whatsappApiSession = config('midtrans.railway_whatsapp_api_session');
     }
 
     public function handle()
@@ -44,14 +42,13 @@ class SendNotification implements ShouldQueue
                    "Jatuh Tempo : " . $this->expired_date . "\n" .
                    "Status : " . $this->ipkl->status . "\n" .
                    "Nominal : Rp " . $this->nominal . "\n\n" .
-                   "Pembayaran Melalui Link Dibawah Ini \n";
+                   "Silakan lakukan pembayaran melalui link berikut:\n\n" .
+                   url('/my-ipkl/show/'.$this->ipkl->id);
 
-        Http::post($this->whatsappApiUrl, [
-            'api_key' => $this->whatsappApiKey,
-            'sender' => $this->whatsappSender,
-            'number' => $this->user->no_hp,
-            'message' => $message,
-            'footer' => url('/my-ipkl/show/'.$this->ipkl->id),
+        Http::get($this->whatsappApiUrl, [
+            'session' => $this->whatsappApiSession,
+            'to' => $this->user->whatsapp($this->user->no_hp),
+            'text' =>  $message,
         ]);
     }
 }
