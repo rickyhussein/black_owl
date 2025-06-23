@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Berita;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -137,10 +138,12 @@ class dashboardController extends Controller
     public function dashboardUser()
     {
         $title = 'Dashboard';
+        $beritas = Berita::orderBy('id', 'DESC')->get();
         $tagihan_ipkl = Transaction::where('user_id', auth()->user()->id)->where('type', 'IPKL')->where('status', 'unpaid')->sum('nominal');
         return view('dashboard.dashboardUser', compact(
             'title',
             'tagihan_ipkl',
+            'beritas',
         ));
     }
 }

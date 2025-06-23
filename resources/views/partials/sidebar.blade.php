@@ -167,6 +167,51 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ url('/berita') }}" class="nav-link {{ Request::is('berita*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-newspaper"></i>
+                        <p>
+                            Berita Publik
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/olahraga') }}" class="nav-link {{ Request::is('olahraga*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-running"></i>
+                        <p>
+                            Olahraga
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/social') }}" class="nav-link {{ Request::is('social*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-thumbs-up"></i>
+                        <p>
+                            Social
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/agama') }}" class="nav-link {{ Request::is('agama*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-star-and-crescent"></i>
+                        <p>
+                            Agama
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/infrastruktur') }}" class="nav-link {{ Request::is('infrastruktur*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>
+                            Infrastruktur
+                        </p>
+                    </a>
+                </li>
+
                 {{-- <li class="nav-item">
                     <a href="{{ url('/roles') }}" class="nav-link {{ Request::is('roles*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-solid fa-hat-cowboy"></i>

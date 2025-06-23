@@ -4,11 +4,16 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\IPKLController;
+use App\Http\Controllers\UmkmController;
+use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\rolesController;
 use App\Http\Controllers\usersController;
+use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\KontakController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\GateCardController;
+use App\Http\Controllers\OlahragaController;
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\FasilitasController;
@@ -17,6 +22,7 @@ use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\KritiksSaranController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\InfrastrukturController;
 use App\Http\Controllers\SuratPengantarController;
 use App\Http\Controllers\SuratIzinRenovasiController;
 
@@ -35,6 +41,9 @@ Route::get('/', [authController::class, 'index'])->middleware('islogin');
 Route::get('/login', [authController::class, 'login'])->name('login')->middleware('islogin');
 Route::post('/login-proses', [authController::class, 'loginProses']);
 Route::get('/logout', [authController::class, 'logout'])->middleware('auth');
+
+Route::get('/umkm', [authController::class, 'umkm'])->middleware('islogin');
+Route::get('/umkm/detail/{id}', [authController::class, 'detailUmkm'])->middleware('islogin');
 
 Route::get('/forgot-password', [authController::class, 'forgotPassword']);
 Route::post('/forgot-password/link', [authController::class, 'forgotPasswordLink']);
@@ -147,7 +156,6 @@ Route::get('/my-kritik-saran/edit/{id}', [KritiksSaranController::class, 'editMy
 Route::put('/my-kritik-saran/update/{id}', [KritiksSaranController::class, 'updateMyKritikSaran'])->middleware('role:user');
 Route::get('/my-kritik-saran/delete/{id}', [KritiksSaranController::class, 'deleteMyKritikSaran'])->middleware('role:user');
 
-
 Route::get('/donasi', [DonasiController::class, 'index'])->middleware('role:admin');
 Route::get('/donasi/show/{id}', [DonasiController::class, 'show'])->middleware('role:admin');
 Route::post('/donasi/approval/{id}', [DonasiController::class, 'approval'])->middleware('role:admin');
@@ -204,6 +212,65 @@ Route::get('/my-surat-izin-renovasi/edit/{id}', [SuratIzinRenovasiController::cl
 Route::put('/my-surat-izin-renovasi/update/{id}', [SuratIzinRenovasiController::class, 'updateMySuratIzinRenovasi'])->middleware('role:user');
 Route::get('/my-surat-izin-renovasi/delete/{id}', [SuratIzinRenovasiController::class, 'deleteMySuratIzinRenovasi'])->middleware('role:user');
 Route::get('/my-surat-izin-renovasi/getKeluarga', [SuratIzinRenovasiController::class, 'getKeluarga'])->middleware('role:user');
+
+Route::get('/berita', [BeritaController::class, 'index'])->middleware('role:admin');
+Route::get('/berita/tambah', [BeritaController::class, 'tambah'])->middleware('role:admin');
+Route::post('/berita/store', [BeritaController::class, 'store'])->middleware('role:admin');
+Route::get('/berita/edit/{id}', [BeritaController::class, 'edit'])->middleware('role:admin');
+Route::put('/berita/update/{id}', [BeritaController::class, 'update'])->middleware('role:admin');
+Route::delete('/berita/delete/{id}', [BeritaController::class, 'delete'])->middleware('role:admin');
+
+Route::get('/my-berita', [BeritaController::class, 'myBerita'])->middleware('role:user');
+Route::get('/my-berita/show/{id}', [BeritaController::class, 'showMyBerita'])->middleware('role:user');
+
+Route::get('/olahraga', [OlahragaController::class, 'index'])->middleware('role:admin');
+Route::get('/olahraga/calendar', [OlahragaController::class, 'calendar'])->middleware('role:admin');
+Route::get('/olahraga/tambah', [OlahragaController::class, 'tambah'])->middleware('role:admin');
+Route::post('/olahraga/store', [OlahragaController::class, 'store'])->middleware('role:admin');
+Route::get('/olahraga/edit/{id}', [OlahragaController::class, 'edit'])->middleware('role:admin');
+Route::put('/olahraga/update/{id}', [OlahragaController::class, 'update'])->middleware('role:admin');
+Route::delete('/olahraga/delete/{id}', [OlahragaController::class, 'delete'])->middleware('role:admin');
+
+Route::get('/my-olahraga', [OlahragaController::class, 'myOlahraga'])->middleware('role:user');
+
+Route::get('/social', [SocialController::class, 'index'])->middleware('role:admin');
+Route::get('/social/calendar', [SocialController::class, 'calendar'])->middleware('role:admin');
+Route::get('/social/tambah', [SocialController::class, 'tambah'])->middleware('role:admin');
+Route::post('/social/store', [SocialController::class, 'store'])->middleware('role:admin');
+Route::get('/social/edit/{id}', [SocialController::class, 'edit'])->middleware('role:admin');
+Route::put('/social/update/{id}', [SocialController::class, 'update'])->middleware('role:admin');
+Route::delete('/social/delete/{id}', [SocialController::class, 'delete'])->middleware('role:admin');
+
+Route::get('/my-social', [SocialController::class, 'mySocial'])->middleware('role:user');
+
+Route::get('/agama', [AgamaController::class, 'index'])->middleware('role:admin');
+Route::get('/agama/calendar', [AgamaController::class, 'calendar'])->middleware('role:admin');
+Route::get('/agama/tambah', [AgamaController::class, 'tambah'])->middleware('role:admin');
+Route::post('/agama/store', [AgamaController::class, 'store'])->middleware('role:admin');
+Route::get('/agama/edit/{id}', [AgamaController::class, 'edit'])->middleware('role:admin');
+Route::put('/agama/update/{id}', [AgamaController::class, 'update'])->middleware('role:admin');
+Route::delete('/agama/delete/{id}', [AgamaController::class, 'delete'])->middleware('role:admin');
+
+Route::get('/my-agama', [AgamaController::class, 'myAgama'])->middleware('role:user');
+
+Route::get('/infrastruktur', [InfrastrukturController::class, 'index'])->middleware('role:admin');
+Route::get('/infrastruktur/tambah', [InfrastrukturController::class, 'tambah'])->middleware('role:admin');
+Route::post('/infrastruktur/store', [InfrastrukturController::class, 'store'])->middleware('role:admin');
+Route::get('/infrastruktur/show/{id}', [InfrastrukturController::class, 'show'])->middleware('role:admin');
+Route::get('/infrastruktur/edit/{id}', [InfrastrukturController::class, 'edit'])->middleware('role:admin');
+Route::put('/infrastruktur/update/{id}', [InfrastrukturController::class, 'update'])->middleware('role:admin');
+Route::delete('/infrastruktur/delete/{id}', [InfrastrukturController::class, 'delete'])->middleware('role:admin');
+
+Route::get('/my-infrastruktur', [InfrastrukturController::class, 'myInfrastruktur'])->middleware('role:user');
+Route::get('/my-infrastruktur/show/{id}', [InfrastrukturController::class, 'showMyInfrastruktur'])->middleware('role:user');
+
+Route::get('/my-umkm', [UmkmController::class, 'myUmkm'])->middleware('role:user');
+Route::get('/my-umkm/tambah', [UmkmController::class, 'tambahMyUmkm'])->middleware('role:user');
+Route::post('/my-umkm/store', [UmkmController::class, 'storeMyUmkm'])->middleware('role:user');
+Route::get('/my-umkm/show/{id}', [UmkmController::class, 'showMyUmkm'])->middleware('role:user');
+Route::get('/my-umkm/edit/{id}', [UmkmController::class, 'editMyUmkm'])->middleware('role:user');
+Route::put('/my-umkm/update/{id}', [UmkmController::class, 'updateMyUmkm'])->middleware('role:user');
+Route::get('/my-umkm/delete/{id}', [UmkmController::class, 'deleteMyUmkm'])->middleware('role:user');
 
 Route::get('/reset', function () {
     Artisan::call('optimize');

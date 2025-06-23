@@ -76,6 +76,7 @@
                                             @foreach ($pengeluaran->pengeluaranfile as $key => $file)
                                                 @if ($file->pengeluaran_file_path)
                                                     <a class="badge" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px;" target="_blank" href="{{ url('/storage/'.$file->pengeluaran_file_path) }}"><i class="fa fa-download mr-1"></i> {{ $file->pengeluaran_file_name }}</a>
+                                                    <br>
                                                 @else
                                                     -
                                                 @endif

@@ -84,7 +84,7 @@
                             <li class="list-card-invoice tf-topbar d-flex justify-content-between align-items-center">
                                 <div class="content-right">
                                     <p>
-                                        File {{ $key + 1 }}
+                                        File {{ count($pengeluaran->pengeluaranfile) <= 1 ? '' : $key + 1 }}
                                     </p>
                                     <h5>
                                         @if ($file->pengeluaran_file_path)

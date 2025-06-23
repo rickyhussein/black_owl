@@ -24,8 +24,8 @@
 
                             <div class="group-input">
                                 <label for="kritik_saran">Kritik & Saran</label>
-                                <textarea name="kritik_saran" id="kritik_saran" class="@error('keterangan') is-invalid @enderror" cols="30" rows="10">{{ old('kritik_saran', $kritik_saran->kritik_saran) }}</textarea>
-                                @error('keterangan')
+                                <textarea name="kritik_saran" id="kritik_saran" class="@error('kritik_saran') is-invalid @enderror" cols="30" rows="10">{{ old('kritik_saran', $kritik_saran->kritik_saran) }}</textarea>
+                                @error('kritik_saran')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Umkm;
 use App\Models\User;
 use App\Models\Kontak;
 use App\Models\Pengurus;
@@ -29,6 +30,34 @@ class authController extends Controller
             'tata_tertib',
             'pengurus',
         ));
+    }
+
+    public function umkm()
+    {
+        $search = request()->input('search');
+
+        $umkms = Umkm::when($search, function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        })
+        ->orderBy('click', 'DESC')
+        ->orderBy('id', 'DESC')
+        ->paginate(30)
+        ->withQueryString();
+
+        return view('auth.umkm',[
+            "title" => "UMKM",
+            "umkms" => $umkms
+        ]);
+    }
+
+    public function detailUmkm($id)
+    {
+        $umkm = Umkm::find($id);
+        $umkm->update(['click' => $umkm->click + 1]);
+        return view('auth.detailUmkm',[
+            "title" => $umkm->name,
+            "umkm" => $umkm
+        ]);
     }
 
     public function login()

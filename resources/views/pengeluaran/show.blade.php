@@ -85,6 +85,28 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-2 font-weight-bold">File</div>
+                        <div class="col-sm-4 mt-sm-0 mt-1">
+                            <div class="row align-items-center">
+                                <div class="col-1 d-none d-sm-inline">
+                                    :
+                                </div>
+                                <div class="col">
+                                    @if(count($pengeluaran->pengeluaranfile) > 0)
+                                        @foreach ($pengeluaran->pengeluaranfile as $key => $file)
+                                            @if ($file->pengeluaran_file_path)
+                                                <a class="badge" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px;" target="_blank" href="{{ url('/storage/'.$file->pengeluaran_file_path) }}"><i class="fa fa-download mr-1"></i> {{ $file->pengeluaran_file_name }}</a>
+                                                <br>
+                                            @else
+                                                -
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        -
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </li>
 
@@ -114,45 +136,6 @@
                         </div>
                     </div>
                 </li>
-                @if(count($pengeluaran->pengeluaranfile) > 0)
-                    @foreach ($pengeluaran->pengeluaranfile as $key => $file)
-                        <li class="list-group-item">
-                            <div class="row align-items-center">
-                                <div class="col-sm-2 font-weight-bold">File {{ $key + 1 }}</div>
-                                <div class="col-sm-4 mt-sm-0 mt-1">
-                                    <div class="row align-items-center">
-                                        <div class="col-1 d-none d-sm-inline">
-                                            :
-                                        </div>
-                                        <div class="col">
-                                            @if ($file->pengeluaran_file_path)
-                                                <a class="badge" style="color: rgb(21, 47, 118); background-color:rgba(192, 218, 254, 0.889); border-radius:10px;" target="_blank" href="{{ url('/storage/'.$file->pengeluaran_file_path) }}"><i class="fa fa-download mr-1"></i> {{ $file->pengeluaran_file_name }}</a>
-                                            @else
-                                                -
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    @endforeach
-                @else
-                    <li class="list-group-item">
-                        <div class="row align-items-center">
-                            <div class="col-sm-2 font-weight-bold">File</div>
-                            <div class="col-sm-4 mt-sm-0 mt-1">
-                                <div class="row align-items-center">
-                                    <div class="col-1 d-none d-sm-inline">
-                                        :
-                                    </div>
-                                    <div class="col">
-                                        -
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                @endif
             </ul>
         </div>
     </div>

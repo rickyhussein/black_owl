@@ -43,7 +43,7 @@
                     <div class="form-row">
                         <div class="col">
                             <label for="nominal">Nominal</label>
-                            <input nominal="text" class="form-control money @error('nominal') is-invalid @enderror" id="nominal" name="nominal" value="{{ old('nominal') }}">
+                            <input type="text" class="form-control money @error('nominal') is-invalid @enderror" id="nominal" name="nominal" value="{{ old('nominal') }}">
                             @error('nominal')
                                 <div class="invalid-feedback">
                                     {{ $message }}

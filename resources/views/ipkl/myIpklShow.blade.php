@@ -162,7 +162,7 @@
             @endif
         @endif
 
-        @else
+    @else
         <div id="app-wrap" class="d-flex justify-content-center align-items-center vh-100">
             <div class="bill-content text-center">
                 <div class="tf-container">

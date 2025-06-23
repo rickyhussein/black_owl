@@ -30,6 +30,8 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
     <link rel="stylesheet" type="text/css" href="{{ url('clock/dist/bootstrap-clockpicker.min.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
     <style>
         .select2-container .select2-selection--single {
             height: 45px;
@@ -57,10 +59,15 @@
         }
 
         .readonly-checkbox {
-    pointer-events: none !important; /* Blok semua klik */
-    opacity: 1 !important;           /* Hilangkan efek pudar */
-}
+            pointer-events: none !important; /* Blok semua klik */
+            opacity: 1 !important;           /* Hilangkan efek pudar */
+        }
 
+        .carousel-media {
+            width: 100%;
+            height: 300px; /* atur tinggi sesuai desain */
+            object-fit: cover;
+        }
 
     </style>
     @stack('style')
@@ -108,9 +115,7 @@
                 <div class="tf-statusbar d-flex justify-content-between align-items-center position-relative" style="height: 50px;">
 
                     <div class="flex-item start" style="width: 50px; margin-top: -50px">
-                        <a href="{{ url('/dashboard-user') }}" class="back-btn d-inline-block">
-                            @yield('back')
-                        </a>
+                        @yield('back')
                     </div>
 
                     <div class="flex-item center text-center flex-grow-1">
@@ -317,6 +322,36 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ url('/my-berita') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-berita*') ? 'color: blue' : '' }}">Berita Publik</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/my-umkm') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-umkm*') ? 'color: blue' : '' }}">UMKM</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/my-olahraga') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-olahraga*') ? 'color: blue' : '' }}">Olahraga</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/my-social') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-social*') ? 'color: blue' : '' }}">Sosial</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/my-agama') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-agama*') ? 'color: blue' : '' }}">Agama</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/my-infrastruktur') }}" class="nav-link">
+                                    <span style="{{ Request::is('my-infrastruktur*') ? 'color: blue' : '' }}">Infrastruktur</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ url('/logout') }}" class="nav-link" onclick="return confirm('Are You Sure?')">
                                     <span style="{{ Request::is('logout*') ? 'color: blue' : '' }}">Log Out</span>
                                 </a>
@@ -350,6 +385,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ url('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
     <script>
         config = {
             enableTime: true,

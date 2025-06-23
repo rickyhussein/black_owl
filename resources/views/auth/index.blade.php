@@ -215,6 +215,7 @@
               <li><a class="section-scroll" href="#kontak">Kontak Emergensi</a></li>
               <li><a class="section-scroll" href="#tata-tertib">Tata Tertib</a></li>
               <li><a class="section-scroll" href="#pengurus">Pengurus</a></li>
+              <li><a class="section-scroll" href="{{ url('/umkm') }}">UMKM</a></li>
               <li><a class="section-scroll" href="{{ url('/login') }}">Login</a></li>
             </ul>
           </div>
@@ -353,7 +354,6 @@
             <div class="map-container">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.945894680764!2d107.0143520746822!3d-6.137971593848913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69896256bda113%3A0x596e1f76c0918196!2sCluster%20Madrid%20Mutiara%20Gading%20City!5e0!3m2!1sid!2sid!4v1743026420211!5m2!1sid!2sid" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
-        </section>
         </section>
 
 

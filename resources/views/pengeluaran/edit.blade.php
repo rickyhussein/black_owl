@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('button')
     <li class="nav-item mr-2">
-        <a href="{{ url('/ipkl') }}" class="btn nav-link" style="color: red; border:1px solid red; background-color:white; ">Back</a>
+        <a href="{{ url('/pengeluaran') }}" class="btn nav-link" style="color: red; border:1px solid red; background-color:white; ">Back</a>
     </li>
 @endsection
 @section('isi')
@@ -44,7 +44,7 @@
                     <div class="form-row">
                         <div class="col">
                             <label for="nominal">Nominal</label>
-                            <input nominal="text" class="form-control money @error('nominal') is-invalid @enderror" id="nominal" name="nominal" value="{{ old('nominal', $pengeluaran->nominal) }}">
+                            <input type="text" class="form-control money @error('nominal') is-invalid @enderror" id="nominal" name="nominal" value="{{ old('nominal', $pengeluaran->nominal) }}">
                             @error('nominal')
                                 <div class="invalid-feedback">
                                     {{ $message }}
