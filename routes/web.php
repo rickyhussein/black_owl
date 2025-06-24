@@ -178,6 +178,9 @@ Route::get('/gate-card/show/{id}', [GateCardController::class, 'show'])->middlew
 Route::post('/gate-card/approval/{id}', [GateCardController::class, 'approval'])->middleware('role:admin');
 Route::get('/gate-card/export', [GateCardController::class, 'export'])->middleware('role:admin');
 
+Route::get('/laporan-gate-card', [GateCardController::class, 'laporanGateCard'])->middleware('role:admin');
+Route::get('/laporan-gate-card/export', [GateCardController::class, 'laporanGateCardExport'])->middleware('role:admin');
+
 Route::get('/my-gate-card', [GateCardController::class, 'myGateCard'])->middleware('role:user');
 Route::get('/my-gate-card/tambah', [GateCardController::class, 'tambahMyGateCard'])->middleware('role:user');
 Route::post('/my-gate-card/store', [GateCardController::class, 'storeMyGateCard'])->middleware('role:user');

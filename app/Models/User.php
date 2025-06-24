@@ -47,6 +47,20 @@ class User extends Authenticatable
         return $total_ipkl;
     }
 
+    public function getGateCard($user_id)
+    {
+        $total_gate_card = Transaction::where('type', 'Gate Card')->where('status', 'paid')->where('user_id', $user_id)->sum('nominal');
+
+        return $total_gate_card;
+    }
+
+    public function getQtyGateCard($user_id)
+    {
+        $total_gate_card = Transaction::where('type', 'Gate Card')->where('status', 'paid')->where('user_id', $user_id)->sum('qty');
+
+        return $total_gate_card;
+    }
+
     public function countIpklPaid($user_id, $month, $year)
     {
         $count_ipkl_paid = Transaction::where('type', 'IPKL')->where('status', 'paid')->where('user_id', $user_id)->where('month', $month)->where('year', $year)->count();

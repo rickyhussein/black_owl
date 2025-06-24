@@ -132,6 +132,15 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ url('/laporan-gate-card') }}" class="nav-link {{ Request::is('laporan-gate-card*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chart-area"></i>
+                        <p>
+                            Laporan Gate Card
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ url('/pengeluaran') }}" class="nav-link {{ Request::is('pengeluaran*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>

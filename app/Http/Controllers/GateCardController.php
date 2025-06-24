@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Exports\GateCardExport;
 use Illuminate\Support\Facades\DB;
+use App\Exports\laporanGateCardExport;
 use App\Notifications\UserNotification;
 
 class GateCardController extends Controller
@@ -390,5 +391,46 @@ class GateCardController extends Controller
         });
 
         return redirect('/my-gate-card')->with('success', 'Data Berhasil Didelete');
+    }
+
+    public function laporanGateCard()
+    {
+        $title = 'Laporan Gate Card';
+        $search = request()->input('search');
+        $rt = request()->input('rt');
+        $rw = request()->input('rw');
+        $status = request()->input('status');
+
+        $users = User::when($search, function ($query) use ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('alamat', 'LIKE', '%'.$search.'%');
+            });
+        })
+        ->when($rt, function ($query) use ($rt) {
+            $query->where('rt', $rt);
+        })
+        ->when($rw, function ($query) use ($rw) {
+            $query->where('rw', $rw);
+        })
+        ->when($status, function ($query) use ($status) {
+            $query->where('status', $status);
+        })
+
+
+        ->orderBy('rt', 'asc')
+        ->orderBy('alamat', 'asc')
+        ->paginate(10)
+        ->withQueryString();
+
+        return view('gate-card.laporanGateCard', compact(
+            'title',
+            'users',
+        ));
+    }
+
+    public function laporanGateCardExport(Request $request)
+    {
+        return (new laporanGateCardExport($_GET))->download('Laporan Gate Card.xlsx');
     }
 }
