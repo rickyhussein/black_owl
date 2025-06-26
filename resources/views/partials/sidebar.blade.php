@@ -86,14 +86,16 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ url('/ipkl') }}" class="nav-link {{ Request::is('ipkl*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-hand-holding-usd"></i>
-                        <p>
-                            IPKL
-                        </p>
-                    </a>
-                </li>
+                @if (auth()->user()->hasRole('superadmin'))
+                    <li class="nav-item">
+                        <a href="{{ url('/ipkl') }}" class="nav-link {{ Request::is('ipkl*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-hand-holding-usd"></i>
+                            <p>
+                                IPKL
+                            </p>
+                        </a>
+                    </li>
+                @endif
 
                 <li class="nav-item">
                     <a href="{{ url('/laporan-ipkl') }}" class="nav-link {{ Request::is('laporan-ipkl*') ? 'active' : '' }}">

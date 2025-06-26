@@ -17,7 +17,7 @@ class IsLogin
     public function handle(Request $request, Closure $next)
     {
         if (auth()->check() && auth()->user()->hasRole('user')) {
-            if (auth()->user()->hasRole('admin')) {
+            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('superadmin')) {
                 return redirect('/dashboard');
             } else {
                 return redirect('/dashboard-user');

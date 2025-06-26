@@ -295,8 +295,8 @@
                   </div>
                 </div>
                 <div class="row mb-20">
-                  <div class="col-sm-6"><a class="btn btn-lg btn-block btn-round btn-b" style="background-color: green" href="https://wa.me/{{ $umkm->user->whatsapp($umkm->user->no_hp) }}?text=Halo {{ $umkm->user->name }}. Saya ingin order {{ $umkm->name }}. %0A{{ url('/umkm/detail/'.$umkm->id) }}" target="_blank">Whatsapp</a></div>
-                  <div class="col-sm-6"><a class="btn btn-lg btn-block btn-round btn-b" href="{{ url('/umkm') }}">Back</a></div>
+                  <div class="col-sm-6 col-xs-6 col-md-6 col-lg-6"><a class="btn btn-lg btn-block btn-round btn-b" style="background-color: green" href="https://wa.me/{{ $umkm->user->whatsapp($umkm->user->no_hp) }}?text=Halo {{ $umkm->user->name }}. Saya ingin order {{ $umkm->name }}. %0A{{ url('/umkm/detail/'.$umkm->id) }}" target="_blank">Whatsapp</a></div>
+                  <div class="col-sm-6 col-xs-6 col-md-6 col-lg-6"><a class="btn btn-lg btn-block btn-round btn-b" href="{{ url('/umkm') }}">Back</a></div>
                 </div>
               </div>
             </div>

@@ -547,7 +547,7 @@ class IPKLController extends Controller
                 $month_name = Carbon::createFromFormat('m', $transaction->month)->translatedFormat('F');
 
                 $users = User::whereHas('roles', function ($query) {
-                    $query->where('name', 'admin');
+                    $query->where('name', 'admin')->orWhere('name', 'superadmin');
                 })->get();
 
                 if ($transaction->type == 'IPKL') {

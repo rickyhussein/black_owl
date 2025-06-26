@@ -164,7 +164,7 @@ class KritiksSaranController extends Controller
             $this->result = $kritik_saran->id;
 
             $users = User::whereHas('roles', function ($query) {
-                $query->where('name', 'admin');
+                $query->where('name', 'admin')->orWhere('name', 'superadmin');
             })->get();
 
             foreach ($users as $user) {
@@ -210,7 +210,7 @@ class KritiksSaranController extends Controller
             $kritik_saran->update($validated);
 
             $users = User::whereHas('roles', function ($query) {
-                $query->where('name', 'admin');
+                $query->where('name', 'admin')->orWhere('name', 'superadmin');
             })->get();
 
             foreach ($users as $user) {

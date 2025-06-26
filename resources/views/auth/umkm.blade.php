@@ -222,11 +222,11 @@
         </div>
       </nav>
       <div class="main">
-        <section class="module bg-dark-60 shop-page-header" data-background="{{ url('/assets/img/marketplace.jpg') }}">
+        <section class="module bg-dark-60 shop-page-header" data-background="{{ url('/assets/img/umkm.jpg') }}">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">UMKM</h2>
+                <h2 class="module-title font-alt"></h2>
               </div>
             </div>
           </div>
@@ -254,7 +254,7 @@
                 @php
                     $firstImage = $umkm->items->first();
                 @endphp
-                <div class="col-sm-6 col-md-4 col-lg-4 clickable" data-url="{{ url('/umkm/detail/'.$umkm->id) }}" style="cursor: pointer;">
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 clickable" data-url="{{ url('/umkm/detail/'.$umkm->id) }}" style="cursor: pointer;">
                     <div class="shop-item">
                     <div class="shop-item-image"><img src="{{ url('/storage/'.$firstImage->umkm_file_path) }}" alt="{{ $umkm->name }}" style="width: 100%; height: 300px; object-fit: cover;" />
                     </div>

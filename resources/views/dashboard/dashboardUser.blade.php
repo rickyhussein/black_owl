@@ -468,7 +468,7 @@
                 </li>
 
 
-                @if (auth()->user()->hasRole('admin'))
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('superadmin'))
                     <li>
                         <a href="{{ url('/dashboard') }}" onclick="return confirm('Are you sure ?')">
                             <div class="icon-box bg_service-5">

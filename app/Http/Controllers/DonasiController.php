@@ -234,7 +234,7 @@ class DonasiController extends Controller
             }
 
             $users = User::whereHas('roles', function ($query) {
-                $query->where('name', 'admin');
+                $query->where('name', 'admin')->orWhere('name', 'superadmin');
             })->get();
 
             foreach ($users as $user) {
@@ -348,7 +348,7 @@ class DonasiController extends Controller
             }
 
             $users = User::whereHas('roles', function ($query) {
-                $query->where('name', 'admin');
+                $query->where('name', 'admin')->orWhere('name', 'superadmin');
             })->get();
 
             foreach ($users as $user) {
